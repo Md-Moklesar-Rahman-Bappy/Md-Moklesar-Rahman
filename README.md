@@ -4,7 +4,7 @@ Architect of custom WordPress themes and Laravel dashboards, blending modular UI
 
 [🌐 Visit My Live Portfolio](https://md-moklesar-rahman-bappy.github.io/Md-Moklesar-Rahman/)  
 📫 Email: moklesarrahmanbappy@gmail.com  
-🔗 LinkedIn: [Md Moklesar Rahman](https://www.linkedin.com/in/mdmoklesarrahman/)  
+🔗 LinkedIn: [Md Moklesar Rahman](https://www.linkedin.com/in/md-moklasar-rahman-bappy/)  
 🎓 YouTube Tutorials: Coming Soon!
 
 ---
