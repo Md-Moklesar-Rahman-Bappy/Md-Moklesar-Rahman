@@ -22,10 +22,8 @@ type SectionTab =
   | "experience" | "education" | "services" | "certifications"
   | "social" | "messages" | "media" | "settings";
 
-interface EditableItem {
-  id: string;
-  [key: string]: unknown;
-}
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+type EditableItem = Record<string, any>;
 
 export function AdminDashboard() {
   const navigate = useNavigate();
@@ -463,13 +461,13 @@ export function AdminDashboard() {
             </div>
           )}
 
-          {tab === "skills" && renderTable(skills as EditableItem[], "skills", ["name", "category", "level", "sort_order", "is_visible"])}
-          {tab === "projects" && renderTable(projects as EditableItem[], "projects", ["title", "category", "featured", "is_visible", "sort_order"])}
-          {tab === "experience" && renderTable(experience as EditableItem[], "experience", ["company", "position", "is_current", "sort_order", "is_visible"])}
-          {tab === "education" && renderTable(education as EditableItem[], "education", ["institution", "degree", "start_year", "end_year", "is_visible"])}
-          {tab === "services" && renderTable(services as EditableItem[], "services", ["title", "sort_order", "is_visible"])}
-          {tab === "certifications" && renderTable(certifications as EditableItem[], "certifications", ["title", "issuer", "is_visible"])}
-          {tab === "social" && renderTable(socialLinks as EditableItem[], "social_links", ["platform", "url", "sort_order", "is_visible"])}
+          {tab === "skills" && renderTable(skills as unknown as EditableItem[], "skills", ["name", "category", "level", "sort_order", "is_visible"])}
+          {tab === "projects" && renderTable(projects as unknown as EditableItem[], "projects", ["title", "category", "featured", "is_visible", "sort_order"])}
+          {tab === "experience" && renderTable(experience as unknown as EditableItem[], "experience", ["company", "position", "is_current", "sort_order", "is_visible"])}
+          {tab === "education" && renderTable(education as unknown as EditableItem[], "education", ["institution", "degree", "start_year", "end_year", "is_visible"])}
+          {tab === "services" && renderTable(services as unknown as EditableItem[], "services", ["title", "sort_order", "is_visible"])}
+          {tab === "certifications" && renderTable(certifications as unknown as EditableItem[], "certifications", ["title", "issuer", "is_visible"])}
+          {tab === "social" && renderTable(socialLinks as unknown as EditableItem[], "social_links", ["platform", "url", "sort_order", "is_visible"])}
 
           {tab === "messages" && (
             <div>
