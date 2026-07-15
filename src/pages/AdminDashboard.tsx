@@ -3,14 +3,14 @@ import { useNavigate } from "react-router-dom";
 import {
   LayoutDashboard, FileText, Briefcase, GraduationCap, Code,
   Palette, Award, Link, MessageSquare, LogOut, User,
-  Settings, Menu, X, Plus, Pencil, Trash2, Star, Save,
+  Settings, Menu, X, Plus, Pencil, Trash2, Star, Save, Upload,
 } from "lucide-react";
 import { ImageUploader } from "@/components/ui/ImageUploader";
 import {
   adminGetAll, adminGetSingle, adminInsert, adminUpdate,
   adminDelete, adminMarkMessageRead,
 } from "@/services/portfolioService";
-import { isGitHubConfigured } from "@/services/githubService";
+import { isGitHubConfigured, uploadImage } from "@/services/githubService";
 import type {
   Skill, Project, Experience, Education, Service,
   SocialLink, ContactMessage, Certification,
@@ -811,6 +811,7 @@ const SETTINGS_FIELDS = [
 function SettingsForm({ siteSettings, onSaved }: { siteSettings: SiteSettings; onSaved: () => void }) {
   const [form, setForm] = useState<Record<string, string>>({});
   const [saving, setSaving] = useState(false);
+  const [uploadingResume, setUploadingResume] = useState(false);
   const [dirty, setDirty] = useState(false);
 
   const record = siteSettings as unknown as Record<string, string>;
@@ -825,6 +826,37 @@ function SettingsForm({ siteSettings, onSaved }: { siteSettings: SiteSettings; o
   const handleChange = (key: string, value: string) => {
     setForm(prev => ({ ...prev, [key]: value }));
     setDirty(true);
+  };
+
+  const handleResumeUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    if (file.size > 10 * 1024 * 1024) {
+      toast.error("File must be under 10MB");
+      return;
+    }
+
+    if (!isGitHubConfigured()) {
+      toast.error("GitHub not configured. Set VITE_GITHUB_TOKEN, VITE_GITHUB_OWNER, and VITE_GITHUB_REPO.");
+      return;
+    }
+
+    setUploadingResume(true);
+    try {
+      const result = await uploadImage(file, "resume");
+      if (result.success && result.url) {
+        handleChange("resume_url", result.url);
+        toast.success("Resume uploaded!");
+      } else {
+        toast.error(result.error || "Upload failed");
+      }
+    } catch {
+      toast.error("Upload failed");
+    } finally {
+      setUploadingResume(false);
+      if (e.target) e.target.value = "";
+    }
   };
 
   const handleSave = async () => {
@@ -860,22 +892,45 @@ function SettingsForm({ siteSettings, onSaved }: { siteSettings: SiteSettings; o
     <div>
       <h3 className="text-lg font-semibold text-dark-900 dark:text-white mb-4">Site Settings</h3>
       <div className="space-y-3 max-w-lg">
-        {SETTINGS_FIELDS.map(f => (
-          <div key={f.key}>
-            <label className="block text-xs font-medium text-dark-500 dark:text-dark-400 mb-1 capitalize">{f.key.replace(/_/g, " ")}</label>
-            {f.key === "logo_url" ? (
-              <div className="flex gap-2">
-                <input type="url" value={form[f.key] ?? ""} onChange={e => handleChange(f.key, e.target.value)}
-                  className="flex-1 px-3 py-2 text-sm rounded-lg border border-dark-200 dark:border-dark-700 bg-white dark:bg-dark-900 text-dark-900 dark:text-white focus:ring-2 focus:ring-primary-400 outline-none" />
-                {!!form[f.key] && <img src={form[f.key]} alt="" className="w-10 h-10 rounded object-cover border border-dark-200" />}
+        {SETTINGS_FIELDS.map(f => {
+          if (f.key === "logo_url") {
+            return (
+              <div key={f.key}>
+                <label className="block text-xs font-medium text-dark-500 dark:text-dark-400 mb-1">Logo</label>
+                <ImageUploader value={form[f.key] ?? null} onChange={v => handleChange(f.key, v)} folder="logo" label="" />
               </div>
-            ) : (
+            );
+          }
+          if (f.key === "resume_url") {
+            return (
+              <div key={f.key}>
+                <label className="block text-xs font-medium text-dark-500 dark:text-dark-400 mb-1">Resume</label>
+                <div className="flex flex-wrap items-center gap-2">
+                  <input type="file" accept=".pdf,application/pdf" onChange={handleResumeUpload} className="hidden" id="resume-upload" />
+                  <label htmlFor="resume-upload" className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium rounded-lg bg-primary-50 dark:bg-primary-900/20 text-primary-600 dark:text-primary-400 border border-primary-200 dark:border-primary-800 hover:bg-primary-100 dark:hover:bg-primary-900/30 transition-colors cursor-pointer">
+                    <Upload size={12} /> {uploadingResume ? "Uploading..." : "Upload PDF"}
+                  </label>
+                  {form[f.key] && (
+                    <a href={form[f.key]} target="_blank" rel="noopener noreferrer"
+                      className="text-xs text-primary-500 hover:underline">View current</a>
+                  )}
+                </div>
+                {form[f.key] && (
+                  <button type="button" onClick={() => handleChange(f.key, "")}
+                    className="mt-1 text-xs text-red-500 hover:underline">Remove</button>
+                )}
+              </div>
+            );
+          }
+          return (
+            <div key={f.key}>
+              <label className="block text-xs font-medium text-dark-500 dark:text-dark-400 mb-1 capitalize">{f.key.replace(/_/g, " ")}</label>
               <input type={f.type}
                 value={form[f.key] ?? ""} onChange={e => handleChange(f.key, e.target.value)}
                 className="w-full px-3 py-2 text-sm rounded-lg border border-dark-200 dark:border-dark-700 bg-white dark:bg-dark-900 text-dark-900 dark:text-white focus:ring-2 focus:ring-primary-400 outline-none" />
-            )}
-          </div>
-        ))}
+            </div>
+          );
+        })}
       </div>
       <div className="mt-6 flex gap-3">
         <button onClick={handleReset} disabled={!dirty || saving}
