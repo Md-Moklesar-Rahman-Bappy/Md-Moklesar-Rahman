@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Eye, EyeOff, LogIn } from "lucide-react";
-import { supabase } from "@/lib/supabase";
+import { getSupabase } from "@/lib/supabase";
 import { loginSchema, LoginFormData } from "@/lib/validations";
 import toast from "react-hot-toast";
 
@@ -27,7 +27,7 @@ export function AdminLogin() {
     }
 
     setLoading(true);
-    const { error } = await supabase.auth.signInWithPassword({
+    const { error } = await getSupabase().auth.signInWithPassword({
       email: form.email,
       password: form.password,
     });

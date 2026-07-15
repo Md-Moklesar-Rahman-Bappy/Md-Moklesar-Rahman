@@ -5,7 +5,7 @@ import {
   Palette, Award, Link, MessageSquare, Image, LogOut, User,
   Settings, Menu, X, Plus, Pencil, Trash2, Star, ChevronUp,
 } from "lucide-react";
-import { supabase, isSupabaseConfigured } from "@/lib/supabase";
+import { getSupabase, isSupabaseConfigured } from "@/lib/supabase";
 import {
   adminGetAll, adminGetMessages, adminInsert, adminUpdate,
   adminDelete, adminMarkMessageRead, uploadMedia, deleteMedia,
@@ -49,7 +49,7 @@ export function AdminDashboard() {
   const [siteSettings, setSiteSettings] = useState<SiteSettings | null>(null);
 
   useEffect(() => {
-    supabase.auth.getSession().then(({ data: { session } }) => {
+    getSupabase().auth.getSession().then(({ data: { session } }) => {
       if (!session) {
         navigate("/admin");
         return;
@@ -59,7 +59,7 @@ export function AdminDashboard() {
       loadAllData();
     });
 
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+    const { data: { subscription } } = getSupabase().auth.onAuthStateChange((_event: any, session: any) => {
       if (!session) navigate("/admin");
       else setUser(session.user);
     });
@@ -85,11 +85,12 @@ export function AdminDashboard() {
       setServices(sv); setSocialLinks(sl); setMessages(m); setMedia(med);
       setCertifications(cert);
 
-      const { data: h } = await supabase.from("hero").select("*").limit(1).single();
+      const sb = getSupabase();
+      const { data: h } = await sb.from("hero").select("*").limit(1).single();
       if (h) setHero(h as Hero);
-      const { data: a } = await supabase.from("about").select("*").limit(1).single();
+      const { data: a } = await sb.from("about").select("*").limit(1).single();
       if (a) setAbout(a as About);
-      const { data: ss } = await supabase.from("site_settings").select("*").limit(1).single();
+      const { data: ss } = await sb.from("site_settings").select("*").limit(1).single();
       if (ss) setSiteSettings(ss as SiteSettings);
     } catch (err) {
       console.error("Error loading data:", err);
@@ -97,7 +98,7 @@ export function AdminDashboard() {
   };
 
   const handleLogout = async () => {
-    await supabase.auth.signOut();
+    await getSupabase().auth.signOut();
     navigate("/admin");
   };
 
@@ -402,7 +403,8 @@ export function AdminDashboard() {
                         <textarea
                           value={(about as any)[f] || ""}
                           onChange={async (e) => {
-                            await supabase.from("about").update({ [f]: e.target.value }).eq("id", about.id);
+                            const sb = getSupabase();
+                            await sb.from("about").update({ [f]: e.target.value }).eq("id", about.id);
                             loadAllData();
                           }}
                           rows={4}
@@ -414,7 +416,8 @@ export function AdminDashboard() {
                           value={(about as any)[f] || ""}
                           onChange={async (e) => {
                             const val = f === "years_experience" ? Number(e.target.value) : e.target.value;
-                            await supabase.from("about").update({ [f]: val }).eq("id", about.id);
+                            const sb = getSupabase();
+                            await sb.from("about").update({ [f]: val }).eq("id", about.id);
                             loadAllData();
                           }}
                           className="w-full px-3 py-2 text-sm rounded-lg border border-dark-200 dark:border-dark-700 bg-white dark:bg-dark-900 text-dark-900 dark:text-white focus:ring-2 focus:ring-primary-400 outline-none"
@@ -438,20 +441,22 @@ export function AdminDashboard() {
                       <textarea
                         value={(hero as any)[f] || ""}
                         onChange={async (e) => {
-                          await supabase.from("hero").update({ [f]: e.target.value }).eq("id", hero.id);
-                          loadAllData();
-                        }}
-                        rows={3}
-                        className="w-full px-3 py-2 text-sm rounded-lg border border-dark-200 dark:border-dark-700 bg-white dark:bg-dark-900 text-dark-900 dark:text-white focus:ring-2 focus:ring-primary-400 outline-none resize-none"
-                      />
-                    ) : (
-                      <input
-                        type="text"
-                        value={(hero as any)[f] || ""}
-                        onChange={async (e) => {
-                          await supabase.from("hero").update({ [f]: e.target.value }).eq("id", hero.id);
-                          loadAllData();
-                        }}
+                            const sb = getSupabase();
+                            await sb.from("hero").update({ [f]: e.target.value }).eq("id", hero.id);
+                            loadAllData();
+                          }}
+                          rows={3}
+                          className="w-full px-3 py-2 text-sm rounded-lg border border-dark-200 dark:border-dark-700 bg-white dark:bg-dark-900 text-dark-900 dark:text-white focus:ring-2 focus:ring-primary-400 outline-none resize-none"
+                        />
+                      ) : (
+                        <input
+                          type="text"
+                          value={(hero as any)[f] || ""}
+                          onChange={async (e) => {
+                            const sb = getSupabase();
+                            await sb.from("hero").update({ [f]: e.target.value }).eq("id", hero.id);
+                            loadAllData();
+                          }}
                         className="w-full px-3 py-2 text-sm rounded-lg border border-dark-200 dark:border-dark-700 bg-white dark:bg-dark-900 text-dark-900 dark:text-white focus:ring-2 focus:ring-primary-400 outline-none"
                       />
                     )}
@@ -539,7 +544,8 @@ export function AdminDashboard() {
                       type={f === "primary_email" ? "email" : f === "resume_url" ? "url" : "text"}
                       value={(siteSettings as any)[f] || ""}
                       onChange={async (e) => {
-                        await supabase.from("site_settings").update({ [f]: e.target.value }).eq("id", siteSettings.id);
+                        const sb = getSupabase();
+                        await sb.from("site_settings").update({ [f]: e.target.value }).eq("id", siteSettings.id);
                         loadAllData();
                       }}
                       className="w-full px-3 py-2 text-sm rounded-lg border border-dark-200 dark:border-dark-700 bg-white dark:bg-dark-900 text-dark-900 dark:text-white focus:ring-2 focus:ring-primary-400 outline-none"

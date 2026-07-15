@@ -12,7 +12,7 @@ import {
   ContactMessage,
   MediaAsset,
 } from "@/types/database";
-import { supabase, isSupabaseConfigured } from "@/lib/supabase";
+import { getSupabase, isSupabaseConfigured } from "@/lib/supabase";
 import { fallbackData } from "@/lib/fallback";
 
 type TableName =
@@ -29,9 +29,11 @@ type TableName =
   | "contact_messages"
   | "media_assets";
 
+const sb = () => getSupabase();
+
 async function fetchTable<T>(table: TableName, fallback: T): Promise<T> {
   if (!isSupabaseConfigured) return fallback;
-  const { data, error } = await supabase.from(table).select("*");
+  const { data, error } = await sb().from(table).select("*");
   if (error) {
     console.error(`Error fetching ${table}:`, error);
     return fallback;
@@ -41,7 +43,7 @@ async function fetchTable<T>(table: TableName, fallback: T): Promise<T> {
 
 async function fetchSingle<T>(table: TableName, fallback: T): Promise<T> {
   if (!isSupabaseConfigured) return fallback;
-  const { data, error } = await supabase.from(table).select("*").limit(1).single();
+  const { data, error } = await sb().from(table).select("*").limit(1).single();
   if (error) {
     console.error(`Error fetching ${table}:`, error);
     return fallback;
@@ -49,7 +51,6 @@ async function fetchSingle<T>(table: TableName, fallback: T): Promise<T> {
   return (data as T) || fallback;
 }
 
-// Public API
 export async function getSiteSettings(): Promise<SiteSettings> {
   return fetchSingle("site_settings", fallbackData.siteSettings);
 }
@@ -90,7 +91,6 @@ export async function getSocialLinks(): Promise<SocialLink[]> {
   return fetchTable("social_links", fallbackData.socialLinks);
 }
 
-// Contact form
 export async function submitContactMessage(msg: {
   name: string;
   email: string;
@@ -100,28 +100,21 @@ export async function submitContactMessage(msg: {
   if (!isSupabaseConfigured) {
     return { success: false, error: "Database not configured" };
   }
-  const { error } = await supabase.from("contact_messages").insert({
-    name: msg.name,
-    email: msg.email,
-    subject: msg.subject,
-    message: msg.message,
-  });
+  const { error } = await sb().from("contact_messages").insert(msg as any);
   if (error) {
-    console.error("Error submitting message:", error);
     return { success: false, error: error.message };
   }
   return { success: true };
 }
 
-// Admin API
 export async function adminGetAll<T>(table: TableName): Promise<T[]> {
-  const { data, error } = await supabase.from(table).select("*").order("sort_order", { ascending: true });
+  const { data, error } = await sb().from(table).select("*").order("sort_order", { ascending: true });
   if (error) throw error;
   return (data as T[]) || [];
 }
 
 export async function adminGetMessages(): Promise<ContactMessage[]> {
-  const { data, error } = await supabase
+  const { data, error } = await sb()
     .from("contact_messages")
     .select("*")
     .order("created_at", { ascending: false });
@@ -129,37 +122,37 @@ export async function adminGetMessages(): Promise<ContactMessage[]> {
   return (data as ContactMessage[]) || [];
 }
 
-export async function adminInsert(table: TableName, record: Record<string, unknown>) {
-  const { data, error } = await supabase.from(table).insert(record).select().single();
+export async function adminInsert(table: TableName, record: any) {
+  const { data, error } = await sb().from(table).insert(record).select().single();
   if (error) throw error;
   return data;
 }
 
-export async function adminUpdate(table: TableName, id: string, record: Record<string, unknown>) {
-  const { data, error } = await supabase.from(table).update(record).eq("id", id).select().single();
+export async function adminUpdate(table: TableName, id: string, record: any) {
+  const { data, error } = await sb().from(table).update(record).eq("id", id).select().single();
   if (error) throw error;
   return data;
 }
 
 export async function adminDelete(table: TableName, id: string) {
-  const { error } = await supabase.from(table).delete().eq("id", id);
+  const { error } = await sb().from(table).delete().eq("id", id);
   if (error) throw error;
 }
 
 export async function adminMarkMessageRead(id: string) {
-  const { error } = await supabase.from("contact_messages").update({ is_read: true }).eq("id", id);
+  const { error } = await sb().from("contact_messages").update({ is_read: true } as any).eq("id", id);
   if (error) throw error;
 }
 
 export async function uploadMedia(file: File): Promise<MediaAsset> {
   const fileExt = file.name.split(".").pop();
   const fileName = `${Date.now()}-${Math.random().toString(36).slice(2, 8)}.${fileExt}`;
-  const { error: uploadError } = await supabase.storage
+  const { error: uploadError } = await sb().storage
     .from("portfolio-media")
     .upload(fileName, file);
   if (uploadError) throw uploadError;
 
-  const { data: urlData } = supabase.storage.from("portfolio-media").getPublicUrl(fileName);
+  const { data: urlData } = sb().storage.from("portfolio-media").getPublicUrl(fileName);
 
   const asset = {
     file_name: file.name,
@@ -169,7 +162,7 @@ export async function uploadMedia(file: File): Promise<MediaAsset> {
     bucket: "portfolio-media",
   };
 
-  const { data, error } = await supabase.from("media_assets").insert(asset).select().single();
+  const { data, error } = await sb().from("media_assets").insert(asset as any).select().single();
   if (error) throw error;
   return data as MediaAsset;
 }
@@ -177,8 +170,8 @@ export async function uploadMedia(file: File): Promise<MediaAsset> {
 export async function deleteMedia(id: string, fileUrl: string) {
   const path = fileUrl.split("/").pop();
   if (path) {
-    await supabase.storage.from("portfolio-media").remove([path]);
+    await sb().storage.from("portfolio-media").remove([path]);
   }
-  const { error } = await supabase.from("media_assets").delete().eq("id", id);
+  const { error } = await sb().from("media_assets").delete().eq("id", id);
   if (error) throw error;
 }

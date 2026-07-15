@@ -4,6 +4,7 @@ import {
   getExperience, getEducation, getServices, getSocialLinks,
 } from "@/services/portfolioService";
 import { fallbackData } from "@/lib/fallback";
+import { isSupabaseConfigured } from "@/lib/supabase";
 import type {
   SiteSettings, Hero, About, Skill, Project,
   Experience, Education, Service, SocialLink,
@@ -21,21 +22,24 @@ interface PortfolioData {
   socialLinks: SocialLink[];
 }
 
+const defaultData: PortfolioData = {
+  siteSettings: fallbackData.siteSettings,
+  hero: fallbackData.hero,
+  about: fallbackData.about,
+  skills: fallbackData.skills,
+  projects: fallbackData.projects,
+  experience: fallbackData.experience,
+  education: fallbackData.education,
+  services: fallbackData.services,
+  socialLinks: fallbackData.socialLinks,
+};
+
 export function usePortfolioData() {
-  const [data, setData] = useState<PortfolioData>({
-    siteSettings: fallbackData.siteSettings,
-    hero: fallbackData.hero,
-    about: fallbackData.about,
-    skills: fallbackData.skills,
-    projects: fallbackData.projects,
-    experience: fallbackData.experience,
-    education: fallbackData.education,
-    services: fallbackData.services,
-    socialLinks: fallbackData.socialLinks,
-  });
-  const [loading, setLoading] = useState(true);
+  const [data, setData] = useState<PortfolioData>(defaultData);
+  const [loading, setLoading] = useState(isSupabaseConfigured);
 
   useEffect(() => {
+    if (!isSupabaseConfigured) return;
     async function load() {
       try {
         const [siteSettings, hero, about, skills, projects, experience, education, services, socialLinks] =
