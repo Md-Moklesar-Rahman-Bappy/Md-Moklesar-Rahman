@@ -4,6 +4,8 @@ A modern, dynamic portfolio web application built with React, TypeScript, Vite, 
 
 **Live Site:** [md-moklesar-rahman-bappy.github.io](https://md-moklesar-rahman-bappy.github.io/Md-Moklesar-Rahman/)
 
+**Live Site:** [md-moklesar-rahman-bappy.github.io](https://moklesarrahman.netlify.app/)
+
 ## Tech Stack
 
 - **Frontend:** React 19 + TypeScript + Vite
