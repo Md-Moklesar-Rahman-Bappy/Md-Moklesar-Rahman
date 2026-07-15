@@ -1,58 +1,131 @@
-# 👨‍💻 Md Moklesar Rahman
+# Md Moklesar Rahman — Portfolio
 
-Architect of custom WordPress themes and Laravel dashboards, blending modular UI/UX with joyful polish. Assistant Maintenance Engineer at the Land Record & Survey Directorate, Dhaka.
+My personal portfolio website showcasing my work as a **Web Designer & Developer** based in Dhaka, Bangladesh. Built with React, TypeScript, and Tailwind CSS for a fast, responsive, and animated experience.
 
-[🌐 Visit My Live Portfolio](https://md-moklesar-rahman-bappy.github.io/Md-Moklesar-Rahman/)  
-📫 Email: moklesarrahmanbappy@gmail.com  
-🔗 LinkedIn: [Md Moklesar Rahman](https://www.linkedin.com/in/md-moklasar-rahman-bappy/)  
-🎓 YouTube Tutorials: Coming Soon!
+**Live Site:** [md-moklesar-rahman-bappy.github.io](https://md-moklesar-rahman-bappy.github.io/Md-Moklesar-Rahman/)
 
 ---
 
-## 🚀 About Me
+## About Me
 
-I build maintainable, dynamic educational websites with:
+I am an Assistant Maintenance Engineer at the **Land Record & Survey Directorate, Dhaka**, and a self-taught web developer. I specialize in building:
 
-- 🎨 **Modular UI/UX** using Laravel Blade and Elementor
-- 🧩 **Custom WordPress Themes** with CPTs, ACF, and onboarding overlays
-- 📚 **Tutorials & Documentation** for collaborative learning
-- 🛠️ **Responsive Dashboards** with animated feedback and joyful polish
+- **Custom WordPress Themes** with Advanced Custom Fields (ACF) and Custom Post Types (CPTs)
+- **Laravel Dashboards** for internal tools and data management
+- **Responsive UI/UX** with modular design, smooth animations, and clean code
 
----
-
-## 🧠 Skills Snapshot
-
-| Laravel & Blade | WordPress & Elementor | UI/UX Design | ACF & CPTs | CSS Animations | Documentation |
-|-----------------|-----------------------|--------------|------------|----------------|----------------|
+I also create tutorials and documentation to help others learn web development.
 
 ---
 
-## 📂 Featured Projects
+## Tech Stack
 
-### 🎓 `eschool` Theme (In Progress)
-A modular WordPress theme for educational platforms:
-- Dynamic course cards with Elementor polish
-- ACF-powered layouts and onboarding overlays
-- Confetti animations and style guide pages
-
-### 🗺️ Land Survey Dashboard
-Laravel-based internal tool for digital land survey capacity-building:
-- Live validation, responsive maps, and modular architecture
-
----
-
-## 📘 Tutorials & Guides
-
-I believe every technical win should be teachable.  
-Coming soon: YouTube series on theme development, onboarding flows, and Laravel-to-WordPress translation.
+| Layer        | Tools                                          |
+|--------------|------------------------------------------------|
+| Frontend     | React 19, TypeScript, Tailwind CSS             |
+| Build        | Vite                                           |
+| Animation    | Framer Motion                                  |
+| Icons        | Lucide React                                   |
+| Routing      | React Router DOM                               |
+| Backend/DB   | Supabase                                       |
+| Validation   | Zod                                            |
+| Notifications| React Hot Toast                                |
 
 ---
 
-## ✨ Let's Collaborate
+## Getting Started
 
-Open to freelance, collaboration, and feedback-driven design.  
-Feel free to fork, star, or reach out!
+### Prerequisites
+
+- [Node.js](https://nodejs.org/) (v18 or later)
+- npm or yarn
+
+### Installation
+
+```bash
+# Clone the repository
+git clone https://github.com/md-moklesar-rahman-bappy/Md-Moklesar-Rahman.git
+
+# Go into the project folder
+cd Md-Moklesar-Rahman
+
+# Install dependencies
+npm install
+```
+
+### Development
+
+```bash
+npm run dev
+```
+
+Opens the site at `http://localhost:5173` with hot reload.
+
+### Build for Production
+
+```bash
+npm run build
+```
+
+### Preview Production Build
+
+```bash
+npm run preview
+```
+
+### Lint
+
+```bash
+npm run lint
+```
 
 ---
 
-> “Modularity is joy. Maintainability is power. Education is the goal.”
+## Project Structure
+
+```
+├── public/              Static assets (images, favicon, etc.)
+├── src/
+│   ├── components/
+│   │   ├── admin/       Admin panel components
+│   │   ├── common/      Reusable shared components
+│   │   ├── layout/      Header, footer, navigation
+│   │   ├── sections/    Page sections (hero, projects, etc.)
+│   │   └── ui/          Base UI primitives (buttons, cards, etc.)
+│   ├── hooks/           Custom React hooks
+│   ├── lib/             Library configurations
+│   ├── pages/           Route-level page components
+│   ├── services/        API and Supabase service layer
+│   ├── styles/          Global and custom styles
+│   ├── types/           TypeScript type definitions
+│   └── utils/           Helper functions and utilities
+├── supabase/            Database schema, policies, and seed data
+├── index.html           Entry HTML
+├── vite.config.ts       Vite configuration
+├── tailwind.config.ts   Tailwind theme and animations
+└── tsconfig.json        TypeScript configuration
+```
+
+---
+
+## Featured Work
+
+### eschool Theme (In Progress)
+A modular WordPress theme for educational platforms featuring dynamic course cards, ACF-powered layouts, onboarding overlays, and confetti animations.
+
+### Land Survey Dashboard
+An internal Laravel-based tool for digital land survey capacity-building with live data validation, responsive map integration, and modular architecture.
+
+---
+
+## Contact
+
+- **Email:** moklesarrahmanbappy@gmail.com
+
+- **Portfolio:** [md-moklesar-rahman-bappy.github.io](https://md-moklesar-rahman-bappy.github.io/Md-Moklesar-Rahman/)
+
+---
+
+## License
+
+See [LICENSE.txt](LICENSE.txt) for details.
