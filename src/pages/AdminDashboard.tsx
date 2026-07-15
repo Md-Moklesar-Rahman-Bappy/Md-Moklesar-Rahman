@@ -3,8 +3,9 @@ import { useNavigate } from "react-router-dom";
 import {
   LayoutDashboard, FileText, Briefcase, GraduationCap, Code,
   Palette, Award, Link, MessageSquare, LogOut, User,
-  Settings, Menu, X, Plus, Pencil, Trash2, Star,
+  Settings, Menu, X, Plus, Pencil, Trash2, Star, Save,
 } from "lucide-react";
+import { ImageUploader } from "@/components/ui/ImageUploader";
 import {
   adminGetAll, adminGetSingle, adminInsert, adminUpdate,
   adminDelete, adminMarkMessageRead,
@@ -47,6 +48,140 @@ const SOCIAL_ICON_OPTIONS = [
 
 function getProjectCategories(projects: Project[]): string[] {
   return ["all", ...new Set(projects.map(p => p.category))].filter(c => c !== "all");
+}
+
+function renderFormField(projects: Project[], field: FormFieldConfig, value: unknown, onChange: (v: unknown) => void) {
+  const label = field.label || field.key.replace(/_/g, " ");
+  const id = `field-${field.key}`;
+
+  switch (field.type) {
+    case "checkbox":
+      return (
+        <label key={field.key} className="flex items-center gap-2 cursor-pointer">
+          <input type="checkbox" checked={!!value} onChange={e => onChange(e.target.checked)} className="rounded border-dark-300 dark:border-dark-600 text-primary-500 focus:ring-primary-400" />
+          <span className="text-sm capitalize text-dark-700 dark:text-dark-200">{label}</span>
+        </label>
+      );
+
+    case "number":
+      return (
+        <div key={field.key}>
+          <label htmlFor={id} className="block text-xs font-medium text-dark-500 dark:text-dark-400 mb-1 capitalize">{label}</label>
+          <input id={id} type="number" value={value as number ?? 0} onChange={e => onChange(Number(e.target.value))}
+            className="w-full px-3 py-2 text-sm rounded-lg border border-dark-200 dark:border-dark-700 bg-white dark:bg-dark-900 text-dark-900 dark:text-white focus:ring-2 focus:ring-primary-400 outline-none" />
+        </div>
+      );
+
+    case "date":
+      return (
+        <div key={field.key}>
+          <label htmlFor={id} className="block text-xs font-medium text-dark-500 dark:text-dark-400 mb-1 capitalize">{label}</label>
+          <input id={id} type="date" value={value as string ?? ""} onChange={e => onChange(e.target.value)}
+            className="w-full px-3 py-2 text-sm rounded-lg border border-dark-200 dark:border-dark-700 bg-white dark:bg-dark-900 text-dark-900 dark:text-white focus:ring-2 focus:ring-primary-400 outline-none" />
+        </div>
+      );
+
+    case "url":
+      return (
+        <div key={field.key}>
+          <label htmlFor={id} className="block text-xs font-medium text-dark-500 dark:text-dark-400 mb-1 capitalize">{label}</label>
+          <input id={id} type="url" value={value as string ?? ""} onChange={e => onChange(e.target.value)} placeholder="https://"
+            className="w-full px-3 py-2 text-sm rounded-lg border border-dark-200 dark:border-dark-700 bg-white dark:bg-dark-900 text-dark-900 dark:text-white focus:ring-2 focus:ring-primary-400 outline-none" />
+        </div>
+      );
+
+    case "email":
+      return (
+        <div key={field.key}>
+          <label htmlFor={id} className="block text-xs font-medium text-dark-500 dark:text-dark-400 mb-1 capitalize">{label}</label>
+          <input id={id} type="email" value={value as string ?? ""} onChange={e => onChange(e.target.value)}
+            className="w-full px-3 py-2 text-sm rounded-lg border border-dark-200 dark:border-dark-700 bg-white dark:bg-dark-900 text-dark-900 dark:text-white focus:ring-2 focus:ring-primary-400 outline-none" />
+        </div>
+      );
+
+    case "icon-select":
+      return (
+        <div key={field.key}>
+          <label htmlFor={id} className="block text-xs font-medium text-dark-500 dark:text-dark-400 mb-1 capitalize">{label}</label>
+          <select id={id} value={value as string ?? ""} onChange={e => onChange(e.target.value)}
+            className="w-full px-3 py-2 text-sm rounded-lg border border-dark-200 dark:border-dark-700 bg-white dark:bg-dark-900 text-dark-900 dark:text-white focus:ring-2 focus:ring-primary-400 outline-none">
+            <option value="">Select icon...</option>
+            {field.options?.map(o => (
+              <option key={o.value} value={o.value}>{o.label}</option>
+            ))}
+          </select>
+        </div>
+      );
+
+    case "social-icon-select":
+      return (
+        <div key={field.key}>
+          <label htmlFor={id} className="block text-xs font-medium text-dark-500 dark:text-dark-400 mb-1 capitalize">{label}</label>
+          <select id={id} value={value as string ?? ""} onChange={e => onChange(e.target.value)}
+            className="w-full px-3 py-2 text-sm rounded-lg border border-dark-200 dark:border-dark-700 bg-white dark:bg-dark-900 text-dark-900 dark:text-white focus:ring-2 focus:ring-primary-400 outline-none">
+            <option value="">Select icon...</option>
+            {field.options?.map(o => (
+              <option key={o.value} value={o.value}>{o.label}</option>
+            ))}
+          </select>
+        </div>
+      );
+
+    case "category-select":
+      return (
+        <div key={field.key}>
+          <label htmlFor={id} className="block text-xs font-medium text-dark-500 dark:text-dark-400 mb-1 capitalize">{label}</label>
+          <select id={id} value={value as string ?? ""} onChange={e => onChange(e.target.value)}
+            className="w-full px-3 py-2 text-sm rounded-lg border border-dark-200 dark:border-dark-700 bg-white dark:bg-dark-900 text-dark-900 dark:text-white focus:ring-2 focus:ring-primary-400 outline-none">
+            <option value="">Select category...</option>
+            {getProjectCategories(projects).map(c => (
+              <option key={c} value={c}>{c.replace(/-/g, " ").replace(/\b\w/g, l => l.toUpperCase())}</option>
+            ))}
+          </select>
+        </div>
+      );
+
+    case "image-url":
+      return (
+        <div key={field.key}>
+          <ImageUploader
+            value={value as string | null | undefined}
+            onChange={onChange}
+            folder={field.label?.toLowerCase().replace(/\s+/g, "-") || "general"}
+            label={label}
+            previewSize="sm"
+          />
+        </div>
+      );
+
+    case "comma-list":
+      return (
+        <div key={field.key}>
+          <label htmlFor={id} className="block text-xs font-medium text-dark-500 dark:text-dark-400 mb-1 capitalize">{label}</label>
+          <input id={id} type="text" value={Array.isArray(value) ? (value as string[]).join(", ") : (value as string ?? "")}
+            onChange={e => onChange(e.target.value.split(",").map(s => s.trim()).filter(Boolean))}
+            className="w-full px-3 py-2 text-sm rounded-lg border border-dark-200 dark:border-dark-700 bg-white dark:bg-dark-900 text-dark-900 dark:text-white focus:ring-2 focus:ring-primary-400 outline-none" />
+        </div>
+      );
+
+    case "textarea":
+      return (
+        <div key={field.key}>
+          <label htmlFor={id} className="block text-xs font-medium text-dark-500 dark:text-dark-400 mb-1 capitalize">{label}</label>
+          <textarea id={id} value={value as string ?? ""} onChange={e => onChange(e.target.value)} rows={3}
+            className="w-full px-3 py-2 text-sm rounded-lg border border-dark-200 dark:border-dark-700 bg-white dark:bg-dark-900 text-dark-900 dark:text-white focus:ring-2 focus:ring-primary-400 outline-none resize-none" />
+        </div>
+      );
+
+    default:
+      return (
+        <div key={field.key}>
+          <label htmlFor={id} className="block text-xs font-medium text-dark-500 dark:text-dark-400 mb-1 capitalize">{label}</label>
+          <input id={id} type="text" value={value as string ?? ""} onChange={e => onChange(e.target.value)}
+            className="w-full px-3 py-2 text-sm rounded-lg border border-dark-200 dark:border-dark-700 bg-white dark:bg-dark-900 text-dark-900 dark:text-white focus:ring-2 focus:ring-primary-400 outline-none" />
+        </div>
+      );
+  }
 }
 
 interface FormFieldConfig {
@@ -237,138 +372,181 @@ export function AdminDashboard() {
     }
   };
 
-  function renderFormField(field: FormFieldConfig, value: unknown, onChange: (v: unknown) => void) {
-    const label = field.label || field.key.replace(/_/g, " ");
-    const id = `field-${field.key}`;
+const ABOUT_FIELDS = [
+  { key: "heading", type: "text" as const },
+  { key: "content", type: "textarea" as const },
+  { key: "years_experience", type: "number" as const },
+  { key: "image_url", type: "image" as const },
+];
 
-    switch (field.type) {
-      case "checkbox":
-        return (
-          <label key={field.key} className="flex items-center gap-2 cursor-pointer">
-            <input type="checkbox" checked={!!value} onChange={e => onChange(e.target.checked)} className="rounded border-dark-300 dark:border-dark-600 text-primary-500 focus:ring-primary-400" />
-            <span className="text-sm capitalize text-dark-700 dark:text-dark-200">{label}</span>
-          </label>
-        );
+function ProfileForm({ about, onSaved }: { about: About; onSaved: () => void }) {
+  const record = about as unknown as Record<string, unknown>;
+  const [form, setForm] = useState<Record<string, unknown>>({});
+  const [saving, setSaving] = useState(false);
+  const [dirty, setDirty] = useState(false);
 
-      case "number":
-        return (
-          <div key={field.key}>
-            <label htmlFor={id} className="block text-xs font-medium text-dark-500 dark:text-dark-400 mb-1 capitalize">{label}</label>
-            <input id={id} type="number" value={value as number ?? 0} onChange={e => onChange(Number(e.target.value))}
-              className="w-full px-3 py-2 text-sm rounded-lg border border-dark-200 dark:border-dark-700 bg-white dark:bg-dark-900 text-dark-900 dark:text-white focus:ring-2 focus:ring-primary-400 outline-none" />
-          </div>
-        );
+  useEffect(() => {
+    const init: Record<string, unknown> = {};
+    ABOUT_FIELDS.forEach(f => { init[f.key] = record[f.key] ?? ""; });
+    setForm(init);
+    setDirty(false);
+  }, [about]);
 
-      case "date":
-        return (
-          <div key={field.key}>
-            <label htmlFor={id} className="block text-xs font-medium text-dark-500 dark:text-dark-400 mb-1 capitalize">{label}</label>
-            <input id={id} type="date" value={value as string ?? ""} onChange={e => onChange(e.target.value)}
-              className="w-full px-3 py-2 text-sm rounded-lg border border-dark-200 dark:border-dark-700 bg-white dark:bg-dark-900 text-dark-900 dark:text-white focus:ring-2 focus:ring-primary-400 outline-none" />
-          </div>
-        );
+  const set = (key: string, val: unknown) => {
+    setForm(p => ({ ...p, [key]: val }));
+    setDirty(true);
+  };
 
-      case "url":
-        return (
-          <div key={field.key}>
-            <label htmlFor={id} className="block text-xs font-medium text-dark-500 dark:text-dark-400 mb-1 capitalize">{label}</label>
-            <input id={id} type="url" value={value as string ?? ""} onChange={e => onChange(e.target.value)} placeholder="https://"
-              className="w-full px-3 py-2 text-sm rounded-lg border border-dark-200 dark:border-dark-700 bg-white dark:bg-dark-900 text-dark-900 dark:text-white focus:ring-2 focus:ring-primary-400 outline-none" />
-          </div>
-        );
-
-      case "email":
-        return (
-          <div key={field.key}>
-            <label htmlFor={id} className="block text-xs font-medium text-dark-500 dark:text-dark-400 mb-1 capitalize">{label}</label>
-            <input id={id} type="email" value={value as string ?? ""} onChange={e => onChange(e.target.value)}
-              className="w-full px-3 py-2 text-sm rounded-lg border border-dark-200 dark:border-dark-700 bg-white dark:bg-dark-900 text-dark-900 dark:text-white focus:ring-2 focus:ring-primary-400 outline-none" />
-          </div>
-        );
-
-      case "icon-select":
-        return (
-          <div key={field.key}>
-            <label htmlFor={id} className="block text-xs font-medium text-dark-500 dark:text-dark-400 mb-1 capitalize">{label}</label>
-            <select id={id} value={value as string ?? ""} onChange={e => onChange(e.target.value)}
-              className="w-full px-3 py-2 text-sm rounded-lg border border-dark-200 dark:border-dark-700 bg-white dark:bg-dark-900 text-dark-900 dark:text-white focus:ring-2 focus:ring-primary-400 outline-none">
-              <option value="">Select icon...</option>
-              {field.options?.map(o => (
-                <option key={o.value} value={o.value}>{o.label}</option>
-              ))}
-            </select>
-          </div>
-        );
-
-      case "social-icon-select":
-        return (
-          <div key={field.key}>
-            <label htmlFor={id} className="block text-xs font-medium text-dark-500 dark:text-dark-400 mb-1 capitalize">{label}</label>
-            <select id={id} value={value as string ?? ""} onChange={e => onChange(e.target.value)}
-              className="w-full px-3 py-2 text-sm rounded-lg border border-dark-200 dark:border-dark-700 bg-white dark:bg-dark-900 text-dark-900 dark:text-white focus:ring-2 focus:ring-primary-400 outline-none">
-              <option value="">Select icon...</option>
-              {field.options?.map(o => (
-                <option key={o.value} value={o.value}>{o.label}</option>
-              ))}
-            </select>
-          </div>
-        );
-
-      case "category-select":
-        return (
-          <div key={field.key}>
-            <label htmlFor={id} className="block text-xs font-medium text-dark-500 dark:text-dark-400 mb-1 capitalize">{label}</label>
-            <select id={id} value={value as string ?? ""} onChange={e => onChange(e.target.value)}
-              className="w-full px-3 py-2 text-sm rounded-lg border border-dark-200 dark:border-dark-700 bg-white dark:bg-dark-900 text-dark-900 dark:text-white focus:ring-2 focus:ring-primary-400 outline-none">
-              <option value="">Select category...</option>
-              {getProjectCategories(projects).map(c => (
-                <option key={c} value={c}>{c.replace(/-/g, " ").replace(/\b\w/g, l => l.toUpperCase())}</option>
-              ))}
-            </select>
-          </div>
-        );
-
-      case "image-url":
-        return (
-          <div key={field.key}>
-            <label htmlFor={id} className="block text-xs font-medium text-dark-500 dark:text-dark-400 mb-1 capitalize">{label}</label>
-            <div className="flex gap-2">
-              <input id={id} type="url" value={value as string ?? ""} onChange={e => onChange(e.target.value)} placeholder="https://"
-                className="flex-1 px-3 py-2 text-sm rounded-lg border border-dark-200 dark:border-dark-700 bg-white dark:bg-dark-900 text-dark-900 dark:text-white focus:ring-2 focus:ring-primary-400 outline-none" />
-              {!!value && <img src={String(value)} alt="" className="w-10 h-10 rounded object-cover border border-dark-200 dark:border-dark-700" />}
-            </div>
-          </div>
-        );
-
-      case "comma-list":
-        return (
-          <div key={field.key}>
-            <label htmlFor={id} className="block text-xs font-medium text-dark-500 dark:text-dark-400 mb-1 capitalize">{label}</label>
-            <input id={id} type="text" value={Array.isArray(value) ? (value as string[]).join(", ") : (value as string ?? "")}
-              onChange={e => onChange(e.target.value.split(",").map(s => s.trim()).filter(Boolean))}
-              className="w-full px-3 py-2 text-sm rounded-lg border border-dark-200 dark:border-dark-700 bg-white dark:bg-dark-900 text-dark-900 dark:text-white focus:ring-2 focus:ring-primary-400 outline-none" />
-          </div>
-        );
-
-      case "textarea":
-        return (
-          <div key={field.key}>
-            <label htmlFor={id} className="block text-xs font-medium text-dark-500 dark:text-dark-400 mb-1 capitalize">{label}</label>
-            <textarea id={id} value={value as string ?? ""} onChange={e => onChange(e.target.value)} rows={3}
-              className="w-full px-3 py-2 text-sm rounded-lg border border-dark-200 dark:border-dark-700 bg-white dark:bg-dark-900 text-dark-900 dark:text-white focus:ring-2 focus:ring-primary-400 outline-none resize-none" />
-          </div>
-        );
-
-      default:
-        return (
-          <div key={field.key}>
-            <label htmlFor={id} className="block text-xs font-medium text-dark-500 dark:text-dark-400 mb-1 capitalize">{label}</label>
-            <input id={id} type="text" value={value as string ?? ""} onChange={e => onChange(e.target.value)}
-              className="w-full px-3 py-2 text-sm rounded-lg border border-dark-200 dark:border-dark-700 bg-white dark:bg-dark-900 text-dark-900 dark:text-white focus:ring-2 focus:ring-primary-400 outline-none" />
-          </div>
-        );
+  const handleSave = async () => {
+    setSaving(true);
+    try {
+      const updates: Record<string, unknown> = {};
+      ABOUT_FIELDS.forEach(f => {
+        const orig = record[f.key] ?? "";
+        if (form[f.key] !== orig) updates[f.key] = form[f.key];
+      });
+      if (Object.keys(updates).length > 0) {
+        await adminUpdate("about", about.id, updates);
+        toast.success("About section saved!");
+      }
+      setDirty(false);
+      onSaved();
+    } catch (err: unknown) {
+      toast.error(err instanceof Error ? err.message : "Save failed");
+    } finally {
+      setSaving(false);
     }
-  }
+  };
+
+  const handleReset = () => {
+    const init: Record<string, unknown> = {};
+    ABOUT_FIELDS.forEach(f => { init[f.key] = record[f.key] ?? ""; });
+    setForm(init);
+    setDirty(false);
+  };
+
+  return (
+    <div>
+      <h3 className="text-lg font-semibold text-dark-900 dark:text-white mb-4">About Section</h3>
+      <div className="space-y-4 max-w-lg">
+        {ABOUT_FIELDS.map(f => (
+          <div key={f.key}>
+            <label className="block text-xs font-medium text-dark-500 dark:text-dark-400 mb-1 capitalize">{f.key.replace(/_/g, " ")}</label>
+            {f.type === "textarea" ? (
+              <textarea value={String(form[f.key] ?? "")} onChange={e => set(f.key, e.target.value)} rows={4}
+                className="w-full px-3 py-2 text-sm rounded-lg border border-dark-200 dark:border-dark-700 bg-white dark:bg-dark-900 text-dark-900 dark:text-white focus:ring-2 focus:ring-primary-400 outline-none resize-none" />
+            ) : f.type === "number" ? (
+              <input type="number" value={Number(form[f.key] ?? 0)} onChange={e => set(f.key, Number(e.target.value))}
+                className="w-full px-3 py-2 text-sm rounded-lg border border-dark-200 dark:border-dark-700 bg-white dark:bg-dark-900 text-dark-900 dark:text-white focus:ring-2 focus:ring-primary-400 outline-none" />
+            ) : f.type === "image" ? (
+              <ImageUploader value={String(form[f.key] ?? "")} onChange={v => set(f.key, v)} folder="about" label="" />
+            ) : (
+              <input type="text" value={String(form[f.key] ?? "")} onChange={e => set(f.key, e.target.value)}
+                className="w-full px-3 py-2 text-sm rounded-lg border border-dark-200 dark:border-dark-700 bg-white dark:bg-dark-900 text-dark-900 dark:text-white focus:ring-2 focus:ring-primary-400 outline-none" />
+            )}
+          </div>
+        ))}
+      </div>
+      <div className="mt-6 flex gap-3">
+        <button onClick={handleReset} disabled={!dirty || saving}
+          className="px-4 py-2 text-sm rounded-lg border border-dark-200 dark:border-dark-700 text-dark-700 dark:text-dark-200 hover:bg-dark-50 dark:hover:bg-dark-700 disabled:opacity-50">Cancel</button>
+        <button onClick={handleSave} disabled={!dirty || saving}
+          className="inline-flex items-center gap-2 px-6 py-2 text-sm text-white bg-primary-500 rounded-lg hover:bg-primary-600 disabled:opacity-50">
+          <Save size={14} /> {saving ? "Saving..." : "Save About"}
+        </button>
+      </div>
+    </div>
+  );
+}
+
+const HERO_FIELDS = [
+  { key: "title", type: "text" as const },
+  { key: "subtitle", type: "text" as const },
+  { key: "description", type: "textarea" as const },
+  { key: "profile_image_url", type: "image" as const },
+  { key: "background_image_url", type: "image" as const },
+  { key: "cta_primary_label", type: "text" as const },
+  { key: "cta_primary_url", type: "text" as const },
+  { key: "cta_secondary_label", type: "text" as const },
+  { key: "cta_secondary_url", type: "text" as const },
+];
+
+function HeroForm({ hero, onSaved }: { hero: Hero; onSaved: () => void }) {
+  const record = hero as unknown as Record<string, unknown>;
+  const [form, setForm] = useState<Record<string, unknown>>({});
+  const [saving, setSaving] = useState(false);
+  const [dirty, setDirty] = useState(false);
+
+  useEffect(() => {
+    const init: Record<string, unknown> = {};
+    HERO_FIELDS.forEach(f => { init[f.key] = record[f.key] ?? ""; });
+    setForm(init);
+    setDirty(false);
+  }, [hero]);
+
+  const set = (key: string, val: unknown) => {
+    setForm(p => ({ ...p, [key]: val }));
+    setDirty(true);
+  };
+
+  const handleSave = async () => {
+    setSaving(true);
+    try {
+      const updates: Record<string, unknown> = {};
+      HERO_FIELDS.forEach(f => {
+        const orig = record[f.key] ?? "";
+        if (form[f.key] !== orig) updates[f.key] = form[f.key];
+      });
+      if (Object.keys(updates).length > 0) {
+        await adminUpdate("hero", hero.id, updates);
+        toast.success("Hero section saved!");
+      }
+      setDirty(false);
+      onSaved();
+    } catch (err: unknown) {
+      toast.error(err instanceof Error ? err.message : "Save failed");
+    } finally {
+      setSaving(false);
+    }
+  };
+
+  const handleReset = () => {
+    const init: Record<string, unknown> = {};
+    HERO_FIELDS.forEach(f => { init[f.key] = record[f.key] ?? ""; });
+    setForm(init);
+    setDirty(false);
+  };
+
+  return (
+    <div>
+      <h3 className="text-lg font-semibold text-dark-900 dark:text-white mb-4">Hero Section</h3>
+      <div className="space-y-4 max-w-lg">
+        {HERO_FIELDS.map(f => (
+          <div key={f.key}>
+            <label className="block text-xs font-medium text-dark-500 dark:text-dark-400 mb-1 capitalize">{f.key.replace(/_/g, " ")}</label>
+            {f.type === "textarea" ? (
+              <textarea value={String(form[f.key] ?? "")} onChange={e => set(f.key, e.target.value)} rows={3}
+                className="w-full px-3 py-2 text-sm rounded-lg border border-dark-200 dark:border-dark-700 bg-white dark:bg-dark-900 text-dark-900 dark:text-white focus:ring-2 focus:ring-primary-400 outline-none resize-none" />
+            ) : f.type === "image" ? (
+              <ImageUploader value={String(form[f.key] ?? "")} onChange={v => set(f.key, v)} folder="hero" label="" />
+            ) : (
+              <input type="text" value={String(form[f.key] ?? "")} onChange={e => set(f.key, e.target.value)}
+                className="w-full px-3 py-2 text-sm rounded-lg border border-dark-200 dark:border-dark-700 bg-white dark:bg-dark-900 text-dark-900 dark:text-white focus:ring-2 focus:ring-primary-400 outline-none" />
+            )}
+          </div>
+        ))}
+      </div>
+      <div className="mt-6 flex gap-3">
+        <button onClick={handleReset} disabled={!dirty || saving}
+          className="px-4 py-2 text-sm rounded-lg border border-dark-200 dark:border-dark-700 text-dark-700 dark:text-dark-200 hover:bg-dark-50 dark:hover:bg-dark-700 disabled:opacity-50">Cancel</button>
+        <button onClick={handleSave} disabled={!dirty || saving}
+          className="inline-flex items-center gap-2 px-6 py-2 text-sm text-white bg-primary-500 rounded-lg hover:bg-primary-600 disabled:opacity-50">
+          <Save size={14} /> {saving ? "Saving..." : "Save Hero"}
+        </button>
+      </div>
+    </div>
+  );
+}
 
   const renderForm = (table: string, item: EditableItem | null) => {
     const data = item || {};
@@ -390,7 +568,7 @@ export function AdminDashboard() {
             </button>
           </div>
           <div className="space-y-3">
-            {fields.map(f => renderFormField(f, editing?.item?.[f.key] ?? data[f.key], (v) => handleFieldChange(f.key, v)))}
+            {fields.map(f => renderFormField(projects, f, editing?.item?.[f.key] ?? data[f.key], (v) => handleFieldChange(f.key, v)))}
           </div>
           <div className="mt-6 flex gap-3">
             <button onClick={() => { setEditing(null); setShowForm(false); }} className="px-4 py-2 text-sm rounded-lg border border-dark-200 dark:border-dark-700 text-dark-700 dark:text-dark-200 hover:bg-dark-50 dark:hover:bg-dark-700">Cancel</button>
@@ -566,71 +744,12 @@ export function AdminDashboard() {
             </div>
           )}
 
-          {tab === "profile" && (
-            <div>
-              <h3 className="text-lg font-semibold text-dark-900 dark:text-white mb-4">About Section</h3>
-              {about && (
-                <div className="space-y-3 max-w-lg">
-                  {["heading", "content", "years_experience", "image_url"].map(f => (
-                    <div key={f}>
-                      <label className="block text-xs font-medium text-dark-500 dark:text-dark-400 mb-1 capitalize">{f.replace(/_/g, " ")}</label>
-                      {f === "content" ? (
-                        <textarea value={(about as unknown as Record<string, unknown>)[f] as string || ""}
-                          onChange={async (e) => { await adminUpdate("about", about.id, { [f]: e.target.value }); loadAllData(); }}
-                          rows={4}
-                          className="w-full px-3 py-2 text-sm rounded-lg border border-dark-200 dark:border-dark-700 bg-white dark:bg-dark-900 text-dark-900 dark:text-white focus:ring-2 focus:ring-primary-400 outline-none resize-none" />
-                      ) : f === "image_url" ? (
-                        <div className="flex gap-2">
-                          <input type="url" value={(about as unknown as Record<string, unknown>)[f] as string || ""}
-                            onChange={async (e) => { await adminUpdate("about", about.id, { [f]: e.target.value }); loadAllData(); }}
-                            className="flex-1 px-3 py-2 text-sm rounded-lg border border-dark-200 dark:border-dark-700 bg-white dark:bg-dark-900 text-dark-900 dark:text-white focus:ring-2 focus:ring-primary-400 outline-none" />
-                          {!!(about as unknown as Record<string, unknown>)[f] && (
-                            <img src={String((about as unknown as Record<string, unknown>)[f])} alt="" className="w-12 h-12 rounded object-cover border border-dark-200" />
-                          )}
-                        </div>
-                      ) : (
-                        <input type={f === "years_experience" ? "number" : "text"}
-                          value={(about as unknown as Record<string, unknown>)[f] as string || ""}
-                          onChange={async (e) => { const val = f === "years_experience" ? Number(e.target.value) : e.target.value; await adminUpdate("about", about.id, { [f]: val }); loadAllData(); }}
-                          className="w-full px-3 py-2 text-sm rounded-lg border border-dark-200 dark:border-dark-700 bg-white dark:bg-dark-900 text-dark-900 dark:text-white focus:ring-2 focus:ring-primary-400 outline-none" />
-                      )}
-                    </div>
-                  ))}
-                </div>
-              )}
-            </div>
+          {tab === "profile" && about && (
+            <ProfileForm about={about} onSaved={loadAllData} />
           )}
 
           {tab === "hero" && hero && (
-            <div>
-              <h3 className="text-lg font-semibold text-dark-900 dark:text-white mb-4">Hero Section</h3>
-              <div className="space-y-3 max-w-lg">
-                {["title", "subtitle", "description", "profile_image_url", "background_image_url", "cta_primary_label", "cta_secondary_label", "cta_secondary_url"].map(f => (
-                  <div key={f}>
-                    <label className="block text-xs font-medium text-dark-500 dark:text-dark-400 mb-1 capitalize">{f.replace(/_/g, " ")}</label>
-                    {f === "description" ? (
-                      <textarea value={(hero as unknown as Record<string, unknown>)[f] as string || ""}
-                        onChange={async (e) => { await adminUpdate("hero", hero.id, { [f]: e.target.value }); loadAllData(); }}
-                        rows={3}
-                        className="w-full px-3 py-2 text-sm rounded-lg border border-dark-200 dark:border-dark-700 bg-white dark:bg-dark-900 text-dark-900 dark:text-white focus:ring-2 focus:ring-primary-400 outline-none resize-none" />
-                    ) : f.includes("image_url") ? (
-                      <div className="flex gap-2">
-                        <input type="url" value={(hero as unknown as Record<string, unknown>)[f] as string || ""}
-                          onChange={async (e) => { await adminUpdate("hero", hero.id, { [f]: e.target.value }); loadAllData(); }}
-                          className="flex-1 px-3 py-2 text-sm rounded-lg border border-dark-200 dark:border-dark-700 bg-white dark:bg-dark-900 text-dark-900 dark:text-white focus:ring-2 focus:ring-primary-400 outline-none" />
-                        {!!(hero as unknown as Record<string, unknown>)[f] && (
-                          <img src={String((hero as unknown as Record<string, unknown>)[f])} alt="" className="w-12 h-12 rounded object-cover border border-dark-200" />
-                        )}
-                      </div>
-                    ) : (
-                      <input type="text" value={(hero as unknown as Record<string, unknown>)[f] as string || ""}
-                        onChange={async (e) => { await adminUpdate("hero", hero.id, { [f]: e.target.value }); loadAllData(); }}
-                        className="w-full px-3 py-2 text-sm rounded-lg border border-dark-200 dark:border-dark-700 bg-white dark:bg-dark-900 text-dark-900 dark:text-white focus:ring-2 focus:ring-primary-400 outline-none" />
-                    )}
-                  </div>
-                ))}
-              </div>
-            </div>
+            <HeroForm hero={hero} onSaved={loadAllData} />
           )}
 
           {tab === "skills" && renderTable(skills as unknown as EditableItem[], "skills")}

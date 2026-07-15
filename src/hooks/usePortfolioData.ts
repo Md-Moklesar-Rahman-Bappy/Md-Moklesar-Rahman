@@ -35,12 +35,9 @@ const defaultData: PortfolioData = {
   certifications: fallbackData.certifications,
 };
 
-let cachedData: PortfolioData | null = null;
-
 function loadData(): PortfolioData {
-  if (cachedData) return cachedData;
   try {
-    cachedData = {
+    return {
       siteSettings: getSiteSettings(),
       hero: getHero(),
       about: getAbout(),
@@ -53,9 +50,8 @@ function loadData(): PortfolioData {
       certifications: getCertifications(),
     };
   } catch {
-    cachedData = defaultData;
+    return defaultData;
   }
-  return cachedData;
 }
 
 export function usePortfolioData() {
