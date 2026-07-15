@@ -1,6 +1,7 @@
-import { ExternalLink, Phone, Mail, MapPin } from "lucide-react";
+import { Phone, Mail, MapPin } from "lucide-react";
 import { SocialLink } from "@/types/database";
 import { fallbackData } from "@/lib/fallback";
+import { SocialIcon } from "@/components/ui/SocialIcon";
 
 interface FooterProps {
   socialLinks?: SocialLink[];
@@ -15,16 +16,6 @@ export function Footer({
   phone = fallbackData.siteSettings.phone,
   location = fallbackData.siteSettings.location,
 }: FooterProps) {
-  const platformIcon = (icon: string) => {
-    const icons: Record<string, string> = {
-      instagram: "📸",
-      youtube: "🎥",
-      github: "🐙",
-      linkedin: "💼",
-    };
-    return icons[icon] || "🔗";
-  };
-
   return (
     <footer className="bg-dark-950 text-dark-300 relative overflow-hidden">
       <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-primary-500 via-accent-500 to-highlight-500" />
@@ -102,10 +93,10 @@ export function Footer({
                   href={link.url}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex items-center justify-center w-9 h-9 rounded-xl bg-dark-800 text-dark-400 hover:scale-110 hover:-translate-y-0.5 transition-all duration-300 group"
+                  className="flex items-center justify-center w-9 h-9 rounded-xl bg-dark-800 text-dark-400 hover:scale-110 hover:-translate-y-0.5 hover:text-primary-400 transition-all duration-300 group"
                   title={link.platform}
                 >
-                  <ExternalLink size={14} className="group-hover:text-primary-400 transition-colors" />
+                  <SocialIcon icon={link.icon} className="text-sm" />
                 </a>
               ))}
             </div>

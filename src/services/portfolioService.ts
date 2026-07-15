@@ -37,7 +37,11 @@ const _education: Education[] = (educationRaw as unknown as Education[]).map(e =
 const _services: Service[] = (servicesRaw as unknown as Service[]).map(s => fillMeta<Service>(s));
 const _certifications: Certification[] = (certificationsRaw as unknown as Certification[]).map(c => fillMeta<Certification>(c));
 const _socialLinks: SocialLink[] = (socialLinksRaw as unknown as SocialLink[]).map(s => fillMeta<SocialLink>(s));
-let _messages: ContactMessage[] = (messagesRaw as unknown as ContactMessage[]).map(m => fillMeta<ContactMessage>(m));
+const _messagesRaw: ContactMessage[] = (messagesRaw as unknown as ContactMessage[]).map(m => fillMeta<ContactMessage>(m));
+const _storedMessages = loadMessagesFromStorage();
+const _messageIds = new Set(_messagesRaw.map(m => m.id));
+const _extraStored = _storedMessages.filter(m => !_messageIds.has(m.id));
+let _messages: ContactMessage[] = [..._messagesRaw, ..._extraStored];
 
 // --- Public read functions ---
 
@@ -81,6 +85,23 @@ export function getSocialLinks(): SocialLink[] {
   return _socialLinks;
 }
 
+function saveMessagesToStorage() {
+  try {
+    localStorage.setItem("portfolio_messages", JSON.stringify(_messages));
+  } catch {
+    // localStorage may be full or unavailable
+  }
+}
+
+function loadMessagesFromStorage(): ContactMessage[] {
+  try {
+    const stored = localStorage.getItem("portfolio_messages");
+    return stored ? JSON.parse(stored) : [];
+  } catch {
+    return [];
+  }
+}
+
 export async function submitContactMessage(msg: {
   name: string;
   email: string;
@@ -97,6 +118,7 @@ export async function submitContactMessage(msg: {
     created_at: new Date().toISOString(),
   };
   _messages = [..._messages, newMessage];
+  saveMessagesToStorage();
 
   if (isGitHubConfigured()) {
     const result = await commitFile(

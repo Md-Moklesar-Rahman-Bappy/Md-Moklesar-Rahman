@@ -6,6 +6,7 @@ import { fallbackData } from "@/lib/fallback";
 import { SectionWrapper, SectionHeader } from "@/components/ui/SectionWrapper";
 import { submitContactMessage } from "@/services/portfolioService";
 import { contactFormSchema } from "@/lib/validations";
+import { SocialIcon } from "@/components/ui/SocialIcon";
 
 interface ContactSectionProps {
   email?: string | null;
@@ -114,7 +115,7 @@ export function ContactSection({
                 className="w-10 h-10 flex items-center justify-center rounded-xl bg-white dark:bg-dark-800 border border-dark-200 dark:border-dark-700 text-dark-500 dark:text-dark-400 hover:bg-gradient-to-br hover:from-primary-500 hover:to-accent-500 hover:text-white hover:border-transparent hover:shadow-lg hover:-translate-y-1 transition-all duration-300"
                 title={link.platform}
               >
-                <span className="text-xs font-bold">{link.platform.slice(0, 2)}</span>
+                <SocialIcon icon={link.icon} className="text-sm" />
               </a>
             ))}
           </div>
