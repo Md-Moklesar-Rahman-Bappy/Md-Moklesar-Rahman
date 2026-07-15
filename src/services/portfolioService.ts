@@ -222,6 +222,7 @@ export async function adminMarkMessageRead(id: string): Promise<void> {
   const msg = _messages.find(m => m.id === id);
   if (msg) {
     msg.is_read = true;
+    saveMessagesToStorage();
   }
 }
 
