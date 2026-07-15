@@ -1,0 +1,54 @@
+[
+  {
+    "id": "cert-1",
+    "title": "Responsive Web Design",
+    "issuer": "freeCodeCamp",
+    "issue_date": "2023-06-15",
+    "credential_url": "https://www.freecodecamp.org/certification/responsive-web-design",
+    "image_url": "https://raw.githubusercontent.com/Md-Moklesar-Rahman-Bappy/Md-Moklesar-Rahman/main/public/img/uploads/general/mrlwgza2-aln5rx.jpg",
+    "category": "web-design",
+    "sort_order": 1,
+    "is_visible": true,
+    "created_at": "",
+    "updated_at": ""
+  },
+  {
+    "id": "cert-2",
+    "title": "JavaScript Algorithms and Data Structures",
+    "issuer": "freeCodeCamp",
+    "issue_date": "2023-09-20",
+    "credential_url": "https://www.freecodecamp.org/certification/javascript-algorithms",
+    "image_url": "https://placehold.co/600x400/312e81/818cf8?text=JavaScript+Algorithms",
+    "category": "web-development",
+    "sort_order": 2,
+    "is_visible": true,
+    "created_at": "",
+    "updated_at": ""
+  },
+  {
+    "id": "cert-3",
+    "title": "WordPress Theme Development",
+    "issuer": "Udemy",
+    "issue_date": "2024-01-10",
+    "credential_url": "https://www.udemy.com/certificate/wordpress-theme-dev",
+    "image_url": "https://placehold.co/600x400/1e3a8a/60a5fa?text=WordPress+Theme+Dev",
+    "category": "wordpress",
+    "sort_order": 3,
+    "is_visible": true,
+    "created_at": "",
+    "updated_at": ""
+  },
+  {
+    "id": "cert-4",
+    "title": "Graphic Design Fundamentals",
+    "issuer": "Coursera",
+    "issue_date": "2023-12-05",
+    "credential_url": "https://www.coursera.org/verify/graphic-design",
+    "image_url": "https://placehold.co/600x400/581c87/c4b5fd?text=Graphic+Design",
+    "category": "graphics-design",
+    "sort_order": 4,
+    "is_visible": true,
+    "created_at": "",
+    "updated_at": ""
+  }
+]
