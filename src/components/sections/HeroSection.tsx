@@ -61,6 +61,20 @@ export function HeroSection({ hero = fallbackData.hero }: HeroSectionProps) {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
         >
+          {hero.profile_image_url && (
+            <motion.div
+              initial={{ opacity: 0, scale: 0.8 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ delay: 0.1 }}
+              className="mb-6 flex justify-center"
+            >
+              <div className="w-28 h-28 sm:w-36 sm:h-36 rounded-full overflow-hidden border-4 border-white/50 dark:border-dark-800/50 shadow-xl shadow-primary-500/20 ring-2 ring-primary-200 dark:ring-primary-800">
+                <img src={hero.profile_image_url} alt={hero.title}
+                  className="w-full h-full object-cover" />
+              </div>
+            </motion.div>
+          )}
+
           <motion.p
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}

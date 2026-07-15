@@ -20,7 +20,12 @@ export function AboutSection({ about = fallbackData.about }: AboutSectionProps) 
           <div className="relative">
             <div className="aspect-[4/3] rounded-2xl bg-gradient-to-br from-primary-100 via-accent-50 to-secondary-100 dark:from-primary-900/20 dark:via-accent-900/10 dark:to-secondary-900/20 flex items-center justify-center overflow-hidden relative">
               <div className="absolute inset-0 bg-gradient-to-br from-primary-400/10 to-accent-400/10" />
-              <div className="text-7xl sm:text-8xl relative z-10 animate-float">👨‍💻</div>
+              {about.image_url ? (
+                <img src={about.image_url} alt={about.heading}
+                  className="w-full h-full object-cover relative z-10" />
+              ) : (
+                <div className="text-7xl sm:text-8xl relative z-10 animate-float">👨‍💻</div>
+              )}
             </div>
             <div className="absolute -bottom-4 -right-4 w-24 h-24 rounded-2xl bg-gradient-to-br from-accent-400 to-highlight-400 opacity-20 -z-10" />
             <div className="absolute -top-4 -left-4 w-20 h-20 rounded-2xl bg-gradient-to-br from-primary-400 to-secondary-400 opacity-20 -z-10" />
