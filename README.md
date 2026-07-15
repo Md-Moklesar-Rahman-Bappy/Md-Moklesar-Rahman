@@ -2,9 +2,9 @@
 
 A modern, dynamic portfolio web application built with React, TypeScript, Vite, and Tailwind CSS. Uses a file-based CMS — all content is stored in JSON files and committed to GitHub via the admin dashboard.
 
-**Live Site:** [md-moklesar-rahman-bappy.github.io](https://md-moklesar-rahman-bappy.github.io/Md-Moklesar-Rahman/)
+**Git Live:** [md-moklesar-rahman-bappy.github.io](https://md-moklesar-rahman-bappy.github.io/Md-Moklesar-Rahman/)
 
-**Live Site:** [md-moklesar-rahman-bappy.github.io](https://moklesarrahman.netlify.app/)
+**Netlify:** [md-moklesar-rahman-bappy.github.io](https://moklesarrahman.netlify.app/)
 
 ## Tech Stack
 
