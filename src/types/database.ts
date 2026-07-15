@@ -41,6 +41,7 @@ export interface Skill {
   name: string;
   category: string;
   level: number;
+  icon: string | null;
   icon_url: string | null;
   sort_order: number;
   is_visible: boolean;
@@ -101,6 +102,7 @@ export interface Service {
   title: string;
   description: string | null;
   icon: string;
+  category: string | null;
   sort_order: number;
   is_visible: boolean;
   created_at: string;
@@ -114,6 +116,7 @@ export interface Certification {
   issue_date: string | null;
   credential_url: string | null;
   image_url: string | null;
+  category: string | null;
   sort_order: number;
   is_visible: boolean;
   created_at: string;

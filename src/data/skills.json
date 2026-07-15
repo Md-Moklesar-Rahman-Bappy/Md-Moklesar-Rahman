@@ -1,12 +1,12 @@
 [
-  { "id": "skill-1", "name": "WordPress", "category": "development", "level": 85, "sort_order": 1, "is_visible": true },
-  { "id": "skill-2", "name": "Web Development", "category": "development", "level": 80, "sort_order": 2, "is_visible": true },
-  { "id": "skill-3", "name": "Web Design", "category": "design", "level": 75, "sort_order": 3, "is_visible": true },
-  { "id": "skill-4", "name": "Graphics Design", "category": "design", "level": 70, "sort_order": 4, "is_visible": true },
-  { "id": "skill-5", "name": "Laravel", "category": "development", "level": 70, "sort_order": 5, "is_visible": true },
-  { "id": "skill-6", "name": "HTML/CSS", "category": "development", "level": 90, "sort_order": 6, "is_visible": true },
-  { "id": "skill-7", "name": "JavaScript", "category": "development", "level": 75, "sort_order": 7, "is_visible": true },
-  { "id": "skill-8", "name": "PHP", "category": "development", "level": 75, "sort_order": 8, "is_visible": true },
-  { "id": "skill-9", "name": "UI/UX Design", "category": "design", "level": 70, "sort_order": 9, "is_visible": true },
-  { "id": "skill-10", "name": "Elementor", "category": "tools", "level": 80, "sort_order": 10, "is_visible": true }
+  { "id": "skill-1", "name": "WordPress", "category": "development", "level": 85, "icon": "fa-brands fa-wordpress", "icon_url": null, "sort_order": 1, "is_visible": true },
+  { "id": "skill-2", "name": "Web Development", "category": "development", "level": 80, "icon": "fa-solid fa-globe", "icon_url": null, "sort_order": 2, "is_visible": true },
+  { "id": "skill-3", "name": "Web Design", "category": "design", "level": 75, "icon": "fa-solid fa-pen-ruler", "icon_url": null, "sort_order": 3, "is_visible": true },
+  { "id": "skill-4", "name": "Graphics Design", "category": "design", "level": 70, "icon": "fa-solid fa-palette", "icon_url": null, "sort_order": 4, "is_visible": true },
+  { "id": "skill-5", "name": "Laravel", "category": "development", "level": 70, "icon": "fa-brands fa-laravel", "icon_url": null, "sort_order": 5, "is_visible": true },
+  { "id": "skill-6", "name": "HTML/CSS", "category": "development", "level": 90, "icon": "fa-brands fa-html5", "icon_url": null, "sort_order": 6, "is_visible": true },
+  { "id": "skill-7", "name": "JavaScript", "category": "development", "level": 75, "icon": "fa-brands fa-js", "icon_url": null, "sort_order": 7, "is_visible": true },
+  { "id": "skill-8", "name": "PHP", "category": "development", "level": 75, "icon": "fa-brands fa-php", "icon_url": null, "sort_order": 8, "is_visible": true },
+  { "id": "skill-9", "name": "UI/UX Design", "category": "design", "level": 70, "icon": "fa-solid fa-wand-magic-sparkles", "icon_url": null, "sort_order": 9, "is_visible": true },
+  { "id": "skill-10", "name": "Elementor", "category": "tools", "level": 80, "icon": "fa-solid fa-puzzle-piece", "icon_url": null, "sort_order": 10, "is_visible": true }
 ]

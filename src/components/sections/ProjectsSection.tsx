@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { ExternalLink, Github, X } from "lucide-react";
+import { ExternalLink, Github, X, ArrowUpDown } from "lucide-react";
 import { Project } from "@/types/database";
 import { fallbackData } from "@/lib/fallback";
 import { SectionWrapper, SectionHeader } from "@/components/ui/SectionWrapper";
@@ -11,16 +11,24 @@ interface ProjectsSectionProps {
   projects?: Project[];
 }
 
+type SortMode = "recent" | "random";
+
 export function ProjectsSection({ projects = fallbackData.projects }: ProjectsSectionProps) {
   const [activeFilter, setActiveFilter] = useState("all");
   const [selected, setSelected] = useState<Project | null>(null);
+  const [sortMode, setSortMode] = useState<SortMode>("recent");
 
-  const visibleProjects = projects.filter(p => p.is_visible).sort((a, b) => a.sort_order - b.sort_order);
+  const visibleProjects = projects.filter(p => p.is_visible);
   const categories = ["all", ...new Set(visibleProjects.map(p => p.category))];
 
+  const sorted = [...visibleProjects].sort((a, b) => {
+    if (sortMode === "random") return Math.random() - 0.5;
+    return (a.sort_order ?? 999) - (b.sort_order ?? 999);
+  });
+
   const filtered = activeFilter === "all"
-    ? visibleProjects
-    : visibleProjects.filter(p => p.category === activeFilter);
+    ? sorted
+    : sorted.filter(p => p.category === activeFilter);
 
   if (visibleProjects.length === 0) {
     return (
@@ -35,24 +43,35 @@ export function ProjectsSection({ projects = fallbackData.projects }: ProjectsSe
     <SectionWrapper id="projects" className="section-gradient-2">
       <SectionHeader title="Projects" subtitle="Some of my recent work" />
 
-      {/* Filters */}
-      <div className="flex flex-wrap items-center justify-center gap-2 mb-10">
-        {categories.map((cat) => (
-          <button
-            key={cat}
-            onClick={() => setActiveFilter(cat)}
-            className={`px-5 py-2 text-sm font-medium rounded-full transition-all duration-300 ${
-              activeFilter === cat
-                ? "bg-gradient-to-r from-primary-500 to-accent-500 text-white shadow-lg shadow-primary-500/25"
-                : "bg-white dark:bg-dark-800 text-dark-600 dark:text-dark-300 hover:bg-dark-50 dark:hover:bg-dark-700 border border-dark-200 dark:border-dark-700 hover:border-primary-300 dark:hover:border-primary-700"
-            }`}
-          >
-            {cat === "all" ? "All" : getCategoryLabel(cat)}
-          </button>
-        ))}
+      <div className="flex flex-wrap items-center justify-center gap-3 mb-10">
+        <div className="flex flex-wrap items-center justify-center gap-2">
+          {categories.map((cat) => (
+            <button
+              key={cat}
+              onClick={() => setActiveFilter(cat)}
+              className={`px-5 py-2 text-sm font-medium rounded-full transition-all duration-300 ${
+                activeFilter === cat
+                  ? "bg-gradient-to-r from-primary-500 to-accent-500 text-white shadow-lg shadow-primary-500/25"
+                  : "bg-white dark:bg-dark-800 text-dark-600 dark:text-dark-300 hover:bg-dark-50 dark:hover:bg-dark-700 border border-dark-200 dark:border-dark-700 hover:border-primary-300 dark:hover:border-primary-700"
+              }`}
+            >
+              {cat === "all" ? "All" : getCategoryLabel(cat)}
+            </button>
+          ))}
+        </div>
+        <button
+          onClick={() => setSortMode(s => s === "recent" ? "random" : "recent")}
+          className={`flex items-center gap-1.5 px-4 py-2 text-sm font-medium rounded-full transition-all duration-300 border ${
+            sortMode === "random"
+              ? "bg-gradient-to-r from-secondary-500 to-highlight-500 text-white shadow-lg border-transparent"
+              : "bg-white dark:bg-dark-800 text-dark-600 dark:text-dark-300 border-dark-200 dark:border-dark-700"
+          }`}
+        >
+          <ArrowUpDown size={14} />
+          {sortMode === "recent" ? "Recent" : "Random"}
+        </button>
       </div>
 
-      {/* Grid */}
       <motion.div layout className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
         <AnimatePresence mode="popLayout">
           {filtered.map((project, index) => (
@@ -99,7 +118,6 @@ export function ProjectsSection({ projects = fallbackData.projects }: ProjectsSe
         </AnimatePresence>
       </motion.div>
 
-      {/* Modal */}
       <AnimatePresence>
         {selected && (
           <motion.div

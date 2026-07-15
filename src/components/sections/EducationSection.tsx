@@ -30,8 +30,18 @@ function getCardBorder(index: number) {
   return colors[index % colors.length];
 }
 
+function getSortYear(edu: Education): number {
+  return edu.end_year ?? edu.start_year ?? 0;
+}
+
 export function EducationSection({ education = fallbackData.education }: EducationSectionProps) {
-  const visible = education.filter(e => e.is_visible).sort((a, b) => a.sort_order - b.sort_order);
+  const visible = education
+    .filter(e => e.is_visible)
+    .sort((a, b) => {
+      const yearCmp = getSortYear(b) - getSortYear(a);
+      if (yearCmp !== 0) return yearCmp;
+      return (a.sort_order ?? 999) - (b.sort_order ?? 999);
+    });
 
   return (
     <SectionWrapper id="education" className="section-gradient-2">

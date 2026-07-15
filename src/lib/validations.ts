@@ -21,6 +21,7 @@ export const skillSchema = z.object({
   name: z.string().min(1, "Name is required").max(100),
   category: z.string().default("general"),
   level: z.number().min(0).max(100).default(0),
+  icon: z.string().optional().nullable(),
   icon_url: z.string().url().optional().or(z.literal("")).nullable(),
   sort_order: z.number().default(0),
   is_visible: z.boolean().default(true),
@@ -69,6 +70,7 @@ export const serviceSchema = z.object({
   title: z.string().min(1, "Title is required").max(200),
   description: z.string().max(1000).optional().nullable(),
   icon: z.string().default("briefcase"),
+  category: z.string().optional().nullable(),
   sort_order: z.number().default(0),
   is_visible: z.boolean().default(true),
 });
@@ -87,6 +89,7 @@ export const certificationSchema = z.object({
   issue_date: z.string().optional().nullable(),
   credential_url: z.string().url().optional().or(z.literal("")).nullable(),
   image_url: z.string().optional().nullable(),
+  category: z.string().optional().nullable(),
   sort_order: z.number().default(0),
   is_visible: z.boolean().default(true),
 });

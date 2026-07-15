@@ -3,6 +3,7 @@ import { Paintbrush, Monitor, Code, Layout } from "lucide-react";
 import { Service } from "@/types/database";
 import { fallbackData } from "@/lib/fallback";
 import { SectionWrapper, SectionHeader } from "@/components/ui/SectionWrapper";
+import { getCategoryColor, getCategoryLabel } from "@/lib/utils";
 
 interface ServicesSectionProps {
   services?: Service[];
@@ -48,8 +49,18 @@ function getBorderColor(index: number) {
   return colors[index % colors.length];
 }
 
+function getCategoryTagColor(index: number) {
+  const colors = [
+    "bg-primary-100 text-primary-700 dark:bg-primary-900/30 dark:text-primary-400",
+    "bg-accent-100 text-accent-700 dark:bg-accent-900/30 dark:text-accent-400",
+    "bg-secondary-100 text-secondary-700 dark:bg-secondary-900/30 dark:text-secondary-400",
+    "bg-highlight-100 text-highlight-700 dark:bg-highlight-900/30 dark:text-highlight-400",
+  ];
+  return colors[index % colors.length];
+}
+
 export function ServicesSection({ services = fallbackData.services }: ServicesSectionProps) {
-  const visibleServices = services.filter(s => s.is_visible).sort((a, b) => a.sort_order - b.sort_order);
+  const visibleServices = services.filter(s => s.is_visible).sort((a, b) => a.title.localeCompare(b.title));
 
   return (
     <SectionWrapper id="services">
@@ -74,6 +85,11 @@ export function ServicesSection({ services = fallbackData.services }: ServicesSe
                 <h3 className="text-lg font-semibold text-dark-900 dark:text-white group-hover:text-white transition-colors duration-300 mb-2">
                   {service.title}
                 </h3>
+                {service.category && (
+                  <span className={`inline-block px-2 py-0.5 text-[10px] font-semibold rounded-full ${getCategoryTagColor(index)} group-hover:bg-white/20 group-hover:text-white transition-colors duration-300 mb-2`}>
+                    {getCategoryLabel(service.category)}
+                  </span>
+                )}
                 <p className="text-sm text-dark-500 dark:text-dark-400 group-hover:text-white/80 leading-relaxed transition-colors duration-300">
                   {service.description}
                 </p>

@@ -1,11 +1,12 @@
 import {
   getSiteSettings, getHero, getAbout, getSkills, getProjects,
   getExperience, getEducation, getServices, getSocialLinks,
+  getCertifications,
 } from "@/services/portfolioService";
 import { fallbackData } from "@/lib/fallback";
 import type {
   SiteSettings, Hero, About, Skill, Project,
-  Experience, Education, Service, SocialLink,
+  Experience, Education, Service, SocialLink, Certification,
 } from "@/types/database";
 
 interface PortfolioData {
@@ -18,6 +19,7 @@ interface PortfolioData {
   education: Education[];
   services: Service[];
   socialLinks: SocialLink[];
+  certifications: Certification[];
 }
 
 const defaultData: PortfolioData = {
@@ -30,6 +32,7 @@ const defaultData: PortfolioData = {
   education: fallbackData.education,
   services: fallbackData.services,
   socialLinks: fallbackData.socialLinks,
+  certifications: fallbackData.certifications,
 };
 
 let cachedData: PortfolioData | null = null;
@@ -47,6 +50,7 @@ function loadData(): PortfolioData {
       education: getEducation(),
       services: getServices(),
       socialLinks: getSocialLinks(),
+      certifications: getCertifications(),
     };
   } catch {
     cachedData = defaultData;

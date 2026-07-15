@@ -4,6 +4,7 @@
     "title": "Graphics Design",
     "description": "Creating compelling brand identities, logos, and visual assets that communicate your brand story effectively.",
     "icon": "palette",
+    "category": "graphics-design",
     "sort_order": 1,
     "is_visible": true
   },
@@ -12,6 +13,7 @@
     "title": "Web Design",
     "description": "Designing modern, responsive, and user-friendly websites with clean aesthetics and intuitive navigation.",
     "icon": "monitor",
+    "category": "web-design",
     "sort_order": 2,
     "is_visible": true
   },
@@ -20,6 +22,7 @@
     "title": "Web Development",
     "description": "Building robust, scalable web applications using modern frameworks and best coding practices.",
     "icon": "code",
+    "category": "web-development",
     "sort_order": 3,
     "is_visible": true
   },
@@ -28,6 +31,7 @@
     "title": "WordPress",
     "description": "Custom WordPress themes, plugins, and full website solutions tailored to your business needs.",
     "icon": "layout",
+    "category": "wordpress",
     "sort_order": 4,
     "is_visible": true
   }

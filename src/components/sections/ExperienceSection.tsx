@@ -31,8 +31,19 @@ function getCardBorder(index: number) {
   return colors[index % colors.length];
 }
 
+function getSortDate(exp: Experience): string {
+  if (exp.start_date) return exp.start_date;
+  return "0000-01-01";
+}
+
 export function ExperienceSection({ experience = fallbackData.experience }: ExperienceSectionProps) {
-  const visible = experience.filter(e => e.is_visible).sort((a, b) => a.sort_order - b.sort_order);
+  const visible = experience
+    .filter(e => e.is_visible)
+    .sort((a, b) => {
+      const dateCmp = getSortDate(b).localeCompare(getSortDate(a));
+      if (dateCmp !== 0) return dateCmp;
+      return (a.sort_order ?? 999) - (b.sort_order ?? 999);
+    });
 
   return (
     <SectionWrapper id="experience">
