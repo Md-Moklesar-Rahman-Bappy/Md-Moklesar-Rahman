@@ -2,6 +2,8 @@ import { useState, useEffect } from "react";
 import { Menu, X } from "lucide-react";
 import { ThemeToggle } from "@/components/ui/ThemeToggle";
 import { cn } from "@/lib/utils";
+import type { SiteSettings } from "@/types/database";
+import { fallbackData } from "@/lib/fallback";
 
 const navLinks = [
   { label: "Home", href: "#home" },
@@ -15,7 +17,11 @@ const navLinks = [
   { label: "Contact", href: "#contact" },
 ];
 
-export function Navbar() {
+interface NavbarProps {
+  siteSettings?: SiteSettings;
+}
+
+export function Navbar({ siteSettings = fallbackData.siteSettings }: NavbarProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
 
@@ -50,7 +56,7 @@ export function Navbar() {
             }}
             className="text-xl font-bold"
           >
-            <span className="gradient-text">Md.Rahman</span>
+            <span className="gradient-text">{siteSettings.site_name || siteSettings.owner_name}</span>
           </a>
 
           <div className="hidden md:flex items-center gap-1">

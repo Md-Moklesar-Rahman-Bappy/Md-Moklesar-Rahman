@@ -9,17 +9,22 @@ import { ExperienceSection } from "@/components/sections/ExperienceSection";
 import { EducationSection } from "@/components/sections/EducationSection";
 import { CertificationsSection } from "@/components/sections/CertificationsSection";
 import { ContactSection } from "@/components/sections/ContactSection";
+import { useEffect } from "react";
 import { usePortfolioData } from "@/hooks/usePortfolioData";
 import { LoadingSpinner } from "@/components/ui/LoadingState";
 
 export function HomePage() {
   const { data, loading } = usePortfolioData();
 
+  useEffect(() => {
+    document.title = `${data.siteSettings.site_name} | Portfolio`;
+  }, [data.siteSettings.site_name]);
+
   if (loading) return <LoadingSpinner />;
 
   return (
     <main>
-      <Navbar />
+      <Navbar siteSettings={data.siteSettings} />
       <HeroSection hero={data.hero} />
       <AboutSection about={data.about} />
       <SkillsSection skills={data.skills} />
@@ -39,6 +44,7 @@ export function HomePage() {
         email={data.siteSettings.primary_email}
         phone={data.siteSettings.phone}
         location={data.siteSettings.location}
+        siteSettings={data.siteSettings}
       />
     </main>
   );

@@ -1,5 +1,5 @@
 import { Phone, Mail, MapPin } from "lucide-react";
-import { SocialLink } from "@/types/database";
+import { SocialLink, SiteSettings } from "@/types/database";
 import { fallbackData } from "@/lib/fallback";
 import { SocialIcon } from "@/components/ui/SocialIcon";
 
@@ -8,6 +8,7 @@ interface FooterProps {
   email?: string | null;
   phone?: string | null;
   location?: string | null;
+  siteSettings?: SiteSettings;
 }
 
 export function Footer({
@@ -15,6 +16,7 @@ export function Footer({
   email = fallbackData.siteSettings.primary_email,
   phone = fallbackData.siteSettings.phone,
   location = fallbackData.siteSettings.location,
+  siteSettings = fallbackData.siteSettings,
 }: FooterProps) {
   return (
     <footer className="bg-dark-950 text-dark-300 relative overflow-hidden">
@@ -26,10 +28,10 @@ export function Footer({
         <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
           <div>
             <h3 className="text-2xl font-bold mb-4">
-              <span className="gradient-text">Md.Rahman</span>
+              <span className="gradient-text">{siteSettings.site_name || siteSettings.owner_name}</span>
             </h3>
             <p className="text-dark-400 text-sm leading-relaxed">
-              Web Designer & Developer specializing in WordPress, Laravel, and modern web solutions. Creating beautiful digital experiences with clean code.
+              {siteSettings.tagline || "Web Designer & Developer"}
             </p>
           </div>
 
