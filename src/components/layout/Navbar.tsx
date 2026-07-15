@@ -33,23 +33,23 @@ export function Navbar() {
   return (
     <nav
       className={cn(
-        "fixed top-0 left-0 right-0 z-50 transition-all duration-300",
+        "fixed top-0 left-0 right-0 z-50 transition-all duration-500",
         scrolled
-          ? "bg-white/90 dark:bg-dark-950/90 backdrop-blur-md shadow-sm"
+          ? "glass shadow-lg shadow-dark-900/5 dark:shadow-dark-950/50"
           : "bg-transparent"
       )}
     >
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-16">
+        <div className="flex items-center justify-between h-16 md:h-20">
           <a
             href="#home"
             onClick={(e) => {
               e.preventDefault();
               handleClick("#home");
             }}
-            className="text-lg font-bold text-dark-900 dark:text-white"
+            className="text-xl font-bold"
           >
-            Md<span className="text-primary-500">.</span>Rahman
+            <span className="gradient-text">Md.Rahman</span>
           </a>
 
           <div className="hidden md:flex items-center gap-1">
@@ -61,7 +61,7 @@ export function Navbar() {
                   e.preventDefault();
                   handleClick(link.href);
                 }}
-                className="px-3 py-2 text-sm font-medium text-dark-600 dark:text-dark-300 hover:text-primary-500 dark:hover:text-primary-400 transition-colors rounded-lg hover:bg-dark-50 dark:hover:bg-dark-800"
+                className="px-3 py-2 text-sm font-medium text-dark-600 dark:text-dark-300 hover:text-primary-500 dark:hover:text-primary-400 transition-colors rounded-lg hover:bg-primary-50 dark:hover:bg-dark-800"
               >
                 {link.label}
               </a>
@@ -73,7 +73,7 @@ export function Navbar() {
             <ThemeToggle />
             <button
               onClick={() => setIsOpen(!isOpen)}
-              className="p-2 text-dark-600 dark:text-dark-300 hover:bg-dark-100 dark:hover:bg-dark-800 rounded-lg"
+              className="p-2 text-dark-600 dark:text-dark-300 hover:bg-dark-100 dark:hover:bg-dark-800 rounded-xl transition-colors"
               aria-label="Toggle menu"
             >
               {isOpen ? <X size={20} /> : <Menu size={20} />}
@@ -83,7 +83,7 @@ export function Navbar() {
       </div>
 
       {isOpen && (
-        <div className="md:hidden bg-white dark:bg-dark-950 border-t border-dark-200 dark:border-dark-800">
+        <div className="md:hidden glass border-t border-dark-200/50 dark:border-dark-700/50">
           <div className="px-4 py-3 space-y-1">
             {navLinks.map((link) => (
               <a
@@ -93,7 +93,7 @@ export function Navbar() {
                   e.preventDefault();
                   handleClick(link.href);
                 }}
-                className="block px-3 py-2 text-sm font-medium text-dark-600 dark:text-dark-300 hover:text-primary-500 rounded-lg hover:bg-dark-50 dark:hover:bg-dark-800"
+                className="block px-3 py-2.5 text-sm font-medium text-dark-600 dark:text-dark-300 hover:text-primary-500 rounded-lg hover:bg-primary-50 dark:hover:bg-dark-800 transition-colors"
               >
                 {link.label}
               </a>

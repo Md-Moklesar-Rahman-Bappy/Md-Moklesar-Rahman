@@ -32,19 +32,19 @@ export function ProjectsSection({ projects = fallbackData.projects }: ProjectsSe
   }
 
   return (
-    <SectionWrapper id="projects" className="bg-dark-50/50 dark:bg-dark-900/50">
+    <SectionWrapper id="projects" className="section-gradient-2">
       <SectionHeader title="Projects" subtitle="Some of my recent work" />
 
       {/* Filters */}
-      <div className="flex flex-wrap items-center justify-center gap-2 mb-8">
+      <div className="flex flex-wrap items-center justify-center gap-2 mb-10">
         {categories.map((cat) => (
           <button
             key={cat}
             onClick={() => setActiveFilter(cat)}
-            className={`px-4 py-1.5 text-sm font-medium rounded-full transition-all ${
+            className={`px-5 py-2 text-sm font-medium rounded-full transition-all duration-300 ${
               activeFilter === cat
-                ? "bg-primary-500 text-white shadow-md"
-                : "bg-white dark:bg-dark-800 text-dark-600 dark:text-dark-300 hover:bg-dark-50 dark:hover:bg-dark-700 border border-dark-200 dark:border-dark-700"
+                ? "bg-gradient-to-r from-primary-500 to-accent-500 text-white shadow-lg shadow-primary-500/25"
+                : "bg-white dark:bg-dark-800 text-dark-600 dark:text-dark-300 hover:bg-dark-50 dark:hover:bg-dark-700 border border-dark-200 dark:border-dark-700 hover:border-primary-300 dark:hover:border-primary-700"
             }`}
           >
             {cat === "all" ? "All" : getCategoryLabel(cat)}
@@ -55,39 +55,40 @@ export function ProjectsSection({ projects = fallbackData.projects }: ProjectsSe
       {/* Grid */}
       <motion.div layout className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
         <AnimatePresence mode="popLayout">
-          {filtered.map((project) => (
+          {filtered.map((project, index) => (
             <motion.div
               key={project.id}
               layout
               initial={{ opacity: 0, scale: 0.9 }}
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.9 }}
-              transition={{ duration: 0.3 }}
+              transition={{ duration: 0.3, delay: index * 0.05 }}
               className="group cursor-pointer"
               onClick={() => setSelected(project)}
             >
-              <div className="rounded-xl overflow-hidden bg-white dark:bg-dark-800 border border-dark-200 dark:border-dark-700 hover:shadow-lg hover:-translate-y-1 transition-all">
-                <div className="aspect-video bg-gradient-to-br from-dark-100 to-dark-200 dark:from-dark-700 dark:to-dark-800 flex items-center justify-center text-dark-400 overflow-hidden">
+              <div className="rounded-xl overflow-hidden bg-white dark:bg-dark-800 border border-dark-200 dark:border-dark-700 hover:shadow-xl hover:-translate-y-2 transition-all duration-300">
+                <div className="aspect-video bg-gradient-to-br from-primary-100 via-accent-50 to-secondary-100 dark:from-dark-700 dark:via-dark-800 dark:to-dark-700 flex items-center justify-center overflow-hidden relative">
                   {project.image_url ? (
                     <img
                       src={project.image_url}
                       alt={project.title}
-                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                      className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
                       loading="lazy"
                     />
                   ) : (
-                    <span className="text-4xl opacity-30">📁</span>
+                    <span className="text-5xl opacity-30 animate-float">📁</span>
                   )}
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                 </div>
-                <div className="p-4">
-                  <span className={`inline-block px-2 py-0.5 text-xs font-medium rounded-full ${getCategoryColor(project.category)}`}>
+                <div className="p-5">
+                  <span className={`inline-block px-3 py-1 text-xs font-semibold rounded-full ${getCategoryColor(project.category)}`}>
                     {getCategoryLabel(project.category)}
                   </span>
-                  <h3 className="mt-2 font-semibold text-dark-900 dark:text-white group-hover:text-primary-500 transition-colors">
+                  <h3 className="mt-3 font-semibold text-dark-900 dark:text-white group-hover:text-primary-500 transition-colors duration-300">
                     {project.title}
                   </h3>
                   {project.short_description && (
-                    <p className="mt-1 text-sm text-dark-500 dark:text-dark-400 line-clamp-2">
+                    <p className="mt-2 text-sm text-dark-500 dark:text-dark-400 line-clamp-2 leading-relaxed">
                       {project.short_description}
                     </p>
                   )}
@@ -112,17 +113,17 @@ export function ProjectsSection({ projects = fallbackData.projects }: ProjectsSe
               initial={{ opacity: 0, scale: 0.95, y: 20 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.95, y: 20 }}
-              className="relative w-full max-w-2xl max-h-[90vh] overflow-y-auto rounded-2xl bg-white dark:bg-dark-800 p-6 sm:p-8"
+              className="relative w-full max-w-2xl max-h-[90vh] overflow-y-auto rounded-2xl bg-white dark:bg-dark-800 p-6 sm:p-8 shadow-2xl border border-dark-100 dark:border-dark-700"
               onClick={(e) => e.stopPropagation()}
             >
               <button
                 onClick={() => setSelected(null)}
-                className="absolute top-4 right-4 p-1 rounded-lg text-dark-400 hover:text-dark-600 dark:hover:text-dark-200 hover:bg-dark-100 dark:hover:bg-dark-700"
+                className="absolute top-4 right-4 p-2 rounded-xl text-dark-400 hover:text-dark-600 dark:hover:text-dark-200 hover:bg-dark-100 dark:hover:bg-dark-700 transition-colors"
               >
                 <X size={20} />
               </button>
 
-              <div className="aspect-video rounded-xl bg-gradient-to-br from-dark-100 to-dark-200 dark:from-dark-700 dark:to-dark-800 flex items-center justify-center overflow-hidden mb-6">
+              <div className="aspect-video rounded-xl bg-gradient-to-br from-primary-100 via-accent-50 to-secondary-100 dark:from-dark-700 dark:via-dark-800 dark:to-dark-700 flex items-center justify-center overflow-hidden mb-6">
                 {selected.image_url ? (
                   <img src={selected.image_url} alt={selected.title} className="w-full h-full object-cover" />
                 ) : (
@@ -130,11 +131,11 @@ export function ProjectsSection({ projects = fallbackData.projects }: ProjectsSe
                 )}
               </div>
 
-              <span className={`inline-block px-3 py-1 text-xs font-medium rounded-full ${getCategoryColor(selected.category)}`}>
+              <span className={`inline-block px-3 py-1 text-xs font-semibold rounded-full ${getCategoryColor(selected.category)}`}>
                 {getCategoryLabel(selected.category)}
               </span>
 
-              <h2 className="mt-3 text-2xl font-bold text-dark-900 dark:text-white">{selected.title}</h2>
+              <h2 className="mt-4 text-2xl font-bold gradient-text-primary">{selected.title}</h2>
 
               {selected.description && (
                 <p className="mt-4 text-dark-600 dark:text-dark-300 leading-relaxed">{selected.description}</p>
@@ -142,10 +143,10 @@ export function ProjectsSection({ projects = fallbackData.projects }: ProjectsSe
 
               {selected.tech_stack && selected.tech_stack.length > 0 && (
                 <div className="mt-6">
-                  <h4 className="text-sm font-semibold text-dark-900 dark:text-white mb-2">Tech Stack</h4>
+                  <h4 className="text-sm font-semibold text-dark-900 dark:text-white mb-3">Tech Stack</h4>
                   <div className="flex flex-wrap gap-2">
                     {selected.tech_stack.map((tech) => (
-                      <span key={tech} className="px-3 py-1 text-xs font-medium rounded-full bg-dark-100 dark:bg-dark-700 text-dark-600 dark:text-dark-300">
+                      <span key={tech} className="px-3 py-1.5 text-xs font-medium rounded-full bg-gradient-to-r from-primary-50 to-accent-50 dark:from-primary-900/20 dark:to-accent-900/20 text-primary-700 dark:text-primary-300 border border-primary-200/50 dark:border-primary-800/30">
                         {tech}
                       </span>
                     ))}
@@ -153,13 +154,13 @@ export function ProjectsSection({ projects = fallbackData.projects }: ProjectsSe
                 </div>
               )}
 
-              <div className="mt-6 flex flex-wrap gap-3">
+              <div className="mt-8 flex flex-wrap gap-3">
                 {selected.live_url && (
                   <a
                     href={selected.live_url}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-white bg-primary-500 rounded-lg hover:bg-primary-600 transition-colors"
+                    className="btn-gradient"
                   >
                     <ExternalLink size={14} /> Live Preview
                   </a>
@@ -169,7 +170,7 @@ export function ProjectsSection({ projects = fallbackData.projects }: ProjectsSe
                     href={selected.github_url}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-dark-700 dark:text-dark-200 bg-dark-100 dark:bg-dark-700 rounded-lg hover:bg-dark-200 dark:hover:bg-dark-600 transition-colors"
+                    className="inline-flex items-center gap-2 px-6 py-3 font-medium rounded-full bg-dark-100 dark:bg-dark-700 text-dark-700 dark:text-dark-200 hover:bg-dark-200 dark:hover:bg-dark-600 transition-all duration-300 hover:shadow-lg border border-dark-200 dark:border-dark-600"
                   >
                     <Github size={14} /> View Code
                   </a>

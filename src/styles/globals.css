@@ -6,6 +6,16 @@ html {
   scroll-behavior: smooth;
 }
 
+@layer base {
+  body {
+    @apply bg-white dark:bg-dark-950 text-dark-900 dark:text-white antialiased;
+  }
+
+  ::selection {
+    @apply bg-primary-200 dark:bg-primary-800 text-primary-900 dark:text-primary-100;
+  }
+}
+
 @layer components {
   .section-container {
     @apply max-w-6xl mx-auto px-4 sm:px-6 lg:px-8;
@@ -13,5 +23,74 @@ html {
 
   .section-padding {
     @apply py-16 sm:py-20 lg:py-24;
+  }
+
+  .gradient-text {
+    @apply bg-gradient-to-r from-primary-500 via-accent-500 to-highlight-500 bg-clip-text text-transparent bg-[length:200%_auto] animate-gradient-shift;
+  }
+
+  .gradient-text-primary {
+    @apply bg-gradient-to-r from-primary-500 to-primary-700 bg-clip-text text-transparent;
+  }
+
+  .gradient-text-accent {
+    @apply bg-gradient-to-r from-accent-500 to-highlight-500 bg-clip-text text-transparent;
+  }
+
+  .glass {
+    @apply bg-white/70 dark:bg-dark-900/70 backdrop-blur-xl border border-white/20 dark:border-dark-700/30 shadow-lg;
+  }
+
+  .glass-card {
+    @apply bg-white/80 dark:bg-dark-800/80 backdrop-blur-sm border border-dark-100 dark:border-dark-700/50 shadow-lg shadow-dark-200/20 dark:shadow-dark-950/50;
+  }
+
+  .gradient-border {
+    @apply relative;
+  }
+
+  .gradient-border::before {
+    content: "";
+    @apply absolute -inset-[1px] rounded-[inherit] bg-gradient-to-r from-primary-400 via-accent-400 to-secondary-400 -z-10 opacity-50;
+  }
+
+  .btn-gradient {
+    @apply relative inline-flex items-center gap-2 px-6 py-3 font-medium text-white rounded-full overflow-hidden transition-all duration-300 hover:shadow-lg hover:scale-[1.02] active:scale-[0.98];
+    background: linear-gradient(135deg, #6366f1, #f43f5e, #f59e0b);
+    background-size: 200% 200%;
+    animation: gradientShift 4s ease infinite;
+  }
+
+  .btn-gradient-secondary {
+    @apply relative inline-flex items-center gap-2 px-6 py-3 font-medium rounded-full overflow-hidden transition-all duration-300 border-2;
+    border-color: transparent;
+    background-image: linear-gradient(135deg, #6366f1, #f43f5e, #f59e0b);
+    background-origin: border-box;
+    background-clip: padding-box, border-box;
+  }
+
+  .btn-gradient-secondary::before {
+    content: "";
+    @apply absolute inset-0 rounded-full;
+    background: linear-gradient(135deg, #6366f1, #f43f5e, #f59e0b);
+    background-size: 200% 200%;
+    animation: gradientShift 4s ease infinite;
+    opacity: 0.15;
+  }
+
+  .section-gradient-1 {
+    @apply bg-gradient-to-br from-primary-50/80 via-white to-accent-50/80 dark:from-dark-950 dark:via-dark-900 dark:to-dark-950;
+  }
+
+  .section-gradient-2 {
+    @apply bg-gradient-to-br from-secondary-50/80 via-white to-primary-50/80 dark:from-dark-900 dark:via-dark-950 dark:to-dark-900;
+  }
+
+  .section-gradient-3 {
+    @apply bg-gradient-to-br from-accent-50/80 via-white to-highlight-50/80 dark:from-dark-950 dark:via-dark-900 dark:to-dark-950;
+  }
+
+  .blob-decoration {
+    @apply absolute pointer-events-none opacity-20 dark:opacity-10 blur-3xl rounded-full;
   }
 }

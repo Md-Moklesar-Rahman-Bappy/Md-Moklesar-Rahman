@@ -15,6 +15,39 @@ const iconMap: Record<string, React.ComponentType<{ size?: number; className?: s
   layout: Layout,
 };
 
+function getServiceGradient(index: number) {
+  const gradients = [
+    "from-primary-100 to-primary-50 dark:from-primary-900/30 dark:to-primary-900/10 group-hover:from-primary-500 group-hover:to-primary-600",
+    "from-accent-100 to-accent-50 dark:from-accent-900/30 dark:to-accent-900/10 group-hover:from-accent-500 group-hover:to-accent-600",
+    "from-secondary-100 to-secondary-50 dark:from-secondary-900/30 dark:to-secondary-900/10 group-hover:from-secondary-500 group-hover:to-secondary-600",
+    "from-highlight-100 to-highlight-50 dark:from-highlight-900/30 dark:to-highlight-900/10 group-hover:from-highlight-500 group-hover:to-highlight-600",
+    "from-primary-100 to-accent-50 dark:from-primary-900/30 dark:to-accent-900/10 group-hover:from-primary-500 group-hover:to-accent-600",
+  ];
+  return gradients[index % gradients.length];
+}
+
+function getIconColor(index: number) {
+  const colors = [
+    "text-primary-500 group-hover:text-white",
+    "text-accent-500 group-hover:text-white",
+    "text-secondary-500 group-hover:text-white",
+    "text-highlight-500 group-hover:text-white",
+    "text-primary-500 group-hover:text-white",
+  ];
+  return colors[index % colors.length];
+}
+
+function getBorderColor(index: number) {
+  const colors = [
+    "border-primary-200/50 dark:border-primary-800/30 hover:border-primary-300 dark:hover:border-primary-700",
+    "border-accent-200/50 dark:border-accent-800/30 hover:border-accent-300 dark:hover:border-accent-700",
+    "border-secondary-200/50 dark:border-secondary-800/30 hover:border-secondary-300 dark:hover:border-secondary-700",
+    "border-highlight-200/50 dark:border-highlight-800/30 hover:border-highlight-300 dark:hover:border-highlight-700",
+    "border-primary-200/50 dark:border-primary-800/30 hover:border-accent-300 dark:hover:border-accent-700",
+  ];
+  return colors[index % colors.length];
+}
+
 export function ServicesSection({ services = fallbackData.services }: ServicesSectionProps) {
   const visibleServices = services.filter(s => s.is_visible).sort((a, b) => a.sort_order - b.sort_order);
 
@@ -31,17 +64,20 @@ export function ServicesSection({ services = fallbackData.services }: ServicesSe
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: "-50px" }}
               transition={{ duration: 0.4, delay: index * 0.1 }}
-              className="group p-6 rounded-xl bg-white dark:bg-dark-800 border border-dark-200 dark:border-dark-700 hover:border-primary-300 dark:hover:border-primary-700 transition-all hover:shadow-lg hover:-translate-y-1"
+              className={`group p-6 rounded-xl bg-white dark:bg-dark-800 border ${getBorderColor(index)} transition-all duration-300 hover:shadow-xl hover:-translate-y-2 relative overflow-hidden`}
             >
-              <div className="w-12 h-12 flex items-center justify-center rounded-lg bg-primary-50 dark:bg-primary-900/20 text-primary-500 group-hover:bg-primary-500 group-hover:text-white transition-all mb-4">
-                <Icon size={24} />
+              <div className={`absolute inset-0 bg-gradient-to-br opacity-0 group-hover:opacity-100 transition-opacity duration-300 ${getServiceGradient(index)}`} />
+              <div className="relative z-10">
+                <div className={`w-12 h-12 flex items-center justify-center rounded-xl bg-gradient-to-br ${getServiceGradient(index)} transition-all duration-300 mb-4 shadow-sm`}>
+                  <Icon size={24} className={`transition-colors duration-300 ${getIconColor(index)}`} />
+                </div>
+                <h3 className="text-lg font-semibold text-dark-900 dark:text-white group-hover:text-white transition-colors duration-300 mb-2">
+                  {service.title}
+                </h3>
+                <p className="text-sm text-dark-500 dark:text-dark-400 group-hover:text-white/80 leading-relaxed transition-colors duration-300">
+                  {service.description}
+                </p>
               </div>
-              <h3 className="text-lg font-semibold text-dark-900 dark:text-white mb-2">
-                {service.title}
-              </h3>
-              <p className="text-sm text-dark-500 dark:text-dark-400 leading-relaxed">
-                {service.description}
-              </p>
             </motion.div>
           );
         })}
