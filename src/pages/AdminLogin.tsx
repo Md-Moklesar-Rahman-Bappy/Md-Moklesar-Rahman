@@ -1,43 +1,38 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Eye, EyeOff, LogIn } from "lucide-react";
-import { getSupabase } from "@/lib/supabase";
-import { loginSchema, LoginFormData } from "@/lib/validations";
 import toast from "react-hot-toast";
+
+const ADMIN_PASSWORD = import.meta.env.VITE_ADMIN_PASSWORD || "admin123";
 
 export function AdminLogin() {
   const navigate = useNavigate();
-  const [form, setForm] = useState({ email: "", password: "" });
-  const [errors, setErrors] = useState<Record<string, string>>({});
+  const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
+  const [error, setError] = useState("");
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setErrors({});
+    setError("");
 
-    const result = loginSchema.safeParse(form);
-    if (!result.success) {
-      const fieldErrors: Record<string, string> = {};
-      result.error.issues.forEach((issue) => {
-        if (issue.path[0]) fieldErrors[issue.path[0] as string] = issue.message;
-      });
-      setErrors(fieldErrors);
+    if (!password) {
+      setError("Password is required");
       return;
     }
 
     setLoading(true);
-    const { error } = await getSupabase().auth.signInWithPassword({
-      email: form.email,
-      password: form.password,
-    });
 
-    if (error) {
-      toast.error(error.message);
+    // Simulate a brief delay for UX
+    await new Promise((r) => setTimeout(r, 400));
+
+    if (password !== ADMIN_PASSWORD) {
+      setError("Invalid password");
       setLoading(false);
       return;
     }
 
+    sessionStorage.setItem("admin_authenticated", "true");
     toast.success("Welcome back!");
     navigate("/admin/dashboard");
   };
@@ -47,30 +42,18 @@ export function AdminLogin() {
       <div className="w-full max-w-md">
         <div className="text-center mb-8">
           <h1 className="text-2xl font-bold text-dark-900 dark:text-white">Admin Login</h1>
-          <p className="mt-2 text-dark-500 dark:text-dark-400">Sign in to manage your portfolio</p>
+          <p className="mt-2 text-dark-500 dark:text-dark-400">Enter the admin password to manage your portfolio</p>
         </div>
 
         <form onSubmit={handleSubmit} className="p-6 sm:p-8 rounded-2xl bg-white dark:bg-dark-800 shadow-xl border border-dark-200 dark:border-dark-700 space-y-4">
-          <div>
-            <label className="block text-sm font-medium text-dark-700 dark:text-dark-200 mb-1">Email</label>
-            <input
-              type="email"
-              value={form.email}
-              onChange={(e) => setForm({ ...form, email: e.target.value })}
-              placeholder="admin@example.com"
-              className="w-full px-4 py-2.5 rounded-lg border border-dark-200 dark:border-dark-700 bg-white dark:bg-dark-900 text-dark-900 dark:text-white placeholder-dark-400 focus:ring-2 focus:ring-primary-400 focus:border-transparent outline-none transition-all text-sm"
-            />
-            {errors.email && <p className="mt-1 text-xs text-red-500">{errors.email}</p>}
-          </div>
-
           <div>
             <label className="block text-sm font-medium text-dark-700 dark:text-dark-200 mb-1">Password</label>
             <div className="relative">
               <input
                 type={showPassword ? "text" : "password"}
-                value={form.password}
-                onChange={(e) => setForm({ ...form, password: e.target.value })}
-                placeholder="Enter your password"
+                value={password}
+                onChange={(e) => { setPassword(e.target.value); setError(""); }}
+                placeholder="Enter admin password"
                 className="w-full px-4 py-2.5 pr-10 rounded-lg border border-dark-200 dark:border-dark-700 bg-white dark:bg-dark-900 text-dark-900 dark:text-white placeholder-dark-400 focus:ring-2 focus:ring-primary-400 focus:border-transparent outline-none transition-all text-sm"
               />
               <button
@@ -81,7 +64,7 @@ export function AdminLogin() {
                 {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
               </button>
             </div>
-            {errors.password && <p className="mt-1 text-xs text-red-500">{errors.password}</p>}
+            {error && <p className="mt-1 text-xs text-red-500">{error}</p>}
           </div>
 
           <button

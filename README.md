@@ -1,6 +1,6 @@
 # Md Moklesar Rahman — Portfolio
 
-A modern, dynamic portfolio web application built with React, TypeScript, Vite, Tailwind CSS, and Supabase.
+A modern, dynamic portfolio web application built with React, TypeScript, Vite, and Tailwind CSS. Uses a file-based CMS — all content is stored in JSON files and committed to GitHub via the admin dashboard.
 
 **Live Site:** [md-moklesar-rahman-bappy.github.io](https://md-moklesar-rahman-bappy.github.io/Md-Moklesar-Rahman/)
 
@@ -9,7 +9,7 @@ A modern, dynamic portfolio web application built with React, TypeScript, Vite, 
 - **Frontend:** React 19 + TypeScript + Vite
 - **Styling:** Tailwind CSS 3 with dark/light mode
 - **UI:** Framer Motion, Lucide React
-- **Backend/Database:** Supabase (PostgreSQL + Auth + Storage)
+- **CMS:** File-based (JSON files in `src/data/`) with GitHub API persistence
 - **Validation:** Zod
 - **Hosting:** Netlify-ready
 
@@ -22,9 +22,8 @@ A modern, dynamic portfolio web application built with React, TypeScript, Vite, 
 - Contact form with validation and honeypot spam protection
 - Secure admin dashboard at `/admin`
 - Full CRUD management for all portfolio content
-- Media upload and management (Supabase Storage)
 - Contact message inbox with read/unread status
-- Supabase Row-Level Security (RLS)
+- All changes committed to GitHub via the admin dashboard
 - SEO-friendly metadata
 
 ## Folder Structure
@@ -36,40 +35,40 @@ src/
     sections/    # HeroSection, AboutSection, SkillsSection, ServicesSection, ProjectsSection, ExperienceSection, EducationSection, ContactSection
     ui/          # ThemeToggle, SectionWrapper, LoadingState
   pages/         # Home, AdminLogin, AdminDashboard
-  hooks/         # useTheme
-  lib/           # supabase client, utils, validations (Zod schemas), fallback data
-  services/      # portfolioService (all API calls to Supabase)
-  types/         # TypeScript interfaces for all database tables
+  data/          # JSON files — all portfolio content (the "database")
+  hooks/         # useTheme, usePortfolioData
+  lib/           # data-utils, fallback data, validations (Zod schemas)
+  services/      # portfolioService, githubService
+  types/         # TypeScript interfaces
   styles/        # globals.css (Tailwind directives + custom styles)
-supabase/
-  schema.sql     # Full database schema (12 tables, indexes, triggers)
-  seed.sql       # Seed data extracted from existing website
-  policies.sql   # RLS policies + admin_users table
 ```
 
-## Supabase Setup
+## How It Works
 
-1. Create a new Supabase project at [supabase.com](https://supabase.com)
-2. Go to **SQL Editor** and run these files in order:
-   - `supabase/schema.sql` — creates all tables, indexes, triggers
-   - `supabase/seed.sql` — populates your existing portfolio data
-   - `supabase/policies.sql` — enables RLS, creates admin_users table
-3. Go to **Authentication** → **Users** → **Add User** (your admin email/password)
-4. Insert your email into the `admin_users` table:
-   ```sql
-   INSERT INTO admin_users (email) VALUES ('your-email@example.com');
-   ```
-5. Go to **Storage** → **New bucket** → name: `portfolio-media`, public: enabled
-6. Get your **Project URL** and **anon key** from **Settings** → **API**
+All portfolio content lives in `src/data/` as JSON files:
+- `site-settings.json`, `hero.json`, `about.json` — single objects
+- `skills.json`, `projects.json`, `experience.json`, `education.json`, `services.json`, `social-links.json`, `certifications.json` — arrays
+- `messages.json` — contact form submissions
+
+The public site reads these files via static imports (bundled at build time, no database needed).
+
+The admin dashboard (`/admin`) lets you edit all content. When you save changes, they are committed to your GitHub repository via the GitHub API. Pushing to `main` triggers a Netlify auto-redeploy.
 
 ## Environment Variables
 
 Copy `.env.example` to `.env`:
 
 ```
-VITE_SUPABASE_URL=your_supabase_project_url
-VITE_SUPABASE_ANON_KEY=your_supabase_anon_key
+VITE_ADMIN_PASSWORD=admin123
+VITE_GITHUB_TOKEN=your_github_token
+VITE_GITHUB_OWNER=your_github_username
+VITE_GITHUB_REPO=your_repo_name
 ```
+
+- `VITE_ADMIN_PASSWORD` — Password to access the admin dashboard
+- `VITE_GITHUB_TOKEN` — GitHub personal access token with `repo` scope (create at https://github.com/settings/tokens)
+- `VITE_GITHUB_OWNER` — Your GitHub username or organization
+- `VITE_GITHUB_REPO` — Your repository name (e.g. `Md-Moklesar-Rahman`)
 
 ## Local Development
 
@@ -79,6 +78,8 @@ npm run dev
 ```
 
 Open [http://localhost:5173](http://localhost:5173)
+
+**Note:** The admin dashboard works locally, but changes are only saved in-memory if GitHub is not configured. Set the env vars above to persist changes via GitHub commits.
 
 ## Build
 
@@ -91,52 +92,48 @@ Output goes to `dist/`.
 ## Netlify Deployment
 
 1. Push code to GitHub
-2. Create Supabase project and run SQL schemas + seed data
-3. In Netlify: **Add new site** → **Import from Git**
-4. Connect your GitHub repo
-5. Under **Site Settings** → **Environment Variables**, add:
-   - `VITE_SUPABASE_URL`
-   - `VITE_SUPABASE_ANON_KEY`
-6. Deploy settings are auto-configured via `netlify.toml`:
+2. In Netlify: **Add new site** → **Import from Git**
+3. Connect your GitHub repo
+4. Under **Site Settings** → **Environment Variables**, add:
+   - `VITE_ADMIN_PASSWORD`
+   - `VITE_GITHUB_TOKEN`
+   - `VITE_GITHUB_OWNER`
+   - `VITE_GITHUB_REPO`
+5. Deploy settings are auto-configured via `netlify.toml`:
    - Build command: `npm run build`
    - Publish directory: `dist`
    - SPA redirect: `/*` → `/index.html` (200)
-7. Deploy
-8. Test public site and `/admin` dashboard
+6. Deploy
+7. Test public site and `/admin` dashboard
 
 ## Admin Dashboard
 
 - **URL:** `https://your-site.netlify.app/admin`
-- Login with the Supabase Auth credentials you created
-- Manage all portfolio content from the sidebar (Skills, Projects, Experience, Education, Services, Social Links, Certifications, Media)
+- Login with the admin password you configured
+- Manage all portfolio content from the sidebar (Skills, Projects, Experience, Education, Services, Social Links, Certifications)
 - View and manage contact messages
 - Edit Hero, About, and Site Settings inline
+- Changes are committed to GitHub automatically when saved
 
-## Manual Steps After Deployment
+## Updating Content
 
-1. Upload profile/about images via **Media** section in admin
-2. Update image URLs in Hero and About sections (use admin UI)
-3. Replace placeholder project descriptions with real content
-4. Add your resume PDF to `public/files/` and update URL in Settings
+**Option 1 — Admin Dashboard (recommended):**
+1. Go to `/admin` and log in
+2. Edit content in the dashboard
+3. Changes are committed to GitHub immediately
 
-## Admin Users
-
-Add admin emails to the `admin_users` table:
-
-```sql
-INSERT INTO admin_users (email) VALUES ('your-admin-email@example.com');
-```
-
-Only users with matching emails in this table can perform write operations (RLS enforced).
+**Option 2 — Direct file editing:**
+1. Edit the JSON files in `src/data/`
+2. Commit and push to GitHub
+3. Netlify auto-redeploys
 
 ## Troubleshooting
 
 | Problem | Solution |
-|---|---|
+|---------|----------|
 | Blank page on Netlify | Verify `netlify.toml` redirect rule exists |
-| Login fails | Check Supabase Auth is enabled and user exists in Auth → Users |
-| "No data" shown | RLS may be blocking reads; check policies or set bucket/public to public |
-| Images not loading | Verify storage bucket `portfolio-media` is public |
+| Login fails | Wrong `VITE_ADMIN_PASSWORD` — check your env vars |
+| Git commits fail | Verify `VITE_GITHUB_TOKEN` has `repo` scope |
 | Build fails | Run `npm install` and check Node >= 18 |
 
 ## License

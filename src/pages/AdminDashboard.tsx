@@ -1,18 +1,18 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import {
   LayoutDashboard, FileText, Briefcase, GraduationCap, Code,
-  Palette, Award, Link, MessageSquare, Image, LogOut, User,
-  Settings, Menu, X, Plus, Pencil, Trash2, Star, ChevronUp,
+  Palette, Award, Link, MessageSquare, LogOut, User,
+  Settings, Menu, X, Plus, Pencil, Trash2, Star,
 } from "lucide-react";
-import { getSupabase, isSupabaseConfigured } from "@/lib/supabase";
 import {
-  adminGetAll, adminGetMessages, adminInsert, adminUpdate,
-  adminDelete, adminMarkMessageRead, uploadMedia, deleteMedia,
+  adminGetAll, adminGetSingle, adminInsert, adminUpdate,
+  adminDelete, adminMarkMessageRead,
 } from "@/services/portfolioService";
+import { isGitHubConfigured } from "@/services/githubService";
 import type {
   Skill, Project, Experience, Education, Service,
-  SocialLink, ContactMessage, MediaAsset, Certification,
+  SocialLink, ContactMessage, Certification,
   Hero, About, SiteSettings,
 } from "@/types/database";
 import toast from "react-hot-toast";
@@ -20,15 +20,14 @@ import toast from "react-hot-toast";
 type SectionTab =
   | "overview" | "profile" | "hero" | "skills" | "projects"
   | "experience" | "education" | "services" | "certifications"
-  | "social" | "messages" | "media" | "settings";
+  | "social" | "messages" | "settings";
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-type EditableItem = Record<string, any>;
+type EditableItem = Record<string, unknown>;
+
+const FIELD_EXCLUDE = ["created_at", "updated_at", "gallery_urls", "tech_stack"];
 
 export function AdminDashboard() {
   const navigate = useNavigate();
-  const [user, setUser] = useState<any>(null);
-  const [loading, setLoading] = useState(true);
   const [tab, setTab] = useState<SectionTab>("overview");
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [editing, setEditing] = useState<{ table: string; item: EditableItem | null } | null>(null);
@@ -42,118 +41,83 @@ export function AdminDashboard() {
   const [services, setServices] = useState<Service[]>([]);
   const [socialLinks, setSocialLinks] = useState<SocialLink[]>([]);
   const [messages, setMessages] = useState<ContactMessage[]>([]);
-  const [media, setMedia] = useState<MediaAsset[]>([]);
   const [certifications, setCertifications] = useState<Certification[]>([]);
   const [hero, setHero] = useState<Hero | null>(null);
   const [about, setAbout] = useState<About | null>(null);
   const [siteSettings, setSiteSettings] = useState<SiteSettings | null>(null);
 
   useEffect(() => {
-    getSupabase().auth.getSession().then(({ data: { session } }) => {
-      if (!session) {
-        navigate("/admin");
-        return;
-      }
-      setUser(session.user);
-      setLoading(false);
-      loadAllData();
-    });
+    const authed = sessionStorage.getItem("admin_authenticated");
+    if (!authed) {
+      navigate("/admin");
+      return;
+    }
+    loadAllData();
+  }, [navigate]);
 
-    const { data: { subscription } } = getSupabase().auth.onAuthStateChange((_event: any, session: any) => {
-      if (!session) navigate("/admin");
-      else setUser(session.user);
-    });
-
-    return () => subscription.unsubscribe();
-  }, []);
-
-  const loadAllData = async () => {
-    if (!isSupabaseConfigured) return;
+  const loadAllData = useCallback(() => {
     try {
-      const [s, p, e, ed, sv, sl, m, med, cert] = await Promise.all([
-        adminGetAll<Skill>("skills"),
-        adminGetAll<Project>("projects"),
-        adminGetAll<Experience>("experience"),
-        adminGetAll<Education>("education"),
-        adminGetAll<Service>("services"),
-        adminGetAll<SocialLink>("social_links"),
-        adminGetMessages(),
-        adminGetAll<MediaAsset>("media_assets"),
-        adminGetAll<Certification>("certifications"),
-      ]);
-      setSkills(s); setProjects(p); setExperience(e); setEducation(ed);
-      setServices(sv); setSocialLinks(sl); setMessages(m); setMedia(med);
-      setCertifications(cert);
+      const s = adminGetAll<Skill>("skills");
+      const p = adminGetAll<Project>("projects");
+      const e = adminGetAll<Experience>("experience");
+      const ed = adminGetAll<Education>("education");
+      const sv = adminGetAll<Service>("services");
+      const sl = adminGetAll<SocialLink>("social_links");
+      const m = adminGetAll<ContactMessage>("contact_messages")
+        .sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime());
+      const cert = adminGetAll<Certification>("certifications");
+      const h = adminGetSingle("hero") as Hero | null;
+      const a = adminGetSingle("about") as About | null;
+      const ss = adminGetSingle("site_settings") as SiteSettings | null;
 
-      const sb = getSupabase();
-      const { data: h } = await sb.from("hero").select("*").limit(1).single();
-      if (h) setHero(h as Hero);
-      const { data: a } = await sb.from("about").select("*").limit(1).single();
-      if (a) setAbout(a as About);
-      const { data: ss } = await sb.from("site_settings").select("*").limit(1).single();
-      if (ss) setSiteSettings(ss as SiteSettings);
+      setSkills(s); setProjects(p); setExperience(e); setEducation(ed);
+      setServices(sv); setSocialLinks(sl); setMessages(m); setCertifications(cert);
+      setHero(h); setAbout(a); setSiteSettings(ss);
     } catch (err) {
       console.error("Error loading data:", err);
+      toast.error("Failed to load data");
     }
-  };
+  }, []);
 
-  const handleLogout = async () => {
-    await getSupabase().auth.signOut();
+  const handleLogout = () => {
+    sessionStorage.removeItem("admin_authenticated");
     navigate("/admin");
   };
 
   const handleDelete = async (table: string, id: string) => {
     if (!confirm("Are you sure you want to delete this item?")) return;
     try {
-      await adminDelete(table as any, id);
+      await adminDelete(table, id);
       toast.success("Deleted successfully");
       loadAllData();
-    } catch (err: any) {
-      toast.error(err.message || "Delete failed");
+    } catch (err: unknown) {
+      toast.error(err instanceof Error ? err.message : "Delete failed");
     }
   };
 
   const handleSave = async (table: string, data: Record<string, unknown>) => {
     try {
-      if (editing?.item) {
-        await adminUpdate(table as any, editing.item.id, data);
+      if (editing?.item?.id) {
+        await adminUpdate(table, editing.item.id as string, data);
         toast.success("Updated successfully");
       } else {
-        await adminInsert(table as any, data);
+        await adminInsert(table, data);
         toast.success("Created successfully");
       }
       setEditing(null);
       setShowForm(false);
       loadAllData();
-    } catch (err: any) {
-      toast.error(err.message || "Save failed");
+    } catch (err: unknown) {
+      toast.error(err instanceof Error ? err.message : "Save failed");
     }
   };
-
-  const handleMediaUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
-    try {
-      await uploadMedia(file);
-      toast.success("Uploaded successfully");
-      loadAllData();
-    } catch (err: any) {
-      toast.error(err.message || "Upload failed");
-    }
-  };
-
-  if (loading) return (
-    <div className="min-h-screen flex items-center justify-center bg-dark-50 dark:bg-dark-950">
-      <div className="w-8 h-8 border-4 border-primary-200 border-t-primary-500 rounded-full animate-spin" />
-    </div>
-  );
 
   const renderForm = (table: string, item: EditableItem | null) => {
     const data = item || {};
-    const fields = Object.keys(data).filter(k => !["id", "created_at", "updated_at", "gallery_urls", "tech_stack"].includes(k));
+    const fields = Object.keys(data).filter(k => !FIELD_EXCLUDE.includes(k) && k !== "id");
 
-    const handleFieldChange = (key: string, value: any) => {
-      setEditing({ table, item: { ...(editing?.item || data as EditableItem), [key]: value } });
+    const handleFieldChange = (key: string, value: unknown) => {
+      setEditing({ table, item: { ...(editing?.item || { ...data }), [key]: value } });
     };
 
     return (
@@ -161,7 +125,7 @@ export function AdminDashboard() {
         <div className="w-full max-w-lg max-h-[90vh] overflow-y-auto p-6 rounded-2xl bg-white dark:bg-dark-800" onClick={e => e.stopPropagation()}>
           <div className="flex items-center justify-between mb-4">
             <h3 className="text-lg font-semibold text-dark-900 dark:text-white">
-              {item ? "Edit" : "Add"} {table}
+              {item?.id ? "Edit" : "Add"} {table.replace(/_/g, " ")}
             </h3>
             <button onClick={() => { setEditing(null); setShowForm(false); }} className="p-1 text-dark-400 hover:text-dark-600">
               <X size={20} />
@@ -169,7 +133,7 @@ export function AdminDashboard() {
           </div>
           <div className="space-y-3">
             {fields.map(f => {
-              const val = (data as any)[f];
+              const val = (data as Record<string, unknown>)[f];
               if (typeof val === "boolean") {
                 return (
                   <label key={f} className="flex items-center gap-2">
@@ -212,7 +176,7 @@ export function AdminDashboard() {
               onClick={() => handleSave(table, editing?.item || data as Record<string, unknown>)}
               className="px-4 py-2 text-sm text-white bg-primary-500 rounded-lg hover:bg-primary-600"
             >
-              {item ? "Update" : "Create"}
+              {item?.id ? "Update" : "Create"}
             </button>
           </div>
         </div>
@@ -223,11 +187,13 @@ export function AdminDashboard() {
   const renderTable = (items: EditableItem[], tableName: string, columns: string[]) => (
     <div className="overflow-x-auto">
       <div className="flex items-center justify-between mb-4">
-        <h3 className="text-lg font-semibold text-dark-900 dark:text-white capitalize">{tableName}</h3>
+        <h3 className="text-lg font-semibold text-dark-900 dark:text-white capitalize">{tableName.replace(/_/g, " ")}</h3>
         <button
           onClick={() => {
-            const emptyItem: EditableItem = { id: "" };
-            columns.forEach(c => { emptyItem[c] = c.includes("visible") || c.includes("featured") || c.includes("current") ? false : c.includes("level") || c.includes("order") || c.includes("year") ? 0 : ""; });
+            const emptyItem: EditableItem = {};
+            columns.forEach(c => {
+              emptyItem[c] = c.includes("visible") || c.includes("featured") || c.includes("current") ? false : c.includes("level") || c.includes("order") || c.includes("year") ? 0 : "";
+            });
             setEditing({ table: tableName, item: emptyItem });
             setShowForm(true);
           }}
@@ -250,25 +216,29 @@ export function AdminDashboard() {
           </thead>
           <tbody>
             {items.map((item) => (
-              <tr key={item.id} className="border-b border-dark-100 dark:border-dark-800 hover:bg-dark-50 dark:hover:bg-dark-800/50">
-                {columns.map(c => (
-                  <td key={c} className="py-3 px-2 text-dark-700 dark:text-dark-300 max-w-[200px] truncate">
-                    {c === "level" ? (
-                      <div className="flex items-center gap-2">
-                        <div className="w-20 h-1.5 bg-dark-200 dark:bg-dark-700 rounded-full overflow-hidden">
-                          <div className="h-full bg-primary-400 rounded-full" style={{ width: `${(item as any)[c]}%` }} />
+              <tr key={item.id as string} className="border-b border-dark-100 dark:border-dark-800 hover:bg-dark-50 dark:hover:bg-dark-800/50">
+                {columns.map(c => {
+                  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                  const val = (item as any)[c];
+                  return (
+                    <td key={c} className="py-3 px-2 text-dark-700 dark:text-dark-300 max-w-[200px] truncate">
+                      {c === "level" ? (
+                        <div className="flex items-center gap-2">
+                          <div className="w-20 h-1.5 bg-dark-200 dark:bg-dark-700 rounded-full overflow-hidden">
+                            <div className="h-full bg-primary-400 rounded-full" style={{ width: `${val}%` }} />
+                          </div>
+                          <span className="text-xs text-dark-500">{val}%</span>
                         </div>
-                        <span className="text-xs text-dark-500">{(item as any)[c]}%</span>
-                      </div>
-                    ) : c === "is_visible" || c === "featured" || c === "is_current" ? (
-                      (item as any)[c] ? <Star size={14} className="text-yellow-500" /> : <span className="text-dark-300">—</span>
-                    ) : c === "image_url" ? (
-                      (item as any)[c] ? "Yes" : "No"
-                    ) : (
-                      String((item as any)[c] || "—")
-                    )}
-                  </td>
-                ))}
+                      ) : c === "is_visible" || c === "featured" || c === "is_current" ? (
+                        val ? <Star size={14} className="text-yellow-500" /> : <span className="text-dark-300">—</span>
+                      ) : c === "image_url" ? (
+                        val ? "Yes" : "No"
+                      ) : (
+                        String(val || "—")
+                      )}
+                    </td>
+                  );
+                })}
                 <td className="py-3 px-2 text-right whitespace-nowrap">
                   <button
                     onClick={() => { setEditing({ table: tableName, item }); setShowForm(true); }}
@@ -278,7 +248,7 @@ export function AdminDashboard() {
                     <Pencil size={14} />
                   </button>
                   <button
-                    onClick={() => handleDelete(tableName, item.id)}
+                    onClick={() => handleDelete(tableName, item.id as string)}
                     className="p-1 text-red-500 hover:text-red-600 ml-1"
                     title="Delete"
                   >
@@ -305,7 +275,6 @@ export function AdminDashboard() {
     { id: "certifications", label: "Certs", icon: <Award size={16} /> },
     { id: "social", label: "Social", icon: <Link size={16} /> },
     { id: "messages", label: "Messages", icon: <MessageSquare size={16} /> },
-    { id: "media", label: "Media", icon: <Image size={16} /> },
     { id: "settings", label: "Settings", icon: <Settings size={16} /> },
   ];
 
@@ -356,8 +325,10 @@ export function AdminDashboard() {
           </button>
           <h2 className="text-lg font-semibold text-dark-900 dark:text-white capitalize">{tab}</h2>
           <div className="flex items-center gap-3">
+            {!isGitHubConfigured() && (
+              <span className="text-xs text-yellow-500 font-medium">GitHub not configured</span>
+            )}
             <a href="/" className="text-sm text-primary-500 hover:underline">View Site</a>
-            <span className="text-xs text-dark-400">{user?.email}</span>
           </div>
         </header>
 
@@ -374,7 +345,7 @@ export function AdminDashboard() {
                   { label: "Services", count: services.length, color: "bg-pink-500" },
                   { label: "Social Links", count: socialLinks.length, color: "bg-indigo-500" },
                   { label: "Messages", count: messages.length, color: "bg-teal-500" },
-                  { label: "Media", count: media.length, color: "bg-red-500" },
+                  { label: "Certifications", count: certifications.length, color: "bg-red-500" },
                 ].map(s => (
                   <div key={s.label} className="p-4 rounded-xl bg-white dark:bg-dark-800 border border-dark-200 dark:border-dark-700">
                     <div className={`w-2 h-2 rounded-full ${s.color} mb-2`} />
@@ -383,6 +354,11 @@ export function AdminDashboard() {
                   </div>
                 ))}
               </div>
+              {!isGitHubConfigured() && (
+                <div className="p-4 rounded-xl bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-900/30 text-yellow-800 dark:text-yellow-300 text-sm mb-4">
+                  GitHub API not configured. Changes will be saved in-memory only and lost on refresh. Set <strong>VITE_GITHUB_TOKEN</strong>, <strong>VITE_GITHUB_OWNER</strong>, and <strong>VITE_GITHUB_REPO</strong> to enable persistence.
+                </div>
+              )}
               {messages.filter(m => !m.is_read).length > 0 && (
                 <div className="p-4 rounded-xl bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-900/30 text-yellow-800 dark:text-yellow-300 text-sm">
                   {messages.filter(m => !m.is_read).length} unread message(s). <button onClick={() => setTab("messages")} className="underline font-medium">View</button>
@@ -401,10 +377,9 @@ export function AdminDashboard() {
                       <label className="block text-xs font-medium text-dark-500 dark:text-dark-400 mb-1 capitalize">{f.replace(/_/g, " ")}</label>
                       {f === "content" ? (
                         <textarea
-                          value={(about as any)[f] || ""}
+                          value={(about as unknown as Record<string, unknown>)[f] as string || ""}
                           onChange={async (e) => {
-                            const sb = getSupabase();
-                            await sb.from("about").update({ [f]: e.target.value }).eq("id", about.id);
+                            await adminUpdate("about", about.id, { [f]: e.target.value });
                             loadAllData();
                           }}
                           rows={4}
@@ -413,11 +388,10 @@ export function AdminDashboard() {
                       ) : (
                         <input
                           type={f === "years_experience" ? "number" : "text"}
-                          value={(about as any)[f] || ""}
+                          value={(about as unknown as Record<string, unknown>)[f] as string || ""}
                           onChange={async (e) => {
                             const val = f === "years_experience" ? Number(e.target.value) : e.target.value;
-                            const sb = getSupabase();
-                            await sb.from("about").update({ [f]: val }).eq("id", about.id);
+                            await adminUpdate("about", about.id, { [f]: val });
                             loadAllData();
                           }}
                           className="w-full px-3 py-2 text-sm rounded-lg border border-dark-200 dark:border-dark-700 bg-white dark:bg-dark-900 text-dark-900 dark:text-white focus:ring-2 focus:ring-primary-400 outline-none"
@@ -439,24 +413,22 @@ export function AdminDashboard() {
                     <label className="block text-xs font-medium text-dark-500 dark:text-dark-400 mb-1 capitalize">{f.replace(/_/g, " ")}</label>
                     {f === "description" ? (
                       <textarea
-                        value={(hero as any)[f] || ""}
+                        value={(hero as unknown as Record<string, unknown>)[f] as string || ""}
                         onChange={async (e) => {
-                            const sb = getSupabase();
-                            await sb.from("hero").update({ [f]: e.target.value }).eq("id", hero.id);
-                            loadAllData();
-                          }}
-                          rows={3}
-                          className="w-full px-3 py-2 text-sm rounded-lg border border-dark-200 dark:border-dark-700 bg-white dark:bg-dark-900 text-dark-900 dark:text-white focus:ring-2 focus:ring-primary-400 outline-none resize-none"
-                        />
-                      ) : (
-                        <input
-                          type="text"
-                          value={(hero as any)[f] || ""}
-                          onChange={async (e) => {
-                            const sb = getSupabase();
-                            await sb.from("hero").update({ [f]: e.target.value }).eq("id", hero.id);
-                            loadAllData();
-                          }}
+                          await adminUpdate("hero", hero.id, { [f]: e.target.value });
+                          loadAllData();
+                        }}
+                        rows={3}
+                        className="w-full px-3 py-2 text-sm rounded-lg border border-dark-200 dark:border-dark-700 bg-white dark:bg-dark-900 text-dark-900 dark:text-white focus:ring-2 focus:ring-primary-400 outline-none resize-none"
+                      />
+                    ) : (
+                      <input
+                        type="text"
+                        value={(hero as unknown as Record<string, unknown>)[f] as string || ""}
+                        onChange={async (e) => {
+                          await adminUpdate("hero", hero.id, { [f]: e.target.value });
+                          loadAllData();
+                        }}
                         className="w-full px-3 py-2 text-sm rounded-lg border border-dark-200 dark:border-dark-700 bg-white dark:bg-dark-900 text-dark-900 dark:text-white focus:ring-2 focus:ring-primary-400 outline-none"
                       />
                     )}
@@ -499,40 +471,6 @@ export function AdminDashboard() {
             </div>
           )}
 
-          {tab === "media" && (
-            <div>
-              <div className="flex items-center justify-between mb-4">
-                <h3 className="text-lg font-semibold text-dark-900 dark:text-white">Media Assets</h3>
-                <label className="flex items-center gap-1 px-3 py-1.5 text-sm text-white bg-primary-500 rounded-lg hover:bg-primary-600 cursor-pointer">
-                  <Plus size={14} /> Upload
-                  <input type="file" className="hidden" onChange={handleMediaUpload} accept="image/*" />
-                </label>
-              </div>
-              {media.length === 0 ? (
-                <p className="text-dark-400 dark:text-dark-500">No media uploaded yet.</p>
-              ) : (
-                <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
-                  {media.map(m => (
-                    <div key={m.id} className="group relative rounded-xl overflow-hidden bg-dark-100 dark:bg-dark-800 border border-dark-200 dark:border-dark-700">
-                      <div className="aspect-square bg-gradient-to-br from-dark-100 to-dark-200 dark:from-dark-700 dark:to-dark-800 flex items-center justify-center">
-                        <img src={m.file_url} alt={m.alt_text || m.file_name} className="w-full h-full object-cover" loading="lazy" />
-                      </div>
-                      <div className="p-2">
-                        <p className="text-xs text-dark-500 dark:text-dark-400 truncate">{m.file_name}</p>
-                      </div>
-                      <button
-                        onClick={() => { if (confirm("Delete this file?")) deleteMedia(m.id, m.file_url).then(() => loadAllData()); }}
-                        className="absolute top-2 right-2 p-1.5 bg-red-500 text-white rounded-lg opacity-0 group-hover:opacity-100 transition-opacity"
-                      >
-                        <Trash2 size={12} />
-                      </button>
-                    </div>
-                  ))}
-                </div>
-              )}
-            </div>
-          )}
-
           {tab === "settings" && siteSettings && (
             <div>
               <h3 className="text-lg font-semibold text-dark-900 dark:text-white mb-4">Site Settings</h3>
@@ -542,10 +480,9 @@ export function AdminDashboard() {
                     <label className="block text-xs font-medium text-dark-500 dark:text-dark-400 mb-1 capitalize">{f.replace(/_/g, " ")}</label>
                     <input
                       type={f === "primary_email" ? "email" : f === "resume_url" ? "url" : "text"}
-                      value={(siteSettings as any)[f] || ""}
+                      value={(siteSettings as unknown as Record<string, unknown>)[f] as string || ""}
                       onChange={async (e) => {
-                        const sb = getSupabase();
-                        await sb.from("site_settings").update({ [f]: e.target.value }).eq("id", siteSettings.id);
+                        await adminUpdate("site_settings", siteSettings.id, { [f]: e.target.value });
                         loadAllData();
                       }}
                       className="w-full px-3 py-2 text-sm rounded-lg border border-dark-200 dark:border-dark-700 bg-white dark:bg-dark-900 text-dark-900 dark:text-white focus:ring-2 focus:ring-primary-400 outline-none"

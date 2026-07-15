@@ -1,0 +1,34 @@
+[
+  {
+    "id": "service-1",
+    "title": "Graphics Design",
+    "description": "Creating compelling brand identities, logos, and visual assets that communicate your brand story effectively.",
+    "icon": "palette",
+    "sort_order": 1,
+    "is_visible": true
+  },
+  {
+    "id": "service-2",
+    "title": "Web Design",
+    "description": "Designing modern, responsive, and user-friendly websites with clean aesthetics and intuitive navigation.",
+    "icon": "monitor",
+    "sort_order": 2,
+    "is_visible": true
+  },
+  {
+    "id": "service-3",
+    "title": "Web Development",
+    "description": "Building robust, scalable web applications using modern frameworks and best coding practices.",
+    "icon": "code",
+    "sort_order": 3,
+    "is_visible": true
+  },
+  {
+    "id": "service-4",
+    "title": "WordPress",
+    "description": "Custom WordPress themes, plugins, and full website solutions tailored to your business needs.",
+    "icon": "layout",
+    "sort_order": 4,
+    "is_visible": true
+  }
+]

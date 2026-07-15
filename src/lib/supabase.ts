@@ -1,19 +1,13 @@
-import { createClient, SupabaseClient } from "@supabase/supabase-js";
+import { DATA_FILE_MAP } from "./data-utils";
 
-const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
-const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
+export function isSupabaseConfigured(): boolean {
+  return false;
+}
 
-export const isSupabaseConfigured = Boolean(supabaseUrl && supabaseAnonKey);
+export function getSupabase(): never {
+  throw new Error("Supabase has been removed. All data is now stored in src/data/ JSON files.");
+}
 
-let _supabase: SupabaseClient | null = null;
-
-export function getSupabase(): SupabaseClient {
-  if (!_supabase) {
-    if (!isSupabaseConfigured) {
-      _supabase = createClient("https://placeholder.supabase.co", "placeholder-key");
-    } else {
-      _supabase = createClient(supabaseUrl!, supabaseAnonKey!);
-    }
-  }
-  return _supabase;
+export function getJsonFilename(table: string): string {
+  return DATA_FILE_MAP[table] || `${table}.json`;
 }

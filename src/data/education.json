@@ -1,0 +1,32 @@
+[
+  {
+    "id": "edu-1",
+    "institution": "Daffodil International University",
+    "degree": "Bachelor of Science (B.Sc)",
+    "field": "Computer Science & Engineering",
+    "start_year": 2014,
+    "end_year": 2019,
+    "sort_order": 1,
+    "is_visible": true
+  },
+  {
+    "id": "edu-2",
+    "institution": "Queen's School & College",
+    "degree": "Higher Secondary Certificate (HSC)",
+    "field": "Science",
+    "start_year": 2012,
+    "end_year": 2014,
+    "sort_order": 2,
+    "is_visible": true
+  },
+  {
+    "id": "edu-3",
+    "institution": "K.B.M. Collegiate High School",
+    "degree": "Secondary School Certificate (SSC)",
+    "field": "Science",
+    "start_year": 2010,
+    "end_year": 2012,
+    "sort_order": 3,
+    "is_visible": true
+  }
+]

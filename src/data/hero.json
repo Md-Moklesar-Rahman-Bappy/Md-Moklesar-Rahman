@@ -1,0 +1,13 @@
+{
+  "id": "default",
+  "title": "Md Moklesar Rahman",
+  "subtitle": "Web Designer & Developer",
+  "description": "Architect of custom WordPress themes and Laravel dashboards, blending modular UI/UX with joyful polish.",
+  "profile_image_url": null,
+  "background_image_url": null,
+  "cta_primary_label": "Hire Me",
+  "cta_primary_url": "#contact",
+  "cta_secondary_label": "Download CV",
+  "cta_secondary_url": "/files/Md_Moklesar_Rahman.pdf",
+  "is_active": true
+}

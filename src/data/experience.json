@@ -1,0 +1,38 @@
+[
+  {
+    "id": "exp-1",
+    "company": "Pentagon International Limited",
+    "position": "Sr. WordPress Developer",
+    "start_date": "2022-07-01",
+    "end_date": "2023-11-30",
+    "is_current": false,
+    "description": "Senior WordPress developer building custom themes and plugins for enterprise clients.",
+    "location": "Rangs Nasim Square, 275/D, Suite #C12, Lift Level-11, Rd No. 27, Dhaka 1207",
+    "sort_order": 1,
+    "is_visible": true
+  },
+  {
+    "id": "exp-2",
+    "company": "Azmaain Corporation",
+    "position": "WordPress Developer",
+    "start_date": "2020-03-01",
+    "end_date": "2022-06-15",
+    "is_current": false,
+    "description": "WordPress development, theme customization, and client project delivery.",
+    "location": "Rangs Nasim Square, 275/D, Suite #C12, Lift Level-11, Rd No. 27, Dhaka 1207",
+    "sort_order": 2,
+    "is_visible": true
+  },
+  {
+    "id": "exp-3",
+    "company": "Enigma IT Solution",
+    "position": "Jr. Web Designer",
+    "start_date": "2019-01-06",
+    "end_date": "2020-02-28",
+    "is_current": false,
+    "description": "Web design and front-end development for various client projects.",
+    "location": "85/A Eskaton Palace, New Eskaton Road, Banglamotor, Dhaka-1000",
+    "sort_order": 3,
+    "is_visible": true
+  }
+]

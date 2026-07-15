@@ -1,94 +1,84 @@
-import {
-  SiteSettings,
-  Hero,
-  About,
-  Skill,
-  Project,
-  Experience,
-  Education,
-  Service,
-  Certification,
-  SocialLink,
-  ContactMessage,
+import type {
+  SiteSettings, Hero, About, Skill, Project, Experience,
+  Education, Service, Certification, SocialLink, ContactMessage,
   MediaAsset,
 } from "@/types/database";
-import { getSupabase, isSupabaseConfigured } from "@/lib/supabase";
+import { isSupabaseConfigured, getJsonFilename } from "@/lib/supabase";
+import { generateId } from "@/lib/data-utils";
+import { commitFile, isGitHubConfigured } from "./githubService";
 import { fallbackData } from "@/lib/fallback";
 
-type TableName =
-  | "site_settings"
-  | "hero"
-  | "about"
-  | "skills"
-  | "projects"
-  | "experience"
-  | "education"
-  | "services"
-  | "certifications"
-  | "social_links"
-  | "contact_messages"
-  | "media_assets";
+import siteSettingsRaw from "@/data/site-settings.json";
+import heroRaw from "@/data/hero.json";
+import aboutRaw from "@/data/about.json";
+import skillsRaw from "@/data/skills.json";
+import projectsRaw from "@/data/projects.json";
+import experienceRaw from "@/data/experience.json";
+import educationRaw from "@/data/education.json";
+import servicesRaw from "@/data/services.json";
+import certificationsRaw from "@/data/certifications.json";
+import socialLinksRaw from "@/data/social-links.json";
+import messagesRaw from "@/data/messages.json";
 
-const sb = () => getSupabase();
+// --- Read helpers ---
 
-async function fetchTable<T>(table: TableName, fallback: T): Promise<T> {
-  if (!isSupabaseConfigured) return fallback;
-  const { data, error } = await sb().from(table).select("*");
-  if (error) {
-    console.error(`Error fetching ${table}:`, error);
-    return fallback;
-  }
-  return (data as T) || fallback;
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+function fillMeta<T>(item: any, extra?: Record<string, string>): T {
+  return { ...item, created_at: "", updated_at: "", ...extra } as T;
 }
 
-async function fetchSingle<T>(table: TableName, fallback: T): Promise<T> {
-  if (!isSupabaseConfigured) return fallback;
-  const { data, error } = await sb().from(table).select("*").limit(1).single();
-  if (error) {
-    console.error(`Error fetching ${table}:`, error);
-    return fallback;
-  }
-  return (data as T) || fallback;
+const _siteSettings: SiteSettings = fillMeta<SiteSettings>(siteSettingsRaw);
+const _hero: Hero = fillMeta<Hero>(heroRaw);
+const _about: About = fillMeta<About>(aboutRaw);
+const _skills: Skill[] = (skillsRaw as unknown as Skill[]).map(s => fillMeta<Skill>(s));
+const _projects: Project[] = (projectsRaw as unknown as Project[]).map(p => fillMeta<Project>(p));
+const _experience: Experience[] = (experienceRaw as unknown as Experience[]).map(e => fillMeta<Experience>(e));
+const _education: Education[] = (educationRaw as unknown as Education[]).map(e => fillMeta<Education>(e));
+const _services: Service[] = (servicesRaw as unknown as Service[]).map(s => fillMeta<Service>(s));
+const _certifications: Certification[] = (certificationsRaw as unknown as Certification[]).map(c => fillMeta<Certification>(c));
+const _socialLinks: SocialLink[] = (socialLinksRaw as unknown as SocialLink[]).map(s => fillMeta<SocialLink>(s));
+let _messages: ContactMessage[] = (messagesRaw as unknown as ContactMessage[]).map(m => fillMeta<ContactMessage>(m));
+
+// --- Public read functions ---
+
+export function getSiteSettings(): SiteSettings {
+  return _siteSettings;
 }
 
-export async function getSiteSettings(): Promise<SiteSettings> {
-  return fetchSingle("site_settings", fallbackData.siteSettings);
+export function getHero(): Hero {
+  return _hero;
 }
 
-export async function getHero(): Promise<Hero> {
-  return fetchSingle("hero", fallbackData.hero);
+export function getAbout(): About {
+  return _about;
 }
 
-export async function getAbout(): Promise<About> {
-  return fetchSingle("about", fallbackData.about);
+export function getSkills(): Skill[] {
+  return _skills;
 }
 
-export async function getSkills(): Promise<Skill[]> {
-  return fetchTable("skills", fallbackData.skills);
+export function getProjects(): Project[] {
+  return _projects;
 }
 
-export async function getProjects(): Promise<Project[]> {
-  return fetchTable("projects", fallbackData.projects);
+export function getExperience(): Experience[] {
+  return _experience;
 }
 
-export async function getExperience(): Promise<Experience[]> {
-  return fetchTable("experience", fallbackData.experience);
+export function getEducation(): Education[] {
+  return _education;
 }
 
-export async function getEducation(): Promise<Education[]> {
-  return fetchTable("education", fallbackData.education);
+export function getServices(): Service[] {
+  return _services;
 }
 
-export async function getServices(): Promise<Service[]> {
-  return fetchTable("services", fallbackData.services);
+export function getCertifications(): Certification[] {
+  return _certifications;
 }
 
-export async function getCertifications(): Promise<Certification[]> {
-  return fetchTable("certifications", fallbackData.certifications);
-}
-
-export async function getSocialLinks(): Promise<SocialLink[]> {
-  return fetchTable("social_links", fallbackData.socialLinks);
+export function getSocialLinks(): SocialLink[] {
+  return _socialLinks;
 }
 
 export async function submitContactMessage(msg: {
@@ -97,81 +87,168 @@ export async function submitContactMessage(msg: {
   subject: string;
   message: string;
 }): Promise<{ success: boolean; error?: string }> {
-  if (!isSupabaseConfigured) {
-    return { success: false, error: "Database not configured" };
+  const newMessage: ContactMessage = {
+    id: generateId(),
+    name: msg.name,
+    email: msg.email,
+    subject: msg.subject,
+    message: msg.message,
+    is_read: false,
+    created_at: new Date().toISOString(),
+  };
+  _messages = [..._messages, newMessage];
+
+  if (isGitHubConfigured()) {
+    const result = await commitFile(
+      `src/data/${getJsonFilename("contact_messages")}`,
+      JSON.stringify(_messages.map(({ created_at, ...rest }) => rest), null, 2),
+      "Add contact message"
+    );
+    if (!result.success) {
+      return { success: false, error: result.error };
+    }
   }
-  const { error } = await sb().from("contact_messages").insert(msg as any);
-  if (error) {
-    return { success: false, error: error.message };
-  }
+
   return { success: true };
 }
 
-export async function adminGetAll<T>(table: TableName): Promise<T[]> {
-  const { data, error } = await sb().from(table).select("*").order("sort_order", { ascending: true });
-  if (error) throw error;
-  return (data as T[]) || [];
+// --- Admin read functions ---
+
+export function adminGetAll<T>(table: string): T[] {
+  switch (table) {
+    case "skills": return [..._skills] as unknown as T[];
+    case "projects": return [..._projects] as unknown as T[];
+    case "experience": return [..._experience] as unknown as T[];
+    case "education": return [..._education] as unknown as T[];
+    case "services": return [..._services] as unknown as T[];
+    case "social_links": return [..._socialLinks] as unknown as T[];
+    case "certifications": return [..._certifications] as unknown as T[];
+    case "contact_messages": return [..._messages] as unknown as T[];
+    default: return [];
+  }
 }
 
-export async function adminGetMessages(): Promise<ContactMessage[]> {
-  const { data, error } = await sb()
-    .from("contact_messages")
-    .select("*")
-    .order("created_at", { ascending: false });
-  if (error) throw error;
-  return (data as ContactMessage[]) || [];
+export function adminGetSingle(table: string): Record<string, unknown> | null {
+  switch (table) {
+    case "site_settings": return { ..._siteSettings };
+    case "hero": return { ..._hero };
+    case "about": return { ..._about };
+    default: return null;
+  }
 }
 
-export async function adminInsert(table: TableName, record: any) {
-  const { data, error } = await sb().from(table).insert(record).select().single();
-  if (error) throw error;
-  return data;
+export async function adminInsert(table: string, record: Record<string, unknown>): Promise<Record<string, unknown>> {
+  const item = { id: generateId(), ...record };
+
+  switch (table) {
+    case "skills": _skills.push(item as unknown as Skill); break;
+    case "projects": _projects.push(item as unknown as Project); break;
+    case "experience": _experience.push(item as unknown as Experience); break;
+    case "education": _education.push(item as unknown as Education); break;
+    case "services": _services.push(item as unknown as Service); break;
+    case "social_links": _socialLinks.push(item as unknown as SocialLink); break;
+    case "certifications": _certifications.push(item as unknown as Certification); break;
+    default: throw new Error(`Unknown table: ${table}`);
+  }
+
+  await saveTableToGitHub(table);
+  return item;
 }
 
-export async function adminUpdate(table: TableName, id: string, record: any) {
-  const { data, error } = await sb().from(table).update(record).eq("id", id).select().single();
-  if (error) throw error;
-  return data;
-}
-
-export async function adminDelete(table: TableName, id: string) {
-  const { error } = await sb().from(table).delete().eq("id", id);
-  if (error) throw error;
-}
-
-export async function adminMarkMessageRead(id: string) {
-  const { error } = await sb().from("contact_messages").update({ is_read: true } as any).eq("id", id);
-  if (error) throw error;
-}
-
-export async function uploadMedia(file: File): Promise<MediaAsset> {
-  const fileExt = file.name.split(".").pop();
-  const fileName = `${Date.now()}-${Math.random().toString(36).slice(2, 8)}.${fileExt}`;
-  const { error: uploadError } = await sb().storage
-    .from("portfolio-media")
-    .upload(fileName, file);
-  if (uploadError) throw uploadError;
-
-  const { data: urlData } = sb().storage.from("portfolio-media").getPublicUrl(fileName);
-
-  const asset = {
-    file_name: file.name,
-    file_url: urlData.publicUrl,
-    file_type: file.type,
-    file_size: file.size,
-    bucket: "portfolio-media",
+export async function adminUpdate(table: string, id: string, record: Record<string, unknown>): Promise<void> {
+  const updateItem = <T extends { id: string }>(arr: T[]): void => {
+    const idx = arr.findIndex(i => i.id === id);
+    if (idx === -1) throw new Error(`Item with id ${id} not found in ${table}`);
+    arr[idx] = { ...arr[idx], ...record } as T;
   };
 
-  const { data, error } = await sb().from("media_assets").insert(asset as any).select().single();
-  if (error) throw error;
-  return data as MediaAsset;
+  switch (table) {
+    case "skills": updateItem<Skill>(_skills); break;
+    case "projects": updateItem<Project>(_projects); break;
+    case "experience": updateItem<Experience>(_experience); break;
+    case "education": updateItem<Education>(_education); break;
+    case "services": updateItem<Service>(_services); break;
+    case "social_links": updateItem<SocialLink>(_socialLinks); break;
+    case "certifications": updateItem<Certification>(_certifications); break;
+    case "site_settings": Object.assign(_siteSettings, record); break;
+    case "hero": Object.assign(_hero, record); break;
+    case "about": Object.assign(_about, record); break;
+    default: throw new Error(`Unknown table: ${table}`);
+  }
+
+  await saveTableToGitHub(table);
 }
 
-export async function deleteMedia(id: string, fileUrl: string) {
-  const path = fileUrl.split("/").pop();
-  if (path) {
-    await sb().storage.from("portfolio-media").remove([path]);
+export async function adminDelete(table: string, id: string): Promise<void> {
+  const removeItem = <T extends { id: string }>(arr: T[]): T[] => arr.filter(i => i.id !== id);
+
+  switch (table) {
+    case "skills": _skills.splice(0, _skills.length, ...removeItem<Skill>(_skills)); break;
+    case "projects": _projects.splice(0, _projects.length, ...removeItem<Project>(_projects)); break;
+    case "experience": _experience.splice(0, _experience.length, ...removeItem<Experience>(_experience)); break;
+    case "education": _education.splice(0, _education.length, ...removeItem<Education>(_education)); break;
+    case "services": _services.splice(0, _services.length, ...removeItem<Service>(_services)); break;
+    case "social_links": _socialLinks.splice(0, _socialLinks.length, ...removeItem<SocialLink>(_socialLinks)); break;
+    case "certifications": _certifications.splice(0, _certifications.length, ...removeItem<Certification>(_certifications)); break;
+    default: throw new Error(`Unknown table: ${table}`);
   }
-  const { error } = await sb().from("media_assets").delete().eq("id", id);
-  if (error) throw error;
+
+  await saveTableToGitHub(table);
+}
+
+export async function adminMarkMessageRead(id: string): Promise<void> {
+  const msg = _messages.find(m => m.id === id);
+  if (msg) {
+    msg.is_read = true;
+  }
+}
+
+// --- Helpers ---
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+function getTableData(table: string): any {
+  switch (table) {
+    case "site_settings": return _siteSettings;
+    case "hero": return _hero;
+    case "about": return _about;
+    case "skills": return _skills;
+    case "projects": return _projects;
+    case "experience": return _experience;
+    case "education": return _education;
+    case "services": return _services;
+    case "social_links": return _socialLinks;
+    case "certifications": return _certifications;
+    case "contact_messages": return _messages;
+    default: throw new Error(`Unknown table: ${table}`);
+  }
+}
+
+async function saveTableToGitHub(table: string): Promise<void> {
+  if (!isGitHubConfigured()) return;
+
+  const data = getTableData(table);
+  const json = JSON.stringify(data, null, 2);
+
+  const result = await commitFile(
+    `src/data/${getJsonFilename(table)}`,
+    json,
+    `Update ${table} via admin dashboard`
+  );
+
+  if (!result.success) {
+    console.error(`Failed to commit ${table}:`, result.error);
+  }
+}
+
+// Legacy compatibility
+export async function adminGetMessages(): Promise<ContactMessage[]> {
+  return [..._messages].sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime());
+}
+
+export async function uploadMedia(_file: File): Promise<MediaAsset> {
+  throw new Error("Media upload requires GitHub LFS or external storage. Use a direct URL instead.");
+}
+
+export async function deleteMedia(_id: string, _fileUrl: string): Promise<void> {
+  throw new Error("Media management via GitHub is not supported. Remove the URL from your data files instead.");
 }
