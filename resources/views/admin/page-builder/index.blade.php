@@ -177,7 +177,7 @@ function pageBuilder() {
         async saveOrder() {
             this.saving = true;
             try {
-                const response = await fetch('{{ route("admin.pagebuilder.sort") }}', {
+                const response = await fetch('{{ route("admin.page-builder.reorder") }}', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
@@ -222,7 +222,7 @@ function addSectionForm() {
             if (!this.form.section_type || !this.form.name) return;
             this.submitting = true;
             try {
-                const response = await fetch('{{ route("admin.pagebuilder.store") }}', {
+                const response = await fetch('{{ route("admin.page-builder.store") }}', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',

@@ -20,7 +20,7 @@
         <a href="{{ route('admin.projects.create') }}" class="quick-action-btn" style="background:#6366f1;color:#fff;">
             <i class="bi bi-plus-lg"></i> Add Project
         </a>
-        <a href="{{ route('admin.blog.create') }}" class="quick-action-btn" style="background:#10b981;color:#fff;">
+        <a href="{{ route('admin.blog-posts.create') }}" class="quick-action-btn" style="background:#10b981;color:#fff;">
             <i class="bi bi-pencil-square"></i> Write Blog
         </a>
         <a href="{{ route('admin.messages.index') }}" class="quick-action-btn" style="background:#f59e0b;color:#fff;">

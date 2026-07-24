@@ -6,7 +6,7 @@
 <nav aria-label="breadcrumb">
     <ol class="breadcrumb mb-0">
         <li class="breadcrumb-item"><a href="{{ route('admin.dashboard') }}" class="text-decoration-none">Dashboard</a></li>
-        <li class="breadcrumb-item"><a href="{{ route('admin.blog.index') }}" class="text-decoration-none">Blog</a></li>
+        <li class="breadcrumb-item"><a href="{{ route('admin.blog-posts.index') }}" class="text-decoration-none">Blog</a></li>
         <li class="breadcrumb-item active">Tags</li>
     </ol>
 </nav>
@@ -18,7 +18,7 @@
         <h4 class="fw-bold mb-1">Blog Tags</h4>
         <p class="text-muted mb-0">Manage tags for organizing blog posts.</p>
     </div>
-    <a href="{{ route('admin.blog.index') }}" class="quick-action-btn" style="background:#e2e8f0;color:#475569;">
+    <a href="{{ route('admin.blog-posts.index') }}" class="quick-action-btn" style="background:#e2e8f0;color:#475569;">
         <i class="bi bi-arrow-left"></i> Back to Blog
     </a>
 </div>

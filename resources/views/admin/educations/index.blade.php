@@ -17,7 +17,7 @@
         <h4 class="fw-bold mb-1">Education</h4>
         <p class="text-muted mb-0">Manage your educational background.</p>
     </div>
-    <a href="{{ route('admin.education.create') }}" class="quick-action-btn" style="background:#6366f1;color:#fff;">
+    <a href="{{ route('admin.educations.create') }}" class="quick-action-btn" style="background:#6366f1;color:#fff;">
         <i class="bi bi-plus-lg"></i> Add Education
     </a>
 </div>
@@ -63,7 +63,7 @@
                                 </span>
                             </td>
                             <td class="text-end">
-                                <a href="{{ route('admin.education.edit', $education) }}" class="btn btn-sm btn-outline-primary">
+                                <a href="{{ route('admin.educations.edit', $education) }}" class="btn btn-sm btn-outline-primary">
                                     <i class="bi bi-pencil"></i>
                                 </a>
                                 <div x-data="{ show: false }" class="d-inline-block">
@@ -82,7 +82,7 @@
                                                 </div>
                                                 <div class="modal-footer border-0">
                                                     <button @click="show = false" class="btn btn-light">Cancel</button>
-                                                    <form action="{{ route('admin.education.destroy', $education) }}" method="POST">
+                                                    <form action="{{ route('admin.educations.destroy', $education) }}" method="POST">
                                                         @csrf @method('DELETE')
                                                         <button type="submit" class="btn btn-danger">
                                                             <i class="bi bi-trash me-1"></i> Delete
@@ -99,7 +99,7 @@
                         <tr>
                             <td colspan="6" class="text-center text-muted py-5">
                                 <i class="bi bi-mortarboard display-4 d-block mb-2" style="color:#e2e8f0;"></i>
-                                No education entries found. <a href="{{ route('admin.education.create') }}" class="text-decoration-none" style="color:#6366f1;">Add your first entry</a>
+                                No education entries found. <a href="{{ route('admin.educations.create') }}" class="text-decoration-none" style="color:#6366f1;">Add your first entry</a>
                             </td>
                         </tr>
                     @endforelse

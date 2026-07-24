@@ -21,7 +21,7 @@ if (method_exists($blogPosts, 'where')) {
                             <p class="text-muted small mb-0" style="font-size: 0.9rem;">{{ Str::limit($post->excerpt ?? $post->description ?? '', 150) }}</p>
                         </div>
                         @if($post->slug)
-                        <a href="{{ route('blog.show', $post->slug) }}" class="min-link small flex-shrink-0 ms-3" target="_blank"><i class="bi bi-arrow-right"></i></a>
+                        <a href="{{ route('home.blog.show', $post->slug) }}" class="min-link small flex-shrink-0 ms-3" target="_blank"><i class="bi bi-arrow-right"></i></a>
                         @endif
                     </div>
                 </div>

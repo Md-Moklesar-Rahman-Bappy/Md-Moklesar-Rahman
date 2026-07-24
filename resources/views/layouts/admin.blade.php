@@ -216,19 +216,19 @@
                 <i class="bi bi-speedometer2"></i><span class="nav-text">Dashboard</span>
             </a>
             <div class="sidebar-section-title">Portfolio</div>
-            <a href="{{ route('admin.profile.index') }}" class="nav-link {{ request()->routeIs('admin.profile.*') ? 'active' : '' }}">
+            <a href="{{ route('admin.profile.edit') }}" class="nav-link {{ request()->routeIs('admin.profile.*') ? 'active' : '' }}">
                 <i class="bi bi-person"></i><span class="nav-text">Profile</span>
             </a>
-            <a href="{{ route('admin.about.index') }}" class="nav-link {{ request()->routeIs('admin.about.*') ? 'active' : '' }}">
+            <a href="{{ route('admin.about.edit') }}" class="nav-link {{ request()->routeIs('admin.about.*') ? 'active' : '' }}">
                 <i class="bi bi-info-circle"></i><span class="nav-text">About</span>
             </a>
             <a href="{{ route('admin.skills.index') }}" class="nav-link {{ request()->routeIs('admin.skills.*') ? 'active' : '' }}">
                 <i class="bi bi-lightning"></i><span class="nav-text">Skills</span>
             </a>
-            <a href="{{ route('admin.experience.index') }}" class="nav-link {{ request()->routeIs('admin.experience.*') ? 'active' : '' }}">
+            <a href="{{ route('admin.experiences.index') }}" class="nav-link {{ request()->routeIs('admin.experiences.*') ? 'active' : '' }}">
                 <i class="bi bi-briefcase"></i><span class="nav-text">Experience</span>
             </a>
-            <a href="{{ route('admin.education.index') }}" class="nav-link {{ request()->routeIs('admin.education.*') ? 'active' : '' }}">
+            <a href="{{ route('admin.educations.index') }}" class="nav-link {{ request()->routeIs('admin.educations.*') ? 'active' : '' }}">
                 <i class="bi bi-mortarboard"></i><span class="nav-text">Education</span>
             </a>
             <a href="{{ route('admin.projects.index') }}" class="nav-link {{ request()->routeIs('admin.projects.*') ? 'active' : '' }}">
@@ -244,7 +244,7 @@
                 <i class="bi bi-award"></i><span class="nav-text">Certifications</span>
             </a>
             <div class="sidebar-section-title">Content</div>
-            <a href="{{ route('admin.blog.index') }}" class="nav-link {{ request()->routeIs('admin.blog.*') ? 'active' : '' }}">
+            <a href="{{ route('admin.blog-posts.index') }}" class="nav-link {{ request()->routeIs('admin.blog-posts.*') ? 'active' : '' }}">
                 <i class="bi bi-journal-text"></i><span class="nav-text">Blog</span>
             </a>
             <a href="{{ route('admin.messages.index') }}" class="nav-link {{ request()->routeIs('admin.messages.*') ? 'active' : '' }}">
@@ -266,10 +266,10 @@
             <a href="{{ route('admin.analytics.index') }}" class="nav-link {{ request()->routeIs('admin.analytics.*') ? 'active' : '' }}">
                 <i class="bi bi-bar-chart"></i><span class="nav-text">Analytics</span>
             </a>
-            <a href="{{ route('admin.pagebuilder.index') }}" class="nav-link {{ request()->routeIs('admin.pagebuilder.*') ? 'active' : '' }}">
+            <a href="{{ route('admin.page-builder.index') }}" class="nav-link {{ request()->routeIs('admin.page-builder.*') ? 'active' : '' }}">
                 <i class="bi bi-layout-wtf"></i><span class="nav-text">Page Builder</span>
             </a>
-            <a href="{{ route('admin.appearance.index') }}" class="nav-link {{ request()->routeIs('admin.appearance.*') ? 'active' : '' }}">
+            <a href="{{ route('admin.themes.index') }}" class="nav-link {{ request()->routeIs('admin.themes.*') ? 'active' : '' }}">
                 <i class="bi bi-palette"></i><span class="nav-text">Appearance</span>
             </a>
             <a href="{{ route('admin.settings.index') }}" class="nav-link {{ request()->routeIs('admin.settings.*') ? 'active' : '' }}">

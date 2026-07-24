@@ -266,7 +266,7 @@
                                             </div>
                                             <div class="modal-footer border-0">
                                                 <button @click="show = false" class="btn btn-sm btn-light">Cancel</button>
-                                                <form action="{{ route('admin.project-gallery.destroy', $image) }}" method="POST">
+                                                <form action="{{ route('admin.projects.images.destroy', [$project, $image]) }}" method="POST">
                                                     @csrf @method('DELETE')
                                                     <button type="submit" class="btn btn-sm btn-danger">Delete</button>
                                                 </form>
@@ -282,7 +282,7 @@
                 @endforelse
             </div>
 
-            <form action="{{ route('admin.project-gallery.store', $project) }}" method="POST" enctype="multipart/form-data">
+            <form action="{{ route('admin.projects.images.store', $project) }}" method="POST" enctype="multipart/form-data">
                 @csrf
                 <div class="row g-3 align-items-end">
                     <div class="col-md-8">

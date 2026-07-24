@@ -6,7 +6,7 @@
 <nav aria-label="breadcrumb">
     <ol class="breadcrumb mb-0">
         <li class="breadcrumb-item"><a href="{{ route('admin.dashboard') }}" class="text-decoration-none">Dashboard</a></li>
-        <li class="breadcrumb-item"><a href="{{ route('admin.experience.index') }}" class="text-decoration-none">Experience</a></li>
+        <li class="breadcrumb-item"><a href="{{ route('admin.experiences.index') }}" class="text-decoration-none">Experience</a></li>
         <li class="breadcrumb-item active">Edit</li>
     </ol>
 </nav>
@@ -18,7 +18,7 @@
         <h4 class="fw-bold mb-1">Edit Experience</h4>
         <p class="text-muted mb-0">Update your experience at <strong>{{ $experience->company_name }}</strong>.</p>
     </div>
-    <a href="{{ route('admin.experience.index') }}" class="quick-action-btn" style="background:#e2e8f0;color:#475569;">
+    <a href="{{ route('admin.experiences.index') }}" class="quick-action-btn" style="background:#e2e8f0;color:#475569;">
         <i class="bi bi-arrow-left"></i> Back to Experience
     </a>
 </div>
@@ -36,7 +36,7 @@
     </div>
 @endif
 
-<form action="{{ route('admin.experience.update', $experience) }}" method="POST"
+<form action="{{ route('admin.experiences.update', $experience) }}" method="POST"
       x-data="{ isCurrent: {{ old('is_current', $experience->is_current) ? 'true' : 'false' }} }">
     @csrf
     @method('PUT')
@@ -146,7 +146,7 @@
     </div>
 
     <div class="d-flex justify-content-end gap-2 mt-4">
-        <a href="{{ route('admin.experience.index') }}" class="btn btn-light px-4">Cancel</a>
+        <a href="{{ route('admin.experiences.index') }}" class="btn btn-light px-4">Cancel</a>
         <button type="submit" class="btn px-4 text-white" style="background:#6366f1;">
             <i class="bi bi-check-lg me-1"></i> Update Experience
         </button>

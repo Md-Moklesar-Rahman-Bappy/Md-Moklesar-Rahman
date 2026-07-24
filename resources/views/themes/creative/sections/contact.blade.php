@@ -68,7 +68,7 @@
 
             <div class="col-lg-7" data-aos="fade-left" data-aos-delay="200">
                 <div class="cre-card">
-                    <form action="{{ route('portfolio.contact.submit', $profile->slug ?? '') }}" method="POST">
+                    <form action="{{ route('home.contact.submit', $profile->slug ?? '') }}" method="POST">
                         @csrf
                         <div class="row">
                             <div class="col-md-6 mb-3">

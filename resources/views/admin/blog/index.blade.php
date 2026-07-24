@@ -17,14 +17,14 @@
         <h4 class="fw-bold mb-1">Blog Posts</h4>
         <p class="text-muted mb-0">Manage your blog articles and publications.</p>
     </div>
-    <a href="{{ route('admin.blog.create') }}" class="quick-action-btn text-white" style="background:#6366f1;">
+    <a href="{{ route('admin.blog-posts.create') }}" class="quick-action-btn text-white" style="background:#6366f1;">
         <i class="bi bi-plus-lg"></i> Add Post
     </a>
 </div>
 
 <div class="glass-card mb-4">
     <div class="card-body">
-        <form action="{{ route('admin.blog.index') }}" method="GET" class="row g-3 align-items-end">
+        <form action="{{ route('admin.blog-posts.index') }}" method="GET" class="row g-3 align-items-end">
             <div class="col-md-3">
                 <label for="status" class="form-label fw-semibold small">Status</label>
                 <select class="form-select" id="status" name="status">
@@ -121,15 +121,15 @@
                             <td class="text-end">
                                 <div class="d-flex gap-1 justify-content-end">
                                     @if($post->status === 'published')
-                                        <a href="{{ route('admin.blog.show', $post->slug ?? $post) }}" target="_blank"
+                                        <a href="{{ route('home.blog.show', $post->slug ?? $post) }}" target="_blank"
                                            class="btn btn-sm btn-outline-info rounded-pill" title="View">
                                             <i class="bi bi-eye"></i>
                                         </a>
                                     @endif
-                                    <a href="{{ route('admin.blog.edit', $post) }}" class="btn btn-sm btn-outline-secondary rounded-pill px-3" title="Edit">
+                                    <a href="{{ route('admin.blog-posts.edit', $post) }}" class="btn btn-sm btn-outline-secondary rounded-pill px-3" title="Edit">
                                         <i class="bi bi-pencil"></i>
                                     </a>
-                                    <form action="{{ route('admin.blog.destroy', $post) }}" method="POST" class="d-inline">
+                                    <form action="{{ route('admin.blog-posts.destroy', $post) }}" method="POST" class="d-inline">
                                         @csrf
                                         @method('DELETE')
                                         <button type="submit" class="btn btn-sm btn-outline-danger rounded-pill" title="Delete" onclick="return confirm('Delete this post?')">
@@ -145,7 +145,7 @@
                                 <i class="bi bi-journal-text display-4 text-muted mb-3 d-block"></i>
                                 <h5 class="text-muted">No blog posts yet</h5>
                                 <p class="text-muted mb-3">Write your first blog post to share your expertise.</p>
-                                <a href="{{ route('admin.blog.create') }}" class="quick-action-btn text-white" style="background:#6366f1;">
+                                <a href="{{ route('admin.blog-posts.create') }}" class="quick-action-btn text-white" style="background:#6366f1;">
                                     <i class="bi bi-plus-lg"></i> Write Post
                                 </a>
                             </td>

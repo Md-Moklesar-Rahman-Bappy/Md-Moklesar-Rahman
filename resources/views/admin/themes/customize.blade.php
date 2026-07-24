@@ -6,7 +6,7 @@
 <nav aria-label="breadcrumb">
     <ol class="breadcrumb mb-0">
         <li class="breadcrumb-item"><a href="{{ route('admin.dashboard') }}" class="text-decoration-none">Dashboard</a></li>
-        <li class="breadcrumb-item"><a href="{{ route('admin.appearance.index') }}" class="text-decoration-none">Themes</a></li>
+        <li class="breadcrumb-item"><a href="{{ route('admin.themes.index') }}" class="text-decoration-none">Themes</a></li>
         <li class="breadcrumb-item active">Customize</li>
     </ol>
 </nav>
@@ -18,7 +18,7 @@
         <h4 class="fw-bold mb-1">Theme Customizer</h4>
         <p class="text-muted mb-0">Customize: {{ $theme->name }}</p>
     </div>
-    <a href="{{ route('admin.appearance.index') }}" class="quick-action-btn" style="background:#e2e8f0;color:#475569;">
+    <a href="{{ route('admin.themes.index') }}" class="quick-action-btn" style="background:#e2e8f0;color:#475569;">
         <i class="bi bi-arrow-left"></i> Back
     </a>
 </div>
@@ -39,7 +39,7 @@
 <div x-data="themeCustomizer()" class="row g-0" style="min-height:calc(100vh - 200px);">
     <div class="col-lg-5" style="max-height:calc(100vh - 120px);overflow-y:auto;">
         <div class="p-3" style="border-right:1px solid #e2e8f0;">
-            <form action="{{ route('admin.appearance.update', $theme) }}" method="POST" @submit.prevent="saveForm($el)">
+            <form action="{{ route('admin.themes.customize.update', $theme) }}" method="POST" @submit.prevent="saveForm($el)">
                 @csrf
                 @method('PUT')
 

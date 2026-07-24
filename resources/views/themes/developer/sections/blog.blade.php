@@ -34,7 +34,7 @@
                             </div>
 
                             <h5 style="color: var(--dev-heading); font-size: 1rem;">
-                                <a href="{{ route('portfolio.blog.show', $post->slug ?? $post['slug'] ?? '#') }}" style="color: var(--dev-heading);">
+                                <a href="{{ route('home.blog.show', $post->slug ?? $post['slug'] ?? '#') }}" style="color: var(--dev-heading);">
                                     {{ $post->title ?? $post['title'] ?? '' }}
                                 </a>
                             </h5>
@@ -43,7 +43,7 @@
                                 {{ \Illuminate\Support\Str::limit($post->excerpt ?? $post['excerpt'] ?? ($post->description ?? $post['description'] ?? ''), 120) }}
                             </p>
 
-                            <a href="{{ route('portfolio.blog.show', $post->slug ?? $post['slug'] ?? '#') }}" class="dev-btn mt-auto" style="font-size: 0.75rem; padding: 0.5rem 1rem; width: fit-content;">
+                            <a href="{{ route('home.blog.show', $post->slug ?? $post['slug'] ?? '#') }}" class="dev-btn mt-auto" style="font-size: 0.75rem; padding: 0.5rem 1rem; width: fit-content;">
                                 <i class="bi bi-arrow-right"></i> Read More
                             </a>
                         </div>

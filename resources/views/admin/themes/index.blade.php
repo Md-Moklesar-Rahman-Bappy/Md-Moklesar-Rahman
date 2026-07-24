@@ -47,11 +47,11 @@
                     </div>
                     <div class="d-flex gap-2">
                         @if($theme->is_active)
-                            <a href="{{ route('admin.appearance.customize', $theme) }}" class="btn btn-sm text-white flex-grow-1" style="background:#6366f1;">
+                            <a href="{{ route('admin.themes.customize', $theme) }}" class="btn btn-sm text-white flex-grow-1" style="background:#6366f1;">
                                 <i class="bi bi-sliders me-1"></i> Customize
                             </a>
                         @else
-                            <form action="{{ route('admin.appearance.activate', $theme) }}" method="POST" class="flex-grow-1">
+                            <form action="{{ route('admin.themes.activate', $theme) }}" method="POST" class="flex-grow-1">
                                 @csrf
                                 @method('PUT')
                                 <button type="submit" class="btn btn-sm btn-outline-success w-100">

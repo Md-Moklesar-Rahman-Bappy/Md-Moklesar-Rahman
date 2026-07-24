@@ -80,7 +80,7 @@
             <div class="col-lg-7" data-aos="fade-left" data-aos-delay="200">
                 <div class="dev-card">
                     <div class="dev-keyword mb-4">// send_message</div>
-                    <form action="{{ route('portfolio.contact.submit', $profile->slug ?? '') }}" method="POST" id="contactForm">
+                    <form action="{{ route('home.contact.submit', $profile->slug ?? '') }}" method="POST" id="contactForm">
                         @csrf
                         <div class="row">
                             <div class="col-md-6 mb-3">

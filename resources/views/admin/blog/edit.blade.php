@@ -6,7 +6,7 @@
 <nav aria-label="breadcrumb">
     <ol class="breadcrumb mb-0">
         <li class="breadcrumb-item"><a href="{{ route('admin.dashboard') }}" class="text-decoration-none">Dashboard</a></li>
-        <li class="breadcrumb-item"><a href="{{ route('admin.blog.index') }}" class="text-decoration-none">Blog</a></li>
+        <li class="breadcrumb-item"><a href="{{ route('admin.blog-posts.index') }}" class="text-decoration-none">Blog</a></li>
         <li class="breadcrumb-item active">Edit</li>
     </ol>
 </nav>
@@ -18,7 +18,7 @@
         <h4 class="fw-bold mb-1">Edit Blog Post</h4>
         <p class="text-muted mb-0">Editing: {{ $post->title }}</p>
     </div>
-    <a href="{{ route('admin.blog.index') }}" class="quick-action-btn" style="background:#e2e8f0;color:#475569;">
+    <a href="{{ route('admin.blog-posts.index') }}" class="quick-action-btn" style="background:#e2e8f0;color:#475569;">
         <i class="bi bi-arrow-left"></i> Back
     </a>
 </div>
@@ -36,7 +36,7 @@
     </div>
 @endif
 
-<form action="{{ route('admin.blog.update', $post) }}" method="POST" enctype="multipart/form-data">
+<form action="{{ route('admin.blog-posts.update', $post) }}" method="POST" enctype="multipart/form-data">
     @csrf
     @method('PUT')
     <div class="row g-4">

@@ -74,8 +74,9 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'verified'])->group(
 
     // Messages
     Route::resource('messages', MessageController::class)->only(['index', 'show', 'destroy']);
-    Route::post('/messages/{message}/reply', [MessageController::class, 'reply'])->name('messages.reply');
 
+    Route::post('/messages/{message}/reply', [MessageController::class, 'reply'])->name('messages.reply');
+    Route::put('/messages/{message}/read', [MessageController::class, 'markRead'])->name('messages.mark-read');
     // Newsletter
     Route::get('/newsletter', [NewsletterController::class, 'index'])->name('newsletter.index');
     Route::get('/newsletter/export', [NewsletterController::class, 'export'])->name('newsletter.export');

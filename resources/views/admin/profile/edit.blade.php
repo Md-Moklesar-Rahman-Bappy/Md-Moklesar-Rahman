@@ -6,7 +6,7 @@
 <nav aria-label="breadcrumb">
     <ol class="breadcrumb mb-0">
         <li class="breadcrumb-item"><a href="{{ route('admin.dashboard') }}" class="text-decoration-none">Dashboard</a></li>
-        <li class="breadcrumb-item"><a href="{{ route('admin.profile.index') }}" class="text-decoration-none">Profile</a></li>
+        <li class="breadcrumb-item"><a href="{{ route('admin.profile.edit') }}" class="text-decoration-none">Profile</a></li>
         <li class="breadcrumb-item active">Edit</li>
     </ol>
 </nav>
@@ -18,7 +18,7 @@
         <h4 class="fw-bold mb-1">Edit Profile</h4>
         <p class="text-muted mb-0">Update your personal information and preferences.</p>
     </div>
-    <a href="{{ route('admin.profile.index') }}" class="quick-action-btn" style="background:#e2e8f0;color:#475569;">
+    <a href="{{ route('admin.profile.edit') }}" class="quick-action-btn" style="background:#e2e8f0;color:#475569;">
         <i class="bi bi-arrow-left"></i> Back to Profile
     </a>
 </div>
@@ -219,7 +219,7 @@
     </div>
 
     <div class="d-flex justify-content-end gap-2 mt-4">
-        <a href="{{ route('admin.profile.index') }}" class="btn btn-light px-4">Cancel</a>
+        <a href="{{ route('admin.profile.edit') }}" class="btn btn-light px-4">Cancel</a>
         <button type="submit" class="btn px-4 text-white" style="background:#6366f1;">
             <i class="bi bi-check-lg me-1"></i> Update Profile
         </button>

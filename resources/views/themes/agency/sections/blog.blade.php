@@ -34,7 +34,7 @@ if (method_exists($blogPosts, 'where')) {
                         <h5 class="fw-bold">{{ $post->title ?? '' }}</h5>
                         <p class="text-muted small">{{ Str::limit($post->excerpt ?? $post->description ?? '', 120) }}</p>
                         @if($post->slug)
-                        <a href="{{ route('blog.show', $post->slug) }}" class="fw-semibold" style="color: var(--primary);">Read More <i class="bi bi-arrow-right"></i></a>
+                        <a href="{{ route('home.blog.show', $post->slug) }}" class="fw-semibold" style="color: var(--primary);">Read More <i class="bi bi-arrow-right"></i></a>
                         @endif
                     </div>
                 </div>
@@ -43,7 +43,7 @@ if (method_exists($blogPosts, 'where')) {
         </div>
         @if($blogPosts->count() > 3)
         <div class="text-center mt-5" data-aos="fade-up">
-            <a href="{{ route('blog.index') }}" class="btn btn-agency">View All Posts</a>
+            <a href="{{ route('home.blog') }}" class="btn btn-agency">View All Posts</a>
         </div>
         @endif
         @if($blogPosts->isEmpty())

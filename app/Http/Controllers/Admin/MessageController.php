@@ -62,4 +62,14 @@ class MessageController extends AdminController
         return redirect()->route('admin.messages.show', $message)
             ->with('success', 'Reply sent successfully.');
     }
+
+    public function markRead(Message $message)
+    {
+        if (is_null($message->read_at)) {
+            $message->update(['read_at' => now()]);
+        }
+
+        return redirect()->route('admin.messages.show', $message)
+            ->with('success', 'Message marked as read.');
+    }
 }

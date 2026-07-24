@@ -133,7 +133,7 @@ function mediaUploader() {
                         window.location.reload();
                     }
                 });
-                xhr.open('POST', '{{ route("admin.media.store") }}');
+                xhr.open('POST', '{{ route("admin.media.upload") }}');
                 xhr.setRequestHeader('X-CSRF-TOKEN', document.querySelector('meta[name="csrf-token"]').content);
                 xhr.setRequestHeader('Accept', 'application/json');
                 xhr.send(formData);

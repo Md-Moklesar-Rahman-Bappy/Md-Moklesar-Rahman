@@ -6,7 +6,7 @@
 <nav aria-label="breadcrumb">
     <ol class="breadcrumb mb-0">
         <li class="breadcrumb-item"><a href="{{ route('admin.dashboard') }}" class="text-decoration-none">Dashboard</a></li>
-        <li class="breadcrumb-item"><a href="{{ route('admin.education.index') }}" class="text-decoration-none">Education</a></li>
+        <li class="breadcrumb-item"><a href="{{ route('admin.educations.index') }}" class="text-decoration-none">Education</a></li>
         <li class="breadcrumb-item active">Add Education</li>
     </ol>
 </nav>
@@ -18,7 +18,7 @@
         <h4 class="fw-bold mb-1">Add Education</h4>
         <p class="text-muted mb-0">Add a new education entry.</p>
     </div>
-    <a href="{{ route('admin.education.index') }}" class="quick-action-btn" style="background:#e2e8f0;color:#475569;">
+    <a href="{{ route('admin.educations.index') }}" class="quick-action-btn" style="background:#e2e8f0;color:#475569;">
         <i class="bi bi-arrow-left"></i> Back to Education
     </a>
 </div>
@@ -36,7 +36,7 @@
     </div>
 @endif
 
-<form action="{{ route('admin.education.store') }}" method="POST">
+<form action="{{ route('admin.educations.store') }}" method="POST">
     @csrf
     <div class="row g-4">
         <div class="col-lg-8">
@@ -140,7 +140,7 @@
     </div>
 
     <div class="d-flex justify-content-end gap-2 mt-4">
-        <a href="{{ route('admin.education.index') }}" class="btn btn-light px-4">Cancel</a>
+        <a href="{{ route('admin.educations.index') }}" class="btn btn-light px-4">Cancel</a>
         <button type="submit" class="btn px-4 text-white" style="background:#6366f1;">
             <i class="bi bi-check-lg me-1"></i> Save Education
         </button>
