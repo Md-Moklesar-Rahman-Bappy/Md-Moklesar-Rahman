@@ -1,12 +1,17 @@
 <?php
 
+use App\Http\Controllers\Frontend\HomeController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 
-// Public routes
-Route::get('/', function () {
-    return view('welcome');
-})->name('home');
+// Frontend routes
+Route::get('/', [HomeController::class, 'index'])->name('home');
+Route::get('/blog', [HomeController::class, 'blog'])->name('home.blog');
+Route::get('/blog/{slug}', [HomeController::class, 'showBlogPost'])->name('home.blog.show');
+Route::get('/project/{slug}', [HomeController::class, 'showProject'])->name('home.project');
+Route::get('/contact', [HomeController::class, 'contact'])->name('home.contact');
+Route::post('/contact', [HomeController::class, 'submitContact'])->name('home.contact.submit');
+Route::post('/subscribe', [HomeController::class, 'subscribe'])->name('home.subscribe');
 
 // Load admin routes
 require __DIR__.'/admin.php';
