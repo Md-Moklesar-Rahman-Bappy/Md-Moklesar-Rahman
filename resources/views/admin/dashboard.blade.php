@@ -211,8 +211,8 @@
                                 <tr>
                                     <td>{{ Str::limit($project->title ?? '', 35) }}</td>
                                     <td>
-                                        <span class="badge {{ ($project->is_published ?? false) ? 'bg-success' : 'bg-secondary' }} rounded-pill">
-                                            {{ ($project->is_published ?? false) ? 'Published' : 'Draft' }}
+                                        <span class="badge {{ $project->is_active ? 'bg-success' : 'bg-secondary' }} rounded-pill">
+                                            {{ $project->is_active ? 'Active' : 'Inactive' }}
                                         </span>
                                     </td>
                                     <td>{{ $project->created_at->diffForHumans() }}</td>

@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Http\Controllers\Admin\AdminController;
 use App\Models\Experience;
 use Illuminate\Http\Request;
 
@@ -31,13 +30,13 @@ class ExperienceController extends AdminController
         $profile = $this->getProfile();
 
         $validated = $request->validate([
-            'company_name'  => 'required|string|max:255',
-            'position'      => 'required|string|max:255',
-            'start_date'    => 'required|date',
-            'end_date'      => 'nullable|date|after_or_equal:start_date',
-            'is_current'    => 'boolean',
-            'description'   => 'nullable|string',
-            'technologies'  => 'nullable|array',
+            'company_name' => 'required|string|max:255',
+            'position' => 'required|string|max:255',
+            'start_date' => 'required|date',
+            'end_date' => 'nullable|date|after_or_equal:start_date',
+            'is_current' => 'boolean',
+            'description' => 'nullable|string',
+            'technologies' => 'nullable|array',
             'technologies.*' => 'string|max:255',
         ]);
 
@@ -53,20 +52,22 @@ class ExperienceController extends AdminController
     public function edit(Experience $experience)
     {
         $profile = $this->getProfile();
+        $this->authorizeOwnership($experience);
 
         return view('admin.experiences.edit', compact('experience', 'profile'));
     }
 
     public function update(Request $request, Experience $experience)
     {
+        $this->authorizeOwnership($experience);
         $validated = $request->validate([
-            'company_name'  => 'required|string|max:255',
-            'position'      => 'required|string|max:255',
-            'start_date'    => 'required|date',
-            'end_date'      => 'nullable|date|after_or_equal:start_date',
-            'is_current'    => 'boolean',
-            'description'   => 'nullable|string',
-            'technologies'  => 'nullable|array',
+            'company_name' => 'required|string|max:255',
+            'position' => 'required|string|max:255',
+            'start_date' => 'required|date',
+            'end_date' => 'nullable|date|after_or_equal:start_date',
+            'is_current' => 'boolean',
+            'description' => 'nullable|string',
+            'technologies' => 'nullable|array',
             'technologies.*' => 'string|max:255',
         ]);
 
@@ -80,6 +81,7 @@ class ExperienceController extends AdminController
 
     public function destroy(Experience $experience)
     {
+        $this->authorizeOwnership($experience);
         $experience->delete();
 
         return redirect()->route('admin.experiences.index')

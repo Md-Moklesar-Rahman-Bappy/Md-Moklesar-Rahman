@@ -2,11 +2,9 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Http\Controllers\Admin\AdminController;
 use App\Models\Skill;
 use App\Models\SkillCategory;
 use Illuminate\Http\Request;
-use Illuminate\Support\Str;
 
 class SkillController extends AdminController
 {
@@ -36,11 +34,11 @@ class SkillController extends AdminController
         $profile = $this->getProfile();
 
         $validated = $request->validate([
-            'name'         => 'required|string|max:255',
-            'percentage'   => 'nullable|integer|min:0|max:100',
-            'category_id'  => 'nullable|exists:skill_categories,id',
-            'icon'         => 'nullable|string|max:255',
-            'color'        => 'nullable|string|max:7',
+            'name' => 'required|string|max:255',
+            'percentage' => 'nullable|integer|min:0|max:100',
+            'category_id' => 'nullable|exists:skill_categories,id',
+            'icon' => 'nullable|string|max:255',
+            'color' => 'nullable|string|max:7',
         ]);
 
         $validated['profile_id'] = $profile->id;
@@ -54,6 +52,7 @@ class SkillController extends AdminController
     public function edit(Skill $skill)
     {
         $profile = $this->getProfile();
+        $this->authorizeOwnership($skill);
         $categories = SkillCategory::where('profile_id', $profile->id)->orderBy('name')->get();
 
         return view('admin.skills.edit', compact('skill', 'profile', 'categories'));
@@ -61,12 +60,13 @@ class SkillController extends AdminController
 
     public function update(Request $request, Skill $skill)
     {
+        $this->authorizeOwnership($skill);
         $validated = $request->validate([
-            'name'         => 'required|string|max:255',
-            'percentage'   => 'nullable|integer|min:0|max:100',
-            'category_id'  => 'nullable|exists:skill_categories,id',
-            'icon'         => 'nullable|string|max:255',
-            'color'        => 'nullable|string|max:7',
+            'name' => 'required|string|max:255',
+            'percentage' => 'nullable|integer|min:0|max:100',
+            'category_id' => 'nullable|exists:skill_categories,id',
+            'icon' => 'nullable|string|max:255',
+            'color' => 'nullable|string|max:7',
         ]);
 
         $skill->update($validated);
@@ -77,6 +77,7 @@ class SkillController extends AdminController
 
     public function destroy(Skill $skill)
     {
+        $this->authorizeOwnership($skill);
         $skill->delete();
 
         return redirect()->route('admin.skills.index')

@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Http\Controllers\Admin\AdminController;
 use App\Models\BlogTag;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
@@ -14,7 +13,7 @@ class BlogTagController extends AdminController
         $profile = $this->getProfile();
 
         $tags = BlogTag::where('profile_id', $profile->id)
-            ->withCount('posts')
+            ->withCount('blogPosts')
             ->orderBy('name')
             ->paginate(30);
 
@@ -51,7 +50,7 @@ class BlogTagController extends AdminController
 
     public function destroy(BlogTag $tag, Request $request)
     {
-        $tag->posts()->detach();
+        $tag->blogPosts()->detach();
         $tag->delete();
 
         if ($request->ajax()) {

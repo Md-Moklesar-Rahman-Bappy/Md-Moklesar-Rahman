@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Http\Controllers\Admin\AdminController;
 use App\Models\Setting;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
@@ -27,21 +26,29 @@ class SettingController extends AdminController
         $profile = $this->getProfile();
 
         $validated = $request->validate([
-            'settings'   => 'required|array',
-            'settings.*.key'   => 'required|string|max:255',
+            'settings' => 'required|array',
+            'settings.*.key' => 'required|string|max:255',
             'settings.*.value' => 'nullable|string',
-            'settings.*.type'  => 'nullable|string|in:text,textarea,image,boolean',
+            'settings.*.type' => 'nullable|string|in:text,textarea,image,boolean',
+            'settings.*.group' => 'nullable|string|max:255',
         ]);
 
         foreach ($validated['settings'] as $settingData) {
             $value = $settingData['value'] ?? null;
             $type = $settingData['type'] ?? 'text';
+            $group = $settingData['group'] ?? 'general';
 
             if ($type === 'boolean') {
                 $value = $value ? '1' : '0';
             }
 
             if ($type === 'image' && $request->hasFile("setting_files.{$settingData['key']}")) {
+                $existing = Setting::where('profile_id', $profile->id)
+                    ->where('key', $settingData['key'])
+                    ->first();
+                if ($existing && $existing->value) {
+                    Storage::disk('public')->delete($existing->value);
+                }
                 $file = $request->file("setting_files.{$settingData['key']}");
                 $path = $file->store('settings', 'public');
                 $value = $path;
@@ -50,12 +57,12 @@ class SettingController extends AdminController
             Setting::updateOrCreate(
                 [
                     'profile_id' => $profile->id,
-                    'key'        => $settingData['key'],
+                    'key' => $settingData['key'],
                 ],
                 [
                     'value' => $value,
-                    'type'  => $type,
-                    'group' => $settingData['group'] ?? 'general',
+                    'type' => $type,
+                    'group' => $group,
                 ]
             );
         }

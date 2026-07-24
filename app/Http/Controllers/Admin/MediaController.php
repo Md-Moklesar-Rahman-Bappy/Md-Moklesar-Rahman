@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Http\Controllers\Admin\AdminController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
@@ -33,12 +32,12 @@ class MediaController extends AdminController
 
         $files = collect($sliced)->map(function ($path) use ($disk) {
             return [
-                'name'         => basename($path),
-                'path'         => $path,
-                'url'          => $disk->url($path),
-                'size'         => $disk->size($path),
+                'name' => basename($path),
+                'path' => $path,
+                'url' => $disk->url($path),
+                'size' => $disk->size($path),
                 'lastModified' => $disk->lastModified($path),
-                'mimeType'     => $disk->mimeType($path),
+                'mimeType' => $disk->mimeType($path),
             ];
         });
 
@@ -50,22 +49,22 @@ class MediaController extends AdminController
         $profile = $this->getProfile();
 
         $validated = $request->validate([
-            'file'   => 'required|file|max:10240',
-            'folder' => 'nullable|string|max:255',
+            'file' => 'required|file|mimes:jpg,jpeg,png,gif,webp,svg,pdf,doc,docx,xls,xlsx,mp4,mp3,zip|max:10240',
+            'folder' => 'nullable|string|max:255|in:media,blog,blog/og,profiles,covers,resumes,about,projects/thumbnails,projects/images,certifications,testimonials,seo,settings,themes/logos,themes/favicons',
         ]);
 
         $folder = $validated['folder'] ?? 'media';
         $file = $request->file('file');
-        $filename = Str::uuid() . '.' . $file->getClientOriginalExtension();
+        $filename = Str::uuid().'.'.$file->getClientOriginalExtension();
         $path = $file->storeAs($folder, $filename, 'public');
 
         if ($request->ajax()) {
             return response()->json([
                 'success' => true,
-                'file'    => [
+                'file' => [
                     'name' => $filename,
                     'path' => $path,
-                    'url'  => Storage::disk('public')->url($path),
+                    'url' => Storage::disk('public')->url($path),
                     'size' => Storage::disk('public')->size($path),
                 ],
             ]);
@@ -79,8 +78,14 @@ class MediaController extends AdminController
     {
         $path = $request->input('path');
 
-        if ($path && Storage::disk('public')->exists($path)) {
-            Storage::disk('public')->delete($path);
+        if ($path) {
+            $realPath = Storage::disk('public')->path($path);
+            $mediaPath = Storage::disk('public')->path('media');
+            $publicPath = Storage::disk('public')->path('');
+
+            if (str_starts_with($realPath, $mediaPath) && str_starts_with(realpath($realPath) ?: $realPath, $publicPath)) {
+                Storage::disk('public')->delete($path);
+            }
         }
 
         if ($request->ajax()) {
@@ -95,6 +100,15 @@ class MediaController extends AdminController
     {
         $disk = Storage::disk('public');
         $directory = $request->get('folder', 'media');
+
+        $allowedFolders = ['media', 'blog', 'blog/og', 'profiles', 'covers', 'resumes',
+            'about', 'projects/thumbnails', 'projects/images', 'certifications',
+            'testimonials', 'seo', 'settings', 'themes/logos', 'themes/favicons'];
+
+        if (! in_array($directory, $allowedFolders, true)) {
+            $directory = 'media';
+        }
+
         $allFiles = $disk->files($directory);
 
         if ($request->filled('search')) {
@@ -106,10 +120,10 @@ class MediaController extends AdminController
 
         $files = collect(array_values($allFiles))->map(function ($path) use ($disk) {
             return [
-                'name'     => basename($path),
-                'path'     => $path,
-                'url'      => $disk->url($path),
-                'size'     => $disk->size($path),
+                'name' => basename($path),
+                'path' => $path,
+                'url' => $disk->url($path),
+                'size' => $disk->size($path),
                 'mimeType' => $disk->mimeType($path),
             ];
         })->values();

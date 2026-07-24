@@ -2,7 +2,23 @@
 
 namespace Database\Seeders;
 
-use App\Models\{User, Profile, SocialLink, SkillCategory, Skill, Experience, Education, ProjectCategory, Project, Service, Testimonial, Certification, BlogCategory, BlogTag, BlogPost, Setting, AboutSection};
+use App\Models\AboutSection;
+use App\Models\BlogCategory;
+use App\Models\BlogPost;
+use App\Models\BlogTag;
+use App\Models\Certification;
+use App\Models\Education;
+use App\Models\Experience;
+use App\Models\Profile;
+use App\Models\Project;
+use App\Models\ProjectCategory;
+use App\Models\Service;
+use App\Models\Setting;
+use App\Models\Skill;
+use App\Models\SkillCategory;
+use App\Models\SocialLink;
+use App\Models\Testimonial;
+use App\Models\User;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Str;
 
@@ -12,8 +28,8 @@ class UserSeeder extends Seeder
     {
         // Create admin user
         $user = User::create([
-            'name' => 'Md Moklesar Rahman',
-            'email' => 'admin@portfoliobuilder.com',
+            'name' => 'Admin User',
+            'email' => 'admin@portfolio.com',
             'password' => bcrypt('password'),
             'email_verified_at' => now(),
         ]);
@@ -23,7 +39,7 @@ class UserSeeder extends Seeder
         // Create profile
         $profile = Profile::create([
             'user_id' => $user->id,
-            'full_name' => 'Md Moklesar Rahman',
+            'full_name' => 'Admin User',
             'tagline' => 'Your Digital Dreamweaver',
             'designation' => 'Senior WordPress Developer',
             'bio' => 'I fuse captivating visuals with seamless functionality to craft immersive online experiences. From sleek designs to unconventional layouts, I bring your vision to life. With over 5 years of experience in web development and design, I specialize in creating beautiful, functional websites that help businesses grow.',
@@ -354,5 +370,22 @@ class UserSeeder extends Seeder
         foreach ($settings as $setting) {
             Setting::create(array_merge($setting, ['profile_id' => $profile->id, 'type' => 'text']));
         }
+
+        // Create normal demo user
+        $normalUser = User::create([
+            'name' => 'Demo User',
+            'email' => 'user@portfolio.com',
+            'password' => bcrypt('password'),
+            'email_verified_at' => now(),
+        ]);
+
+        Profile::create([
+            'user_id' => $normalUser->id,
+            'full_name' => 'Demo User',
+            'tagline' => 'Demo Portfolio User',
+            'designation' => 'Web Developer',
+            'bio' => 'This is a demo user account for testing purposes.',
+            'slug' => 'demo-user',
+        ]);
     }
 }

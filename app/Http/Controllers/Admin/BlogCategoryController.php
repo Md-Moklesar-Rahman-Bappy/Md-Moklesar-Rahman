@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Http\Controllers\Admin\AdminController;
 use App\Models\BlogCategory;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
@@ -15,7 +14,7 @@ class BlogCategoryController extends AdminController
 
         $categories = BlogCategory::where('profile_id', $profile->id)
             ->with('parent')
-            ->withCount('posts')
+            ->withCount('blogPosts')
             ->orderBy('name')
             ->paginate(15);
 
@@ -43,10 +42,10 @@ class BlogCategoryController extends AdminController
         $profile = $this->getProfile();
 
         $validated = $request->validate([
-            'name'            => 'required|string|max:255',
-            'description'     => 'nullable|string|max:1000',
-            'parent_id'       => 'nullable|exists:blog_categories,id',
-            'meta_title'      => 'nullable|string|max:255',
+            'name' => 'required|string|max:255',
+            'description' => 'nullable|string|max:1000',
+            'parent_id' => 'nullable|exists:blog_categories,id',
+            'meta_title' => 'nullable|string|max:255',
             'meta_description' => 'nullable|string|max:500',
         ]);
 
@@ -62,6 +61,7 @@ class BlogCategoryController extends AdminController
     public function edit(BlogCategory $category)
     {
         $profile = $this->getProfile();
+        $this->authorizeOwnership($category);
         $parentCategories = BlogCategory::where('profile_id', $profile->id)
             ->whereNull('parent_id')
             ->where('id', '!=', $category->id)
@@ -73,11 +73,12 @@ class BlogCategoryController extends AdminController
 
     public function update(Request $request, BlogCategory $category)
     {
+        $this->authorizeOwnership($category);
         $validated = $request->validate([
-            'name'            => 'required|string|max:255',
-            'description'     => 'nullable|string|max:1000',
-            'parent_id'       => 'nullable|exists:blog_categories,id',
-            'meta_title'      => 'nullable|string|max:255',
+            'name' => 'required|string|max:255',
+            'description' => 'nullable|string|max:1000',
+            'parent_id' => 'nullable|exists:blog_categories,id',
+            'meta_title' => 'nullable|string|max:255',
             'meta_description' => 'nullable|string|max:500',
         ]);
 
@@ -91,6 +92,7 @@ class BlogCategoryController extends AdminController
 
     public function destroy(BlogCategory $category)
     {
+        $this->authorizeOwnership($category);
         BlogCategory::where('parent_id', $category->id)->update(['parent_id' => null]);
 
         $category->delete();

@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Http\Controllers\Admin\AdminController;
 use App\Models\SkillCategory;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
@@ -40,6 +39,7 @@ class SkillCategoryController extends AdminController
 
     public function update(Request $request, SkillCategory $category)
     {
+        $this->authorizeOwnership($category);
         $validated = $request->validate([
             'name' => 'required|string|max:255',
         ]);
@@ -54,6 +54,7 @@ class SkillCategoryController extends AdminController
 
     public function destroy(SkillCategory $category)
     {
+        $this->authorizeOwnership($category);
         $category->delete();
 
         return redirect()->route('admin.skill-categories.index')

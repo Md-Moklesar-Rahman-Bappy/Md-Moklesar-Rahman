@@ -2,13 +2,19 @@
 
 namespace App\Services;
 
-use App\Models\{Theme, ThemeCustomization, Profile, PageSection};
+use App\Models\PageSection;
+use App\Models\Profile;
+use App\Models\Theme;
+use App\Models\ThemeCustomization;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\View;
 
 class ThemeManager
 {
     protected ?Theme $activeTheme = null;
+
     protected ?ThemeCustomization $customization = null;
+
     protected ?Profile $profile = null;
 
     public function __construct()
@@ -22,6 +28,7 @@ class ThemeManager
         $this->customization = ThemeCustomization::where('profile_id', $profile->id)
             ->where('theme_id', $this->activeTheme?->id)
             ->first();
+
         return $this;
     }
 
@@ -35,11 +42,12 @@ class ThemeManager
         return $this->customization;
     }
 
-    public function getSections(): \Illuminate\Database\Eloquent\Collection
+    public function getSections(): Collection
     {
-        if (!$this->profile || !$this->activeTheme) {
+        if (! $this->profile || ! $this->activeTheme) {
             return collect();
         }
+
         return PageSection::where('profile_id', $this->profile->id)
             ->where('theme_id', $this->activeTheme->id)
             ->where('is_active', true)
@@ -52,7 +60,7 @@ class ThemeManager
         $themeSlug = $this->activeTheme?->slug ?? 'developer';
         $viewPath = "themes.{$themeSlug}.sections.{$type}";
 
-        if (!View::exists($viewPath)) {
+        if (! View::exists($viewPath)) {
             $viewPath = "themes.developer.sections.{$type}";
         }
 
@@ -68,7 +76,7 @@ class ThemeManager
         $themeSlug = $this->activeTheme?->slug ?? 'developer';
         $viewPath = "themes.{$themeSlug}.{$page}";
 
-        if (!View::exists($viewPath)) {
+        if (! View::exists($viewPath)) {
             $viewPath = "themes.developer.{$page}";
         }
 
@@ -82,13 +90,14 @@ class ThemeManager
     public function getThemePath(): string
     {
         $slug = $this->activeTheme?->slug ?? 'developer';
+
         return resource_path("views/themes/{$slug}");
     }
 
     public function getCssVariables(): string
     {
         $c = $this->customization;
-        if (!$c) {
+        if (! $c) {
             return '';
         }
 

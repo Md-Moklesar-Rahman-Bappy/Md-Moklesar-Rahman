@@ -9,8 +9,12 @@ class AdminMiddleware
 {
     public function handle(Request $request, Closure $next)
     {
-        if (!auth()->check()) {
+        if (! auth()->check()) {
             return redirect()->route('login');
+        }
+
+        if (! auth()->user()->hasRole('admin')) {
+            abort(403, 'Unauthorized. Admin access required.');
         }
 
         return $next($request);

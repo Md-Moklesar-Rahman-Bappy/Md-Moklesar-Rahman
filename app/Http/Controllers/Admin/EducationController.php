@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Http\Controllers\Admin\AdminController;
 use App\Models\Education;
 use Illuminate\Http\Request;
 
@@ -31,13 +30,13 @@ class EducationController extends AdminController
         $profile = $this->getProfile();
 
         $validated = $request->validate([
-            'institution'    => 'required|string|max:255',
-            'degree'         => 'required|string|max:255',
+            'institution' => 'required|string|max:255',
+            'degree' => 'required|string|max:255',
             'group_or_field' => 'nullable|string|max:255',
-            'result'         => 'nullable|string|max:255',
-            'start_date'     => 'required|date',
-            'end_date'       => 'nullable|date|after_or_equal:start_date',
-            'description'    => 'nullable|string',
+            'result' => 'nullable|string|max:255',
+            'start_date' => 'required|date',
+            'end_date' => 'nullable|date|after_or_equal:start_date',
+            'description' => 'nullable|string',
         ]);
 
         $validated['profile_id'] = $profile->id;
@@ -51,20 +50,22 @@ class EducationController extends AdminController
     public function edit(Education $education)
     {
         $profile = $this->getProfile();
+        $this->authorizeOwnership($education);
 
         return view('admin.educations.edit', compact('education', 'profile'));
     }
 
     public function update(Request $request, Education $education)
     {
+        $this->authorizeOwnership($education);
         $validated = $request->validate([
-            'institution'    => 'required|string|max:255',
-            'degree'         => 'required|string|max:255',
+            'institution' => 'required|string|max:255',
+            'degree' => 'required|string|max:255',
             'group_or_field' => 'nullable|string|max:255',
-            'result'         => 'nullable|string|max:255',
-            'start_date'     => 'required|date',
-            'end_date'       => 'nullable|date|after_or_equal:start_date',
-            'description'    => 'nullable|string',
+            'result' => 'nullable|string|max:255',
+            'start_date' => 'required|date',
+            'end_date' => 'nullable|date|after_or_equal:start_date',
+            'description' => 'nullable|string',
         ]);
 
         $education->update($validated);
@@ -75,6 +76,7 @@ class EducationController extends AdminController
 
     public function destroy(Education $education)
     {
+        $this->authorizeOwnership($education);
         $education->delete();
 
         return redirect()->route('admin.educations.index')

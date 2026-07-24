@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Http\Controllers\Admin\AdminController;
 use App\Models\ProjectCategory;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
@@ -33,7 +32,7 @@ class ProjectCategoryController extends AdminController
         $profile = $this->getProfile();
 
         $validated = $request->validate([
-            'name'        => 'required|string|max:255',
+            'name' => 'required|string|max:255',
             'description' => 'nullable|string|max:500',
         ]);
 
@@ -49,14 +48,16 @@ class ProjectCategoryController extends AdminController
     public function edit(ProjectCategory $category)
     {
         $profile = $this->getProfile();
+        $this->authorizeOwnership($category);
 
         return view('admin.project-categories.edit', compact('category', 'profile'));
     }
 
     public function update(Request $request, ProjectCategory $category)
     {
+        $this->authorizeOwnership($category);
         $validated = $request->validate([
-            'name'        => 'required|string|max:255',
+            'name' => 'required|string|max:255',
             'description' => 'nullable|string|max:500',
         ]);
 
@@ -70,6 +71,7 @@ class ProjectCategoryController extends AdminController
 
     public function destroy(ProjectCategory $category)
     {
+        $this->authorizeOwnership($category);
         $category->delete();
 
         return redirect()->route('admin.project-categories.index')

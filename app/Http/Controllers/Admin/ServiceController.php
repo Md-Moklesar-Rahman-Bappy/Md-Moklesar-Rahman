@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Http\Controllers\Admin\AdminController;
 use App\Models\Service;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
@@ -32,12 +31,12 @@ class ServiceController extends AdminController
         $profile = $this->getProfile();
 
         $validated = $request->validate([
-            'title'       => 'required|string|max:255',
+            'title' => 'required|string|max:255',
             'description' => 'nullable|string',
-            'icon'        => 'nullable|string|max:255',
-            'features'    => 'nullable|array',
-            'features.*'  => 'string|max:255',
-            'price'       => 'nullable|numeric|min:0',
+            'icon' => 'nullable|string|max:255',
+            'features' => 'nullable|array',
+            'features.*' => 'string|max:255',
+            'price' => 'nullable|numeric|min:0',
         ]);
 
         $validated['slug'] = Str::slug($validated['title']);
@@ -52,19 +51,21 @@ class ServiceController extends AdminController
     public function edit(Service $service)
     {
         $profile = $this->getProfile();
+        $this->authorizeOwnership($service);
 
         return view('admin.services.edit', compact('service', 'profile'));
     }
 
     public function update(Request $request, Service $service)
     {
+        $this->authorizeOwnership($service);
         $validated = $request->validate([
-            'title'       => 'required|string|max:255',
+            'title' => 'required|string|max:255',
             'description' => 'nullable|string',
-            'icon'        => 'nullable|string|max:255',
-            'features'    => 'nullable|array',
-            'features.*'  => 'string|max:255',
-            'price'       => 'nullable|numeric|min:0',
+            'icon' => 'nullable|string|max:255',
+            'features' => 'nullable|array',
+            'features.*' => 'string|max:255',
+            'price' => 'nullable|numeric|min:0',
         ]);
 
         $validated['slug'] = Str::slug($validated['title']);
@@ -77,6 +78,7 @@ class ServiceController extends AdminController
 
     public function destroy(Service $service)
     {
+        $this->authorizeOwnership($service);
         $service->delete();
 
         return redirect()->route('admin.services.index')

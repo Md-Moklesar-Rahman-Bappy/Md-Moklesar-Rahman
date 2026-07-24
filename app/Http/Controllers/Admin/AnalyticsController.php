@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Http\Controllers\Admin\AdminController;
 use App\Models\Analytics;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -14,6 +13,7 @@ class AnalyticsController extends AdminController
         $profile = $this->getProfile();
 
         $days = (int) $request->get('days', 30);
+        $days = max(1, min($days, 365));
         $startDate = Carbon::now()->subDays($days);
 
         $totalViews = Analytics::where('profile_id', $profile->id)
@@ -77,5 +77,44 @@ class AnalyticsController extends AdminController
             'devices',
             'days'
         ));
+    }
+
+    public function data(Request $request)
+    {
+        $profile = $this->getProfile();
+
+        $days = (int) $request->get('days', 30);
+        $days = max(1, min($days, 365));
+        $startDate = Carbon::now()->subDays($days);
+
+        $viewsPerDay = Analytics::where('profile_id', $profile->id)
+            ->where('created_at', '>=', $startDate)
+            ->selectRaw('DATE(created_at) as date, COUNT(*) as views')
+            ->groupBy('date')
+            ->orderBy('date')
+            ->get();
+
+        $browsers = Analytics::where('profile_id', $profile->id)
+            ->where('created_at', '>=', $startDate)
+            ->whereNotNull('browser')
+            ->selectRaw('browser, COUNT(*) as views')
+            ->groupBy('browser')
+            ->orderByDesc('views')
+            ->limit(10)
+            ->get();
+
+        $devices = Analytics::where('profile_id', $profile->id)
+            ->where('created_at', '>=', $startDate)
+            ->whereNotNull('device')
+            ->selectRaw('device, COUNT(*) as views')
+            ->groupBy('device')
+            ->orderByDesc('views')
+            ->get();
+
+        return response()->json([
+            'viewsPerDay' => $viewsPerDay,
+            'browsers' => $browsers,
+            'devices' => $devices,
+        ]);
     }
 }

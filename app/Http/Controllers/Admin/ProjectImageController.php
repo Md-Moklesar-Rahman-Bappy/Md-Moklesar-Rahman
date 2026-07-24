@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Http\Controllers\Admin\AdminController;
 use App\Models\Project;
 use App\Models\ProjectImage;
 use Illuminate\Http\Request;
@@ -12,22 +11,29 @@ class ProjectImageController extends AdminController
 {
     public function store(Request $request, Project $project)
     {
+        $profile = $this->getProfile();
+
+        if ((int) $project->profile_id !== (int) $profile->id) {
+            abort(403);
+        }
+
         $validated = $request->validate([
-            'images'         => 'required|array|max:10',
-            'images.*'       => 'image|mimes:jpg,jpeg,png,webp,gif|max:5120',
-            'images.*.caption' => 'nullable|string|max:255',
+            'images' => 'required|array|max:10',
+            'images.*' => 'image|mimes:jpg,jpeg,png,webp,gif|max:5120',
+            'captions' => 'nullable|array',
+            'captions.*' => 'nullable|string|max:255',
         ]);
 
-        $maxOrder = $project->images()->max('sort_order') ?? 0;
+        $maxOrder = $project->projectImages()->max('sort_order') ?? 0;
 
         foreach ($request->file('images') as $index => $image) {
             $path = $image->store('projects/images', 'public');
 
             ProjectImage::create([
-                'project_id'  => $project->id,
-                'path'        => $path,
-                'caption'     => $request->input("images.{$index}.caption"),
-                'sort_order'  => $maxOrder + $index + 1,
+                'project_id' => $project->id,
+                'image_path' => $path,
+                'caption' => $request->input("captions.{$index}"),
+                'sort_order' => $maxOrder + $index + 1,
             ]);
         }
 
@@ -37,10 +43,16 @@ class ProjectImageController extends AdminController
 
     public function destroy(ProjectImage $image)
     {
+        $profile = $this->getProfile();
+
+        if ((int) $image->project->profile_id !== (int) $profile->id) {
+            abort(403);
+        }
+
         $project = $image->project;
 
-        if ($image->path) {
-            Storage::disk('public')->delete($image->path);
+        if ($image->image_path) {
+            Storage::disk('public')->delete($image->image_path);
         }
 
         $image->delete();

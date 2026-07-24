@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Http\Controllers\Admin\AdminController;
 use App\Models\Testimonial;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
@@ -32,11 +31,11 @@ class TestimonialController extends AdminController
         $profile = $this->getProfile();
 
         $validated = $request->validate([
-            'client_name'   => 'required|string|max:255',
-            'company'       => 'nullable|string|max:255',
-            'position'      => 'nullable|string|max:255',
-            'review'        => 'required|string',
-            'rating'        => 'required|integer|min:1|max:5',
+            'client_name' => 'required|string|max:255',
+            'company' => 'nullable|string|max:255',
+            'position' => 'nullable|string|max:255',
+            'review' => 'required|string',
+            'rating' => 'required|integer|min:1|max:5',
             'profile_image' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:2048',
         ]);
 
@@ -56,18 +55,20 @@ class TestimonialController extends AdminController
     public function edit(Testimonial $testimonial)
     {
         $profile = $this->getProfile();
+        $this->authorizeOwnership($testimonial);
 
         return view('admin.testimonials.edit', compact('testimonial', 'profile'));
     }
 
     public function update(Request $request, Testimonial $testimonial)
     {
+        $this->authorizeOwnership($testimonial);
         $validated = $request->validate([
-            'client_name'   => 'required|string|max:255',
-            'company'       => 'nullable|string|max:255',
-            'position'      => 'nullable|string|max:255',
-            'review'        => 'required|string',
-            'rating'        => 'required|integer|min:1|max:5',
+            'client_name' => 'required|string|max:255',
+            'company' => 'nullable|string|max:255',
+            'position' => 'nullable|string|max:255',
+            'review' => 'required|string',
+            'rating' => 'required|integer|min:1|max:5',
             'profile_image' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:2048',
         ]);
 
@@ -87,6 +88,7 @@ class TestimonialController extends AdminController
 
     public function destroy(Testimonial $testimonial)
     {
+        $this->authorizeOwnership($testimonial);
         if ($testimonial->profile_image) {
             Storage::disk('public')->delete($testimonial->profile_image);
         }

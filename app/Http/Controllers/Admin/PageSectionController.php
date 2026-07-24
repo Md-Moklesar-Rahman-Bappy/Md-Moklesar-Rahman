@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Http\Controllers\Admin\AdminController;
 use App\Models\PageSection;
 use Illuminate\Http\Request;
 
@@ -25,16 +24,16 @@ class PageSectionController extends AdminController
         $profile = $this->getProfile();
 
         $validated = $request->validate([
-            'name'        => 'required|string|max:255',
-            'type'        => 'required|string|max:255',
-            'content'     => 'nullable|string',
-            'sort_order'  => 'nullable|integer|min:0',
-            'is_active'   => 'boolean',
+            'name' => 'required|string|max:255',
+            'type' => 'required|string|max:255',
+            'content' => 'nullable|string',
+            'sort_order' => 'nullable|integer|min:0',
+            'is_active' => 'boolean',
         ]);
 
         $validated['profile_id'] = $profile->id;
 
-        if (!isset($validated['sort_order'])) {
+        if (! isset($validated['sort_order'])) {
             $validated['sort_order'] = PageSection::where('profile_id', $profile->id)->max('sort_order') + 1;
         }
 
@@ -50,12 +49,13 @@ class PageSectionController extends AdminController
 
     public function update(Request $request, PageSection $section)
     {
+        $this->authorizeOwnership($section);
         $validated = $request->validate([
-            'name'        => 'required|string|max:255',
-            'type'        => 'required|string|max:255',
-            'content'     => 'nullable|string',
-            'sort_order'  => 'nullable|integer|min:0',
-            'is_active'   => 'boolean',
+            'name' => 'required|string|max:255',
+            'type' => 'required|string|max:255',
+            'content' => 'nullable|string',
+            'sort_order' => 'nullable|integer|min:0',
+            'is_active' => 'boolean',
         ]);
 
         $section->update($validated);
@@ -70,6 +70,7 @@ class PageSectionController extends AdminController
 
     public function destroy(PageSection $section, Request $request)
     {
+        $this->authorizeOwnership($section);
         $section->delete();
 
         if ($request->ajax()) {
@@ -85,9 +86,9 @@ class PageSectionController extends AdminController
         $profile = $this->getProfile();
 
         $validated = $request->validate([
-            'sections'                => 'required|array',
-            'sections.*.id'           => 'required|exists:page_sections,id',
-            'sections.*.sort_order'   => 'required|integer|min:0',
+            'sections' => 'required|array',
+            'sections.*.id' => 'required|exists:page_sections,id',
+            'sections.*.sort_order' => 'required|integer|min:0',
         ]);
 
         foreach ($validated['sections'] as $item) {

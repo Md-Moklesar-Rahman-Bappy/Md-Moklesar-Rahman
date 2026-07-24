@@ -2,12 +2,11 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Http\Controllers\Admin\AdminController;
 use App\Models\Project;
 use App\Models\ProjectCategory;
 use Illuminate\Http\Request;
-use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 
 class ProjectController extends AdminController
 {
@@ -23,10 +22,10 @@ class ProjectController extends AdminController
 
         if ($request->filled('status')) {
             match ($request->status) {
-                'active'    => $query->where('is_active', true),
-                'inactive'  => $query->where('is_active', false),
-                'featured'  => $query->where('is_featured', true),
-                default     => null,
+                'active' => $query->where('is_active', true),
+                'inactive' => $query->where('is_active', false),
+                'featured' => $query->where('is_featured', true),
+                default => null,
             };
         }
 
@@ -34,7 +33,7 @@ class ProjectController extends AdminController
             $search = $request->search;
             $query->where(function ($q) use ($search) {
                 $q->where('title', 'like', "%{$search}%")
-                  ->orWhere('description', 'like', "%{$search}%");
+                    ->orWhere('description', 'like', "%{$search}%");
             });
         }
 
@@ -57,20 +56,20 @@ class ProjectController extends AdminController
         $profile = $this->getProfile();
 
         $validated = $request->validate([
-            'title'            => 'required|string|max:255',
-            'category_id'      => 'nullable|exists:project_categories,id',
-            'description'      => 'nullable|string',
-            'short_description'=> 'nullable|string|max:500',
-            'technologies'     => 'nullable|array',
-            'technologies.*'   => 'string|max:255',
-            'features'         => 'nullable|array',
-            'features.*'       => 'string|max:255',
-            'github_url'       => 'nullable|url|max:255',
-            'live_url'         => 'nullable|url|max:255',
-            'client_name'      => 'nullable|string|max:255',
-            'is_featured'      => 'boolean',
-            'is_active'        => 'boolean',
-            'thumbnail'        => 'nullable|image|mimes:jpg,jpeg,png,webp|max:2048',
+            'title' => 'required|string|max:255',
+            'category_id' => 'nullable|exists:project_categories,id',
+            'description' => 'nullable|string',
+            'short_description' => 'nullable|string|max:500',
+            'technologies' => 'nullable|array',
+            'technologies.*' => 'string|max:255',
+            'features' => 'nullable|array',
+            'features.*' => 'string|max:255',
+            'github_url' => 'nullable|url|max:255',
+            'live_url' => 'nullable|url|max:255',
+            'client_name' => 'nullable|string|max:255',
+            'is_featured' => 'boolean',
+            'is_active' => 'boolean',
+            'thumbnail' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:2048',
         ]);
 
         $validated['slug'] = Str::slug($validated['title']);
@@ -92,6 +91,7 @@ class ProjectController extends AdminController
     public function edit(Project $project)
     {
         $profile = $this->getProfile();
+        $this->authorizeOwnership($project);
         $categories = ProjectCategory::where('profile_id', $profile->id)->orderBy('name')->get();
 
         return view('admin.projects.edit', compact('project', 'profile', 'categories'));
@@ -99,21 +99,22 @@ class ProjectController extends AdminController
 
     public function update(Request $request, Project $project)
     {
+        $this->authorizeOwnership($project);
         $validated = $request->validate([
-            'title'            => 'required|string|max:255',
-            'category_id'      => 'nullable|exists:project_categories,id',
-            'description'      => 'nullable|string',
-            'short_description'=> 'nullable|string|max:500',
-            'technologies'     => 'nullable|array',
-            'technologies.*'   => 'string|max:255',
-            'features'         => 'nullable|array',
-            'features.*'       => 'string|max:255',
-            'github_url'       => 'nullable|url|max:255',
-            'live_url'         => 'nullable|url|max:255',
-            'client_name'      => 'nullable|string|max:255',
-            'is_featured'      => 'boolean',
-            'is_active'        => 'boolean',
-            'thumbnail'        => 'nullable|image|mimes:jpg,jpeg,png,webp|max:2048',
+            'title' => 'required|string|max:255',
+            'category_id' => 'nullable|exists:project_categories,id',
+            'description' => 'nullable|string',
+            'short_description' => 'nullable|string|max:500',
+            'technologies' => 'nullable|array',
+            'technologies.*' => 'string|max:255',
+            'features' => 'nullable|array',
+            'features.*' => 'string|max:255',
+            'github_url' => 'nullable|url|max:255',
+            'live_url' => 'nullable|url|max:255',
+            'client_name' => 'nullable|string|max:255',
+            'is_featured' => 'boolean',
+            'is_active' => 'boolean',
+            'thumbnail' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:2048',
         ]);
 
         $validated['slug'] = Str::slug($validated['title']);
@@ -136,6 +137,7 @@ class ProjectController extends AdminController
 
     public function destroy(Project $project)
     {
+        $this->authorizeOwnership($project);
         if ($project->thumbnail) {
             Storage::disk('public')->delete($project->thumbnail);
         }

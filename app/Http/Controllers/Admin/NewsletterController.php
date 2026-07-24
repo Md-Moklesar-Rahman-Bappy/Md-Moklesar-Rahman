@@ -2,9 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Http\Controllers\Admin\AdminController;
 use App\Models\Newsletter;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Response;
 
 class NewsletterController extends AdminController
@@ -34,16 +32,28 @@ class NewsletterController extends AdminController
         foreach ($subscribers as $subscriber) {
             $csvContent .= sprintf(
                 "%s,%s,%s\n",
-                $subscriber->email,
-                $subscriber->name ?? '',
+                $this->sanitizeCsvField($subscriber->email),
+                $this->sanitizeCsvField($subscriber->name ?? ''),
                 $subscriber->created_at->format('Y-m-d H:i:s')
             );
         }
 
         return Response::make($csvContent, 200, [
-            'Content-Type'        => 'text/csv',
-            'Content-Disposition' => 'attachment; filename="subscribers-' . now()->format('Y-m-d') . '.csv"',
+            'Content-Type' => 'text/csv',
+            'Content-Disposition' => 'attachment; filename="subscribers-'.now()->format('Y-m-d').'.csv"',
         ]);
+    }
+
+    private function sanitizeCsvField(string $value): string
+    {
+        if (preg_match('/^[=+\-\t\r@\r\n]/', $value)) {
+            $value = "'".$value;
+        }
+        if (str_contains($value, ',') || str_contains($value, '"') || str_contains($value, "\n")) {
+            $value = '"'.str_replace('"', '""', $value).'"';
+        }
+
+        return $value;
     }
 
     public function destroy(Newsletter $subscriber)
