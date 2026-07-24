@@ -16,7 +16,7 @@ class HomeController extends Controller
     public function index()
     {
         $profile = Profile::with([
-            'socialLinks', 'skills.skillCategory', 'experiences', 'educations',
+            'socialLinks', 'skills.category', 'experiences', 'educations',
             'projects.category', 'services', 'testimonials', 'certifications'
         ])->first();
 

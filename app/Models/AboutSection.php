@@ -19,6 +19,7 @@ class AboutSection extends Model
 
     protected $casts = [
         'counters' => 'array',
+        'achievements' => 'array',
         'sort_order' => 'integer',
     ];
 

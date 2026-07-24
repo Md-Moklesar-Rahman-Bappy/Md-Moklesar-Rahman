@@ -1,59 +1,154 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Portfolio Builder CMS
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+Enterprise-grade Dynamic Portfolio Builder CMS built with Laravel 12 and Bootstrap 5.3.
 
-## About Laravel
+A complete platform that allows admins to create, manage, customize and control portfolio websites from a dashboard.
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+## Tech Stack
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+- **Backend:** Laravel 12, PHP 8.2+
+- **Frontend:** Bootstrap 5.3, Blade Templates, Alpine.js, Chart.js, AOS Animations
+- **Database:** MySQL / SQLite
+- **Auth:** Laravel Breeze
+- **Permissions:** Spatie Permission
+- **Media:** Spatie Media Library, Intervention Image
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+## Features
 
-## Learning Laravel
+- Authentication (Login, Register, Password Reset, Email Verification)
+- Admin Dashboard with stats and charts
+- Profile Manager (name, bio, image, resume, social links)
+- Skills Manager with categories and animated progress bars
+- Experience Timeline CRUD
+- Education Manager
+- Projects Portfolio with categories, gallery, filters, search
+- Services Module
+- Testimonials with ratings
+- Certifications Module
+- Blog CMS (posts, categories, tags, SEO, rich editor)
+- Contact Form with inbox and reply
+- Newsletter with CSV export
+- Media Library
+- SEO Manager (meta tags, Open Graph, Twitter Cards)
+- Analytics Dashboard (visitors, browsers, countries)
+- Theme System with 8 switchable themes
+- Theme Customizer (colors, fonts, layout)
+- Page Builder (show/hide/reorder sections)
+- Settings Manager (site info, social links, contact)
+- Spatie Roles & Permissions (admin, editor)
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework. You can also check out [Laravel Learn](https://laravel.com/learn), where you will be guided through building a modern Laravel application.
+## 8 Themes
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+| Theme | Style |
+|-------|-------|
+| Developer | Dark terminal-style, monospace, green accents |
+| Modern | Clean white, gradient hero, smooth animations |
+| Creative | Bold colorful, split-screen, vibrant gradients |
+| Freelancer | Warm friendly, timeline, pricing cards, carousel |
+| Agency | Professional blue/white, service cards, stat counters |
+| Corporate | Conservative navy, structured, formal |
+| Minimal | Ultra-clean B&W, whitespace-heavy, typography |
+| Premium SaaS | Tech startup, gradients, glassmorphism |
 
-## Laravel Sponsors
+## Installation
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+```bash
+# Clone the repository
+git clone <repo-url>
+cd portfolio-builder
 
-### Premium Partners
+# Install PHP dependencies
+composer install
 
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
+# Install Node dependencies
+npm install
 
-## Contributing
+# Environment setup
+cp .env.example .env
+php artisan key:generate
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+# Database setup
+php artisan migrate:fresh --seed
 
-## Code of Conduct
+# Storage link
+php artisan storage:link
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+# Build frontend assets
+npm run build
 
-## Security Vulnerabilities
+# Start development server
+php artisan serve
+```
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+## Admin Login
+
+| Field | Value |
+|-------|-------|
+| **URL** | `http://localhost:8000/admin` |
+| **Email** | `admin@portfoliobuilder.com` |
+| **Password** | `password` |
+
+> After login, you will be redirected to the Admin Dashboard at `/admin`.
+
+## Project Structure
+
+```
+portfolio-builder/
+├── app/
+│   ├── Http/Controllers/
+│   │   ├── Admin/           # 25 admin controllers
+│   │   ├── Auth/            # Breeze auth controllers
+│   │   └── Frontend/        # Public-facing controllers
+│   ├── Models/              # 26 Eloquent models
+│   ├── Providers/           # ThemeServiceProvider
+│   └── Services/            # ThemeManager service
+├── database/
+│   ├── migrations/          # 28+ table migrations
+│   └── seeders/             # Sample data seeders
+├── resources/
+│   └── views/
+│       ├── admin/           # 40 admin Blade views
+│       ├── auth/            # Breeze auth views
+│       ├── frontend/        # Public page views
+│       ├── layouts/         # Admin master layout
+│       └── themes/          # 8 themes x 12 files
+│           ├── developer/
+│           ├── modern/
+│           ├── creative/
+│           ├── freelancer/
+│           ├── agency/
+│           ├── corporate/
+│           ├── minimal/
+│           └── premium-saas/
+├── routes/
+│   ├── web.php              # Frontend + auth routes
+│   ├── admin.php            # All admin routes
+│   └── auth.php             # Breeze auth routes
+└── public/
+    └── storage/             # Uploaded files (symlinked)
+```
+
+## Database Schema
+
+28 tables covering: users, profiles, social_links, about_sections, skill_categories, skills, experiences, educations, project_categories, projects, project_images, services, testimonials, certifications, blog_categories, blog_tags, blog_posts, blog_post_tag, messages, newsletters, seo_settings, analytics, settings, themes, theme_customizations, page_sections, visitors, plus Spatie permission/media tables.
+
+## Routes
+
+- **Frontend:** Home, Blog, Blog Post, Project Detail, Contact, Newsletter Subscribe
+- **Admin:** 120+ routes covering all CRUD modules
+- **Auth:** Login, Register, Password Reset, Email Verification, Profile
+
+## Performance & Security
+
+- CSRF Protection (Laravel built-in)
+- XSS Protection (Blade auto-escaping)
+- SQL Injection Protection (Eloquent ORM)
+- Spatie Roles & Permissions
+- Lazy Loading on images
+- Database query optimization
+- Asset compilation via Vite
+- Session-based authentication with encryption
 
 ## License
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+MIT License

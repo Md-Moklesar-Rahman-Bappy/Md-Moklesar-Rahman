@@ -2,9 +2,8 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Http\Controllers\AdminController;
+use App\Http\Controllers\Admin\AdminController;
 use App\Models\Analytics;
-use App\Models\PageView;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 
@@ -17,31 +16,31 @@ class AnalyticsController extends AdminController
         $days = (int) $request->get('days', 30);
         $startDate = Carbon::now()->subDays($days);
 
-        $totalViews = PageView::where('profile_id', $profile->id)
+        $totalViews = Analytics::where('profile_id', $profile->id)
             ->where('created_at', '>=', $startDate)
             ->count();
 
-        $uniqueVisitors = PageView::where('profile_id', $profile->id)
+        $uniqueVisitors = Analytics::where('profile_id', $profile->id)
             ->where('created_at', '>=', $startDate)
             ->distinct('ip_address')
             ->count('ip_address');
 
-        $viewsPerDay = PageView::where('profile_id', $profile->id)
+        $viewsPerDay = Analytics::where('profile_id', $profile->id)
             ->where('created_at', '>=', $startDate)
             ->selectRaw('DATE(created_at) as date, COUNT(*) as views')
             ->groupBy('date')
             ->orderBy('date')
             ->get();
 
-        $topPages = PageView::where('profile_id', $profile->id)
+        $topPages = Analytics::where('profile_id', $profile->id)
             ->where('created_at', '>=', $startDate)
-            ->selectRaw('path, COUNT(*) as views')
-            ->groupBy('path')
+            ->selectRaw('url, COUNT(*) as views')
+            ->groupBy('url')
             ->orderByDesc('views')
             ->limit(10)
             ->get();
 
-        $topCountries = PageView::where('profile_id', $profile->id)
+        $topCountries = Analytics::where('profile_id', $profile->id)
             ->where('created_at', '>=', $startDate)
             ->whereNotNull('country')
             ->selectRaw('country, COUNT(*) as views')
@@ -50,7 +49,7 @@ class AnalyticsController extends AdminController
             ->limit(10)
             ->get();
 
-        $browsers = PageView::where('profile_id', $profile->id)
+        $browsers = Analytics::where('profile_id', $profile->id)
             ->where('created_at', '>=', $startDate)
             ->whereNotNull('browser')
             ->selectRaw('browser, COUNT(*) as views')
@@ -59,11 +58,11 @@ class AnalyticsController extends AdminController
             ->limit(10)
             ->get();
 
-        $devices = PageView::where('profile_id', $profile->id)
+        $devices = Analytics::where('profile_id', $profile->id)
             ->where('created_at', '>=', $startDate)
-            ->whereNotNull('device_type')
-            ->selectRaw('device_type, COUNT(*) as views')
-            ->groupBy('device_type')
+            ->whereNotNull('device')
+            ->selectRaw('device, COUNT(*) as views')
+            ->groupBy('device')
             ->orderByDesc('views')
             ->get();
 

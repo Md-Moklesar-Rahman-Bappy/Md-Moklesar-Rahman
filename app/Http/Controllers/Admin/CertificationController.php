@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Http\Controllers\AdminController;
+use App\Http\Controllers\Admin\AdminController;
 use App\Models\Certification;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;

@@ -2,8 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Http\Controllers\AdminController;
-use App\Models\About;
+use App\Models\AboutSection;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
@@ -13,10 +12,10 @@ class AboutController extends AdminController
     {
         $profile = $this->getProfile();
 
-        $about = About::where('profile_id', $profile->id)->first();
+        $about = AboutSection::where('profile_id', $profile->id)->first();
 
         if (!$about) {
-            $about = About::create([
+            $about = AboutSection::create([
                 'profile_id' => $profile->id,
                 'heading'    => 'About Me',
                 'content'    => '',
@@ -46,14 +45,14 @@ class AboutController extends AdminController
         $validated['achievements'] = $validated['achievements'] ?? null;
 
         if ($request->hasFile('image')) {
-            $about = About::where('profile_id', $profile->id)->first();
+            $about = AboutSection::where('profile_id', $profile->id)->first();
             if ($about && $about->image) {
                 Storage::disk('public')->delete($about->image);
             }
             $validated['image'] = $request->file('image')->store('about', 'public');
         }
 
-        About::updateOrCreate(
+        AboutSection::updateOrCreate(
             ['profile_id' => $profile->id],
             $validated
         );

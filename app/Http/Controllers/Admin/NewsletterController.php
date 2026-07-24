@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Http\Controllers\AdminController;
-use App\Models\Subscriber;
+use App\Http\Controllers\Admin\AdminController;
+use App\Models\Newsletter;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Response;
 
@@ -13,7 +13,7 @@ class NewsletterController extends AdminController
     {
         $profile = $this->getProfile();
 
-        $subscribers = Subscriber::where('profile_id', $profile->id)
+        $subscribers = Newsletter::where('profile_id', $profile->id)
             ->orderBy('created_at', 'desc')
             ->paginate(20);
 
@@ -24,7 +24,7 @@ class NewsletterController extends AdminController
     {
         $profile = $this->getProfile();
 
-        $subscribers = Subscriber::where('profile_id', $profile->id)
+        $subscribers = Newsletter::where('profile_id', $profile->id)
             ->where('is_active', true)
             ->orderBy('email')
             ->get();
@@ -46,11 +46,11 @@ class NewsletterController extends AdminController
         ]);
     }
 
-    public function destroy(Subscriber $subscriber)
+    public function destroy(Newsletter $subscriber)
     {
         $subscriber->delete();
 
         return redirect()->route('admin.newsletter.index')
-            ->with('success', 'Subscriber deleted successfully.');
+            ->with('success', 'Newsletter deleted successfully.');
     }
 }
