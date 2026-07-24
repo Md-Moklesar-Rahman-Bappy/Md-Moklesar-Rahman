@@ -2,51 +2,63 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Http\Controllers\Controller;
+use App\Http\Controllers\AdminController;
 use App\Models\About;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
-class AboutController extends Controller
+class AboutController extends AdminController
 {
     public function edit()
     {
-        $about = About::firstOrCreate(
-            ['user_id' => auth()->id()],
-            [
-                'heading' => 'About Me',
-                'content' => '',
-                'counters' => json_encode([]),
-                'achievements' => '',
-            ]
-        );
+        $profile = $this->getProfile();
 
-        return view('admin.about.edit', compact('about'));
+        $about = About::where('profile_id', $profile->id)->first();
+
+        if (!$about) {
+            $about = About::create([
+                'profile_id' => $profile->id,
+                'heading'    => 'About Me',
+                'content'    => '',
+            ]);
+        }
+
+        return view('admin.about.edit', compact('about', 'profile'));
     }
 
     public function update(Request $request)
     {
+        $profile = $this->getProfile();
+
         $validated = $request->validate([
-            'heading' => 'required|string|max:255',
-            'content' => 'required|string',
-            'counters' => 'nullable|string',
-            'achievements' => 'nullable|string',
-            'image' => 'nullable|image|max:2048',
+            'heading'           => 'required|string|max:255',
+            'content'           => 'required|string',
+            'image'             => 'nullable|image|mimes:jpg,jpeg,png,webp|max:2048',
+            'counters'          => 'nullable|array',
+            'counters.*.label'  => 'required|string|max:255',
+            'counters.*.value'  => 'required|string|max:255',
+            'counters.*.icon'   => 'nullable|string|max:255',
+            'achievements'      => 'nullable|array',
+            'achievements.*'    => 'required|string|max:500',
         ]);
 
-        $about = About::firstOrCreate(
-            ['user_id' => auth()->id()]
-        );
+        $validated['counters'] = $validated['counters'] ?? null;
+        $validated['achievements'] = $validated['achievements'] ?? null;
 
         if ($request->hasFile('image')) {
-            if ($about->image) {
+            $about = About::where('profile_id', $profile->id)->first();
+            if ($about && $about->image) {
                 Storage::disk('public')->delete($about->image);
             }
             $validated['image'] = $request->file('image')->store('about', 'public');
         }
 
-        $about->update($validated);
+        About::updateOrCreate(
+            ['profile_id' => $profile->id],
+            $validated
+        );
 
-        return redirect()->route('admin.about.edit')->with('success', 'About section updated.');
+        return redirect()->route('admin.about.edit')
+            ->with('success', 'About section updated successfully.');
     }
 }
