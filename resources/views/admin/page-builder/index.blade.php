@@ -26,7 +26,7 @@
     <div class="card-body">
         <div x-data="pageBuilder()">
             <template x-for="(section, index) in sections" :key="section.id">
-                <div class="d-flex align-items-center gap-3 p-3 mb-2 rounded-3"
+                <div class="d-flex align-items-center gap-3 p-3 mb-2 rounded-3 flex-wrap flex-md-nowrap"
                      style="background:#f8fafc;border:1px solid #e2e8f0;transition:all 0.2s;"
                      :class="{ 'opacity-50': !section.is_active }">
                     <div class="d-flex flex-column gap-1">

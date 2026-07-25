@@ -75,7 +75,7 @@
                                    id="icon" name="icon"
                                    value="{{ old('icon') }}"
                                    placeholder="e.g. bi bi-code-slash">
-                            <div class="form-text">Bootstrap Icons class. <a href="https://icons.getbootstrap.com/" target="_blank" style="color:#6366f1;">Browse icons</a></div>
+                            <div class="form-text">Bootstrap Icons class. <a href="https://icons.getbootstrap.com/" target="_blank" rel="noopener noreferrer" style="color:#6366f1;">Browse icons</a></div>
                             @error('icon')
                                 <div class="invalid-feedback">{{ $message }}</div>
                             @enderror

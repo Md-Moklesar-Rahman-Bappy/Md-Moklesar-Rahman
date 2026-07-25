@@ -56,11 +56,12 @@ class NewsletterController extends AdminController
         return $value;
     }
 
-    public function destroy(Newsletter $subscriber)
+    public function destroy(Newsletter $newsletter)
     {
-        $subscriber->delete();
+        $this->authorizeOwnership($newsletter);
+        $newsletter->delete();
 
         return redirect()->route('admin.newsletter.index')
-            ->with('success', 'Newsletter deleted successfully.');
+            ->with('success', 'Subscriber deleted successfully.');
     }
 }

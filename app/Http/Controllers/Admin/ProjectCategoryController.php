@@ -45,17 +45,17 @@ class ProjectCategoryController extends AdminController
             ->with('success', 'Project category created successfully.');
     }
 
-    public function edit(ProjectCategory $category)
+    public function edit(ProjectCategory $projectCategory)
     {
         $profile = $this->getProfile();
-        $this->authorizeOwnership($category);
+        $this->authorizeOwnership($projectCategory);
 
-        return view('admin.project-categories.edit', compact('category', 'profile'));
+        return view('admin.project-categories.edit', compact('projectCategory', 'profile'));
     }
 
-    public function update(Request $request, ProjectCategory $category)
+    public function update(Request $request, ProjectCategory $projectCategory)
     {
-        $this->authorizeOwnership($category);
+        $this->authorizeOwnership($projectCategory);
         $validated = $request->validate([
             'name' => 'required|string|max:255',
             'description' => 'nullable|string|max:500',
@@ -63,16 +63,16 @@ class ProjectCategoryController extends AdminController
 
         $validated['slug'] = Str::slug($validated['name']);
 
-        $category->update($validated);
+        $projectCategory->update($validated);
 
         return redirect()->route('admin.project-categories.index')
             ->with('success', 'Project category updated successfully.');
     }
 
-    public function destroy(ProjectCategory $category)
+    public function destroy(ProjectCategory $projectCategory)
     {
-        $this->authorizeOwnership($category);
-        $category->delete();
+        $this->authorizeOwnership($projectCategory);
+        $projectCategory->delete();
 
         return redirect()->route('admin.project-categories.index')
             ->with('success', 'Project category deleted successfully.');

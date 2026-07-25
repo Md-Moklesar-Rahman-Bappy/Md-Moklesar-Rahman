@@ -37,7 +37,7 @@
 @endif
 
 <div x-data="themeCustomizer()" class="row g-0" style="min-height:calc(100vh - 200px);">
-    <div class="col-lg-5" style="max-height:calc(100vh - 120px);overflow-y:auto;">
+    <div class="col-lg-5 col-md-12" style="max-height:calc(100vh - 120px);overflow-y:auto;">
         <div class="p-3" style="border-right:1px solid #e2e8f0;">
             <form action="{{ route('admin.themes.customize.update', $theme) }}" method="POST" @submit.prevent="saveForm($el)">
                 @csrf
@@ -188,7 +188,7 @@
         </div>
     </div>
 
-    <div class="col-lg-7">
+    <div class="col-lg-7 col-md-12">
         <div class="p-3" style="background:#f8fafc;min-height:100%;">
             <div class="bg-white rounded-3 shadow-sm overflow-hidden"
                  :style="{
@@ -206,9 +206,7 @@
                 }" :style="{ 'background-color': settings.primary_color }">
                     <div :class="{ 'mx-auto': settings.header_style === 'centered' }">
                         <h4 class="text-white mb-0 fw-bold">Portfolio Name</h4>
-                        @if(settings.header_style !== 'minimal')
-                            <small class="text-white-50">Creative Developer & Designer</small>
-                        @endif
+                        <small class="text-white-50" x-show="settings.header_style !== 'minimal'">Creative Developer & Designer</small>
                     </div>
                 </div>
 

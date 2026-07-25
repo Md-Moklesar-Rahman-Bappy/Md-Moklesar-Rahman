@@ -41,21 +41,21 @@ class ProjectImageController extends AdminController
             ->with('success', 'Project images uploaded successfully.');
     }
 
-    public function destroy(ProjectImage $image)
+    public function destroy(ProjectImage $projectImage)
     {
         $profile = $this->getProfile();
 
-        if ((int) $image->project->profile_id !== (int) $profile->id) {
+        if ((int) $projectImage->project->profile_id !== (int) $profile->id) {
             abort(403);
         }
 
-        $project = $image->project;
+        $project = $projectImage->project;
 
-        if ($image->image_path) {
-            Storage::disk('public')->delete($image->image_path);
+        if ($projectImage->image_path) {
+            Storage::disk('public')->delete($projectImage->image_path);
         }
 
-        $image->delete();
+        $projectImage->delete();
 
         return redirect()->route('admin.projects.edit', $project)
             ->with('success', 'Project image deleted successfully.');

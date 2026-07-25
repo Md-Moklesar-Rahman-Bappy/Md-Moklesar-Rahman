@@ -107,7 +107,7 @@
                             <i class="bi bi-pencil me-1"></i> Edit
                         </a>
                         @if($project->live_url)
-                            <a href="{{ $project->live_url }}" target="_blank" class="btn btn-sm btn-outline-success">
+                            <a href="{{ $project->live_url }}" target="_blank" rel="noopener noreferrer" class="btn btn-sm btn-outline-success">
                                 <i class="bi bi-box-arrow-up-right"></i>
                             </a>
                         @endif

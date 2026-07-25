@@ -44,23 +44,34 @@
                 </div>
             </div>
             <div class="col-lg-7" data-aos="fade-left">
-                <form class="bg-white rounded-4 p-5" style="box-shadow: 0 5px 30px rgba(0,0,0,0.06);">
+                @if(session('success'))
+                    <div class="alert alert-success alert-dismissible fade show" role="alert">
+                        {{ session('success') }}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                    </div>
+                @endif
+                <form class="bg-white rounded-4 p-5" style="box-shadow: 0 5px 30px rgba(0,0,0,0.06);" action="{{ route('home.contact.submit', $profile->slug ?? '') }}" method="POST">
+                    @csrf
                     <div class="row g-3">
                         <div class="col-md-6">
                             <label class="form-label fw-semibold small">Your Name</label>
-                            <input type="text" class="form-control py-3 rounded-3" placeholder="John Doe" required>
+                            <input type="text" name="name" class="form-control py-3 rounded-3" placeholder="John Doe" required>
+                            @error('name')<div class="text-danger small mt-1">{{ $message }}</div>@enderror
                         </div>
                         <div class="col-md-6">
                             <label class="form-label fw-semibold small">Email Address</label>
-                            <input type="email" class="form-control py-3 rounded-3" placeholder="john@example.com" required>
+                            <input type="email" name="email" class="form-control py-3 rounded-3" placeholder="john@example.com" required>
+                            @error('email')<div class="text-danger small mt-1">{{ $message }}</div>@enderror
                         </div>
                         <div class="col-12">
                             <label class="form-label fw-semibold small">Subject</label>
-                            <input type="text" class="form-control py-3 rounded-3" placeholder="Project Inquiry" required>
+                            <input type="text" name="subject" class="form-control py-3 rounded-3" placeholder="Project Inquiry">
+                            @error('subject')<div class="text-danger small mt-1">{{ $message }}</div>@enderror
                         </div>
                         <div class="col-12">
                             <label class="form-label fw-semibold small">Message</label>
-                            <textarea class="form-control py-3 rounded-3" rows="5" placeholder="Tell me about your project..." required></textarea>
+                            <textarea name="message" class="form-control py-3 rounded-3" rows="5" placeholder="Tell me about your project..." required></textarea>
+                            @error('message')<div class="text-danger small mt-1">{{ $message }}</div>@enderror
                         </div>
                         <div class="col-12">
                             <button type="submit" class="btn btn-agency w-100 py-3">Send Message <i class="bi bi-send ms-2"></i></button>

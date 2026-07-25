@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -306,7 +306,22 @@
                     </button>
                     <div class="dropdown-menu dropdown-menu-end" style="min-width:320px;">
                         <h6 class="dropdown-header fw-semibold">Notifications</h6>
-                        <div class="dropdown-item-text text-muted small">No new notifications</div>
+                        @php
+                            $unreadMessages = \App\Models\Message::where('profile_id', auth()->user()->profile->id ?? 0)
+                                ->where('is_read', false)
+                                ->latest()
+                                ->take(5)
+                                ->get();
+                        @endphp
+                        @forelse($unreadMessages as $msg)
+                            <a href="{{ route('admin.messages.show', $msg) }}" class="dropdown-item py-2">
+                                <div class="fw-medium small">{{ $msg->name ?? 'Unknown' }}</div>
+                                <div class="text-muted" style="font-size:0.78rem;">{{ Str::limit($msg->subject ?? $msg->message ?? '', 40) }}</div>
+                                <div class="text-muted" style="font-size:0.7rem;">{{ $msg->created_at->diffForHumans() }}</div>
+                            </a>
+                        @empty
+                            <div class="dropdown-item-text text-muted small">No new notifications</div>
+                        @endforelse
                     </div>
                 </div>
                 <div class="dropdown">

@@ -48,10 +48,10 @@ class BlogTagController extends AdminController
             ->with('success', 'Blog tag created successfully.');
     }
 
-    public function destroy(BlogTag $tag, Request $request)
+    public function destroy(BlogTag $blogTag, Request $request)
     {
-        $tag->blogPosts()->detach();
-        $tag->delete();
+        $blogTag->blogPosts()->detach();
+        $blogTag->delete();
 
         if ($request->ajax()) {
             return response()->json(['success' => true]);

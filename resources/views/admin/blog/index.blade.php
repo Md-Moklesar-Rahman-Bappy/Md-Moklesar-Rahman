@@ -121,7 +121,7 @@
                             <td class="text-end">
                                 <div class="d-flex gap-1 justify-content-end">
                                     @if($post->status === 'published')
-                                        <a href="{{ route('home.blog.show', $post->slug ?? $post) }}" target="_blank"
+                                        <a href="{{ route('home.blog.show', $post->slug ?? $post) }}" target="_blank" rel="noopener noreferrer"
                                            class="btn btn-sm btn-outline-info rounded-pill" title="View">
                                             <i class="bi bi-eye"></i>
                                         </a>

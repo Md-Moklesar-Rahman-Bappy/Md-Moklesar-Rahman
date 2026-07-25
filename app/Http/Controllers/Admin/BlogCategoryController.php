@@ -58,22 +58,22 @@ class BlogCategoryController extends AdminController
             ->with('success', 'Blog category created successfully.');
     }
 
-    public function edit(BlogCategory $category)
+    public function edit(BlogCategory $blogCategory)
     {
         $profile = $this->getProfile();
-        $this->authorizeOwnership($category);
+        $this->authorizeOwnership($blogCategory);
         $parentCategories = BlogCategory::where('profile_id', $profile->id)
             ->whereNull('parent_id')
-            ->where('id', '!=', $category->id)
+            ->where('id', '!=', $blogCategory->id)
             ->orderBy('name')
             ->get();
 
-        return view('admin.blog-categories.edit', compact('category', 'profile', 'parentCategories'));
+        return view('admin.blog-categories.edit', compact('blogCategory', 'profile', 'parentCategories'));
     }
 
-    public function update(Request $request, BlogCategory $category)
+    public function update(Request $request, BlogCategory $blogCategory)
     {
-        $this->authorizeOwnership($category);
+        $this->authorizeOwnership($blogCategory);
         $validated = $request->validate([
             'name' => 'required|string|max:255',
             'description' => 'nullable|string|max:1000',
@@ -84,18 +84,18 @@ class BlogCategoryController extends AdminController
 
         $validated['slug'] = Str::slug($validated['name']);
 
-        $category->update($validated);
+        $blogCategory->update($validated);
 
         return redirect()->route('admin.blog-categories.index')
             ->with('success', 'Blog category updated successfully.');
     }
 
-    public function destroy(BlogCategory $category)
+    public function destroy(BlogCategory $blogCategory)
     {
-        $this->authorizeOwnership($category);
-        BlogCategory::where('parent_id', $category->id)->update(['parent_id' => null]);
+        $this->authorizeOwnership($blogCategory);
+        BlogCategory::where('parent_id', $blogCategory->id)->update(['parent_id' => null]);
 
-        $category->delete();
+        $blogCategory->delete();
 
         return redirect()->route('admin.blog-categories.index')
             ->with('success', 'Blog category deleted successfully.');

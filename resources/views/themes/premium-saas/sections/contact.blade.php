@@ -47,33 +47,34 @@
             </div>
             <div class="col-lg-7" data-aos="fade-left">
                 <div class="feature-card">
-                    <form>
+                    @if(session('success'))
+                        <div class="alert alert-success alert-dismissible fade show" role="alert">
+                            {{ session('success') }}
+                            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                        </div>
+                    @endif
+                    <form action="{{ route('home.contact.submit', $profile->slug ?? '') }}" method="POST">
+                        @csrf
                         <div class="row g-3">
                             <div class="col-md-6">
                                 <label class="form-label fw-medium small">Full Name</label>
-                                <input type="text" class="form-control py-3 rounded-3" placeholder="John Doe" required style="border: 1px solid #e2e8f0;">
+                                <input type="text" name="name" class="form-control py-3 rounded-3" placeholder="John Doe" required style="border: 1px solid #e2e8f0;">
+                                @error('name')<div class="text-danger small mt-1">{{ $message }}</div>@enderror
                             </div>
                             <div class="col-md-6">
                                 <label class="form-label fw-medium small">Email Address</label>
-                                <input type="email" class="form-control py-3 rounded-3" placeholder="john@example.com" required style="border: 1px solid #e2e8f0;">
+                                <input type="email" name="email" class="form-control py-3 rounded-3" placeholder="john@example.com" required style="border: 1px solid #e2e8f0;">
+                                @error('email')<div class="text-danger small mt-1">{{ $message }}</div>@enderror
                             </div>
                             <div class="col-md-6">
                                 <label class="form-label fw-medium small">Subject</label>
-                                <input type="text" class="form-control py-3 rounded-3" placeholder="Project Inquiry" required style="border: 1px solid #e2e8f0;">
-                            </div>
-                            <div class="col-md-6">
-                                <label class="form-label fw-medium small">Budget</label>
-                                <select class="form-select py-3 rounded-3" style="border: 1px solid #e2e8f0;">
-                                    <option>Select budget range</option>
-                                    <option>Under $1,000</option>
-                                    <option>$1,000 - $5,000</option>
-                                    <option>$5,000 - $10,000</option>
-                                    <option>$10,000+</option>
-                                </select>
+                                <input type="text" name="subject" class="form-control py-3 rounded-3" placeholder="Project Inquiry" style="border: 1px solid #e2e8f0;">
+                                @error('subject')<div class="text-danger small mt-1">{{ $message }}</div>@enderror
                             </div>
                             <div class="col-12">
                                 <label class="form-label fw-medium small">Message</label>
-                                <textarea class="form-control py-3 rounded-3" rows="5" placeholder="Tell me about your project..." required style="border: 1px solid #e2e8f0;"></textarea>
+                                <textarea name="message" class="form-control py-3 rounded-3" rows="5" placeholder="Tell me about your project..." required style="border: 1px solid #e2e8f0;"></textarea>
+                                @error('message')<div class="text-danger small mt-1">{{ $message }}</div>@enderror
                             </div>
                             <div class="col-12">
                                 <button type="submit" class="btn btn-saas w-100 py-3 rounded-3 fw-semibold">Send Message <i class="bi bi-send ms-2"></i></button>

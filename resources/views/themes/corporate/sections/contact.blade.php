@@ -43,24 +43,35 @@
                 </div>
             </div>
             <div class="col-lg-7 mt-4 mt-lg-0" data-aos="fade-left">
-                <form class="bg-white border p-5">
+                @if(session('success'))
+                    <div class="alert alert-success alert-dismissible fade show" role="alert">
+                        {{ session('success') }}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                    </div>
+                @endif
+                <form class="bg-white border p-5" action="{{ route('home.contact.submit', $profile->slug ?? '') }}" method="POST">
+                    @csrf
                     <h5 class="fw-bold mb-4">Send a Message</h5>
                     <div class="row g-3">
                         <div class="col-md-6">
                             <label class="form-label small fw-medium">Full Name</label>
-                            <input type="text" class="form-control" placeholder="John Doe" required>
+                            <input type="text" name="name" class="form-control" placeholder="John Doe" required>
+                            @error('name')<div class="text-danger small mt-1">{{ $message }}</div>@enderror
                         </div>
                         <div class="col-md-6">
                             <label class="form-label small fw-medium">Email Address</label>
-                            <input type="email" class="form-control" placeholder="john@example.com" required>
+                            <input type="email" name="email" class="form-control" placeholder="john@example.com" required>
+                            @error('email')<div class="text-danger small mt-1">{{ $message }}</div>@enderror
                         </div>
                         <div class="col-12">
                             <label class="form-label small fw-medium">Subject</label>
-                            <input type="text" class="form-control" placeholder="Inquiry Subject" required>
+                            <input type="text" name="subject" class="form-control" placeholder="Inquiry Subject">
+                            @error('subject')<div class="text-danger small mt-1">{{ $message }}</div>@enderror
                         </div>
                         <div class="col-12">
                             <label class="form-label small fw-medium">Message</label>
-                            <textarea class="form-control" rows="5" placeholder="Your message..." required></textarea>
+                            <textarea name="message" class="form-control" rows="5" placeholder="Your message..." required></textarea>
+                            @error('message')<div class="text-danger small mt-1">{{ $message }}</div>@enderror
                         </div>
                         <div class="col-12">
                             <button type="submit" class="btn btn-corp">Send Inquiry</button>

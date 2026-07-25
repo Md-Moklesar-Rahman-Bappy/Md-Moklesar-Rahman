@@ -93,19 +93,20 @@ class BlogPostController extends AdminController
             ->with('success', 'Blog post created successfully.');
     }
 
-    public function edit(BlogPost $post)
+    public function edit(BlogPost $blogPost)
     {
         $profile = $this->getProfile();
-        $this->authorizeOwnership($post);
+        $this->authorizeOwnership($blogPost);
         $categories = BlogCategory::where('profile_id', $profile->id)->orderBy('name')->get();
         $tags = BlogTag::where('profile_id', $profile->id)->orderBy('name')->get();
+        $post = $blogPost;
 
         return view('admin.blog-posts.edit', compact('post', 'profile', 'categories', 'tags'));
     }
 
-    public function update(Request $request, BlogPost $post)
+    public function update(Request $request, BlogPost $blogPost)
     {
-        $this->authorizeOwnership($post);
+        $this->authorizeOwnership($blogPost);
         $validated = $request->validate([
             'title' => 'required|string|max:255',
             'category_id' => 'nullable|exists:blog_categories,id',
@@ -127,47 +128,47 @@ class BlogPostController extends AdminController
         $validated['is_featured'] = $request->boolean('is_featured');
 
         if ($validated['status'] === 'published' && empty($validated['published_at'])) {
-            $validated['published_at'] = $post->published_at ?? now();
+            $validated['published_at'] = $blogPost->published_at ?? now();
         }
 
         $tags = $validated['tags'] ?? [];
         unset($validated['tags']);
 
         if ($request->hasFile('featured_image')) {
-            if ($post->featured_image) {
-                Storage::disk('public')->delete($post->featured_image);
+            if ($blogPost->featured_image) {
+                Storage::disk('public')->delete($blogPost->featured_image);
             }
             $path = $request->file('featured_image')->store('blog', 'public');
             $validated['featured_image'] = $path;
         }
 
         if ($request->hasFile('og_image')) {
-            if ($post->og_image) {
-                Storage::disk('public')->delete($post->og_image);
+            if ($blogPost->og_image) {
+                Storage::disk('public')->delete($blogPost->og_image);
             }
             $path = $request->file('og_image')->store('blog/og', 'public');
             $validated['og_image'] = $path;
         }
 
-        $post->update($validated);
-        $post->tags()->sync($tags);
+        $blogPost->update($validated);
+        $blogPost->tags()->sync($tags);
 
         return redirect()->route('admin.blog-posts.index')
             ->with('success', 'Blog post updated successfully.');
     }
 
-    public function destroy(BlogPost $post)
+    public function destroy(BlogPost $blogPost)
     {
-        $this->authorizeOwnership($post);
-        if ($post->featured_image) {
-            Storage::disk('public')->delete($post->featured_image);
+        $this->authorizeOwnership($blogPost);
+        if ($blogPost->featured_image) {
+            Storage::disk('public')->delete($blogPost->featured_image);
         }
-        if ($post->og_image) {
-            Storage::disk('public')->delete($post->og_image);
+        if ($blogPost->og_image) {
+            Storage::disk('public')->delete($blogPost->og_image);
         }
 
-        $post->tags()->detach();
-        $post->delete();
+        $blogPost->tags()->detach();
+        $blogPost->delete();
 
         return redirect()->route('admin.blog-posts.index')
             ->with('success', 'Blog post deleted successfully.');

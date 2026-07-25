@@ -188,7 +188,7 @@
                         <label for="resume" class="form-label fw-semibold">Resume / CV</label>
                         @if($profile->resume_path)
                             <div class="mb-2">
-                                <a href="{{ asset('storage/' . $profile->resume_path) }}" target="_blank"
+                                <a href="{{ asset('storage/' . $profile->resume_path) }}" target="_blank" rel="noopener noreferrer"
                                    class="text-decoration-none small" style="color:#6366f1;">
                                     <i class="bi bi-file-earmark-pdf me-1"></i> Current Resume
                                 </a>

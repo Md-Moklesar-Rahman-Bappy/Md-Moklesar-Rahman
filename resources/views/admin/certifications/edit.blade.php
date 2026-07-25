@@ -111,7 +111,7 @@
                     <h6 class="fw-bold mb-4"><i class="bi bi-file-earmark-pdf me-2" style="color:#ef4444;"></i>Certificate File</h6>
                     @if($certification->certificate_file)
                         <div class="mb-3">
-                            <a href="{{ asset('storage/' . $certification->certificate_file) }}" target="_blank"
+                            <a href="{{ asset('storage/' . $certification->certificate_file) }}" target="_blank" rel="noopener noreferrer"
                                class="text-decoration-none small" style="color:#6366f1;">
                                 <i class="bi bi-file-earmark me-1"></i> View Current File
                             </a>

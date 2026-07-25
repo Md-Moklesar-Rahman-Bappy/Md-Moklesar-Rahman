@@ -43,13 +43,13 @@ class PageSectionController extends AdminController
             return response()->json(['success' => true]);
         }
 
-        return redirect()->route('admin.page-sections.index')
+        return redirect()->route('admin.page-builder.index')
             ->with('success', 'Section created successfully.');
     }
 
-    public function update(Request $request, PageSection $section)
+    public function update(Request $request, PageSection $pageSection)
     {
-        $this->authorizeOwnership($section);
+        $this->authorizeOwnership($pageSection);
         $validated = $request->validate([
             'name' => 'required|string|max:255',
             'type' => 'required|string|max:255',
@@ -58,26 +58,26 @@ class PageSectionController extends AdminController
             'is_active' => 'boolean',
         ]);
 
-        $section->update($validated);
+        $pageSection->update($validated);
 
         if ($request->ajax()) {
             return response()->json(['success' => true]);
         }
 
-        return redirect()->route('admin.page-sections.index')
+        return redirect()->route('admin.page-builder.index')
             ->with('success', 'Section updated successfully.');
     }
 
-    public function destroy(PageSection $section, Request $request)
+    public function destroy(PageSection $pageSection, Request $request)
     {
-        $this->authorizeOwnership($section);
-        $section->delete();
+        $this->authorizeOwnership($pageSection);
+        $pageSection->delete();
 
         if ($request->ajax()) {
             return response()->json(['success' => true]);
         }
 
-        return redirect()->route('admin.page-sections.index')
+        return redirect()->route('admin.page-builder.index')
             ->with('success', 'Section deleted successfully.');
     }
 

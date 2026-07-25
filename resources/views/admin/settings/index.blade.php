@@ -17,6 +17,9 @@
         <h4 class="fw-bold mb-1">Site Settings</h4>
         <p class="text-muted mb-0">Configure your portfolio website settings.</p>
     </div>
+    <a href="{{ route('admin.dashboard') }}" class="btn btn-outline-secondary btn-sm">
+        <i class="bi bi-arrow-left me-1"></i> Back
+    </a>
 </div>
 
 @if($errors->any())

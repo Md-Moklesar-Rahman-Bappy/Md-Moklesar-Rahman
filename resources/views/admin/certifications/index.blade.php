@@ -58,7 +58,7 @@
                             <td class="text-end">
                                 <div class="d-flex gap-1 justify-content-end">
                                     @if($certification->credential_id && $certification->verification_url)
-                                        <a href="{{ $certification->verification_url }}" target="_blank" class="btn btn-sm btn-outline-info rounded-pill" title="Verify">
+                                        <a href="{{ $certification->verification_url }}" target="_blank" rel="noopener noreferrer" class="btn btn-sm btn-outline-info rounded-pill" title="Verify">
                                             <i class="bi bi-box-arrow-up-right"></i>
                                         </a>
                                     @endif

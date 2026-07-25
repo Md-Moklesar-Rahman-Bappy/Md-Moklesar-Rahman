@@ -26,6 +26,18 @@
 <div class="glass-card mb-4">
     <div class="card-body">
         <h6 class="fw-bold mb-3"><i class="bi bi-plus-circle me-2" style="color:#6366f1;"></i>Add Category</h6>
+        @if($errors->any())
+            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                <i class="bi bi-exclamation-triangle-fill me-2"></i>
+                <strong>Please fix the following errors:</strong>
+                <ul class="mb-0 mt-1">
+                    @foreach($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            </div>
+        @endif
         <form action="{{ route('admin.project-categories.store') }}" method="POST">
             @csrf
             <div class="row g-3 align-items-end">

@@ -37,25 +37,25 @@ class SkillCategoryController extends AdminController
             ->with('success', 'Skill category created successfully.');
     }
 
-    public function update(Request $request, SkillCategory $category)
+    public function update(Request $request, SkillCategory $skillCategory)
     {
-        $this->authorizeOwnership($category);
+        $this->authorizeOwnership($skillCategory);
         $validated = $request->validate([
             'name' => 'required|string|max:255',
         ]);
 
         $validated['slug'] = Str::slug($validated['name']);
 
-        $category->update($validated);
+        $skillCategory->update($validated);
 
         return redirect()->route('admin.skill-categories.index')
             ->with('success', 'Skill category updated successfully.');
     }
 
-    public function destroy(SkillCategory $category)
+    public function destroy(SkillCategory $skillCategory)
     {
-        $this->authorizeOwnership($category);
-        $category->delete();
+        $this->authorizeOwnership($skillCategory);
+        $skillCategory->delete();
 
         return redirect()->route('admin.skill-categories.index')
             ->with('success', 'Skill category deleted successfully.');
