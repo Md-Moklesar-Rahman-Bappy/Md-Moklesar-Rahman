@@ -61,8 +61,11 @@
                                 </span>
                             </td>
                             <td>
-                                @if($experience->technologies)
-                                    @foreach(explode(',', $experience->technologies) as $tech)
+                                @php
+                                    $techItems = is_array($experience->technologies) ? $experience->technologies : (is_string($experience->technologies) ? explode(',', $experience->technologies) : []);
+                                @endphp
+                                @if(count($techItems) > 0)
+                                    @foreach($techItems as $tech)
                                         <span class="badge bg-light text-dark me-1 mb-1">{{ trim($tech) }}</span>
                                     @endforeach
                                 @else

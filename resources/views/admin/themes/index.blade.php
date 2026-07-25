@@ -53,7 +53,6 @@
                         @else
                             <form action="{{ route('admin.themes.activate', $theme) }}" method="POST" class="flex-grow-1">
                                 @csrf
-                                @method('PUT')
                                 <button type="submit" class="btn btn-sm btn-outline-success w-100">
                                     <i class="bi bi-check-lg me-1"></i> Activate
                                 </button>

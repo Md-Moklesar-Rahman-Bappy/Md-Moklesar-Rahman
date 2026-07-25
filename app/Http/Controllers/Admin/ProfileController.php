@@ -4,16 +4,14 @@ namespace App\Http\Controllers\Admin;
 
 use App\Models\Profile;
 use Illuminate\Http\Request;
-use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 
 class ProfileController extends AdminController
 {
     public function index()
     {
-        return view('admin.profile.show', [
-            'profile' => $this->getProfile(),
-        ]);
+        return redirect()->route('admin.profile.edit');
     }
 
     public function edit()
@@ -67,7 +65,7 @@ class ProfileController extends AdminController
             $slug = Str::slug($request->full_name);
             $count = Profile::where('slug', $slug)->where('id', '!=', $profile->id)->count();
             if ($count > 0) {
-                $slug = $slug . '-' . ($count + 1);
+                $slug = $slug.'-'.($count + 1);
             }
             $validated['slug'] = $slug;
         }

@@ -10,14 +10,7 @@ class SkillCategoryController extends AdminController
 {
     public function index()
     {
-        $profile = $this->getProfile();
-
-        $categories = SkillCategory::where('profile_id', $profile->id)
-            ->withCount('skills')
-            ->orderBy('name')
-            ->paginate(15);
-
-        return view('admin.skill-categories.index', compact('categories', 'profile'));
+        return redirect()->route('admin.skills.index');
     }
 
     public function store(Request $request)

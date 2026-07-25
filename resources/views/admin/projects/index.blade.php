@@ -95,9 +95,12 @@
                     </div>
                     <h6 class="fw-bold mb-1">{{ $project->title }}</h6>
                     <p class="text-muted small flex-grow-1">{{ Str::limit($project->short_description ?? $project->description, 80) }}</p>
-                    @if($project->technologies)
+                    @php
+                        $techItems = is_array($project->technologies) ? $project->technologies : (is_string($project->technologies) ? explode(',', $project->technologies) : []);
+                    @endphp
+                    @if(count($techItems) > 0)
                         <div class="mb-3">
-                            @foreach(array_slice(explode(',', $project->technologies), 0, 4) as $tech)
+                            @foreach(array_slice($techItems, 0, 4) as $tech)
                                 <span class="badge bg-light text-dark me-1" style="font-size:0.65rem;">{{ trim($tech) }}</span>
                             @endforeach
                         </div>

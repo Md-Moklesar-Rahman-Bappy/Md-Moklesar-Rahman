@@ -44,9 +44,12 @@
                         @endif
                     </div>
                     <p class="text-muted small flex-grow-1">{{ Str::limit($service->description, 120) }}</p>
-                    @if($service->features)
+                    @php
+                        $featureItems = is_array($service->features) ? $service->features : (is_string($service->features) ? explode("\n", $service->features) : []);
+                    @endphp
+                    @if(count($featureItems) > 0)
                         <div class="mb-3">
-                            @foreach(array_slice(explode("\n", $service->features), 0, 4) as $feature)
+                            @foreach(array_slice($featureItems, 0, 4) as $feature)
                                 @if(trim($feature))
                                     <div class="small mb-1"><i class="bi bi-check2 text-success me-2"></i>{{ trim($feature) }}</div>
                                 @endif

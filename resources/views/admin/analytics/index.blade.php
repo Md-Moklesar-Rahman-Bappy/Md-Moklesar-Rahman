@@ -17,6 +17,14 @@
         <h4 class="fw-bold mb-1">Analytics Dashboard</h4>
         <p class="text-muted mb-0">Monitor your portfolio traffic and visitor insights.</p>
     </div>
+    <div class="d-flex gap-2">
+        <select class="form-select form-select-sm" style="width:auto;" onchange="window.location.href='{{ route('admin.analytics.index') }}?days='+this.value">
+            <option value="7" {{ ($days ?? 30) == 7 ? 'selected' : '' }}>Last 7 days</option>
+            <option value="30" {{ ($days ?? 30) == 30 ? 'selected' : '' }}>Last 30 days</option>
+            <option value="90" {{ ($days ?? 30) == 90 ? 'selected' : '' }}>Last 90 days</option>
+            <option value="365" {{ ($days ?? 30) == 365 ? 'selected' : '' }}>Last year</option>
+        </select>
+    </div>
 </div>
 
 <div class="row g-4 mb-4">
@@ -28,8 +36,8 @@
                         <i class="bi bi-people"></i>
                     </div>
                     <div>
-                        <div class="stat-value">{{ number_format($totalVisitors ?? 0) }}</div>
-                        <div class="stat-label">Total Visitors</div>
+                        <div class="stat-value">{{ number_format($totalViews ?? 0) }}</div>
+                        <div class="stat-label">Total Views</div>
                     </div>
                 </div>
             </div>
@@ -40,21 +48,6 @@
             <div class="card-body">
                 <div class="stat-card">
                     <div class="stat-icon" style="background:rgba(16,185,129,0.12);color:#10b981;">
-                        <i class="bi bi-graph-up"></i>
-                    </div>
-                    <div>
-                        <div class="stat-value">{{ number_format($todayViews ?? 0) }}</div>
-                        <div class="stat-label">Today's Views</div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="col-lg-3 col-md-6">
-        <div class="glass-card h-100">
-            <div class="card-body">
-                <div class="stat-card">
-                    <div class="stat-icon" style="background:rgba(245,158,11,0.12);color:#f59e0b;">
                         <i class="bi bi-person-check"></i>
                     </div>
                     <div>
@@ -69,12 +62,27 @@
         <div class="glass-card h-100">
             <div class="card-body">
                 <div class="stat-card">
-                    <div class="stat-icon" style="background:rgba(236,72,153,0.12);color:#ec4899;">
-                        <i class="bi bi-geo-alt"></i>
+                    <div class="stat-icon" style="background:rgba(245,158,11,0.12);color:#f59e0b;">
+                        <i class="bi bi-graph-up"></i>
                     </div>
                     <div>
-                        <div class="stat-value">{{ $topCountry ?? 'N/A' }}</div>
-                        <div class="stat-label">Top Country</div>
+                        <div class="stat-value">{{ number_format(($topCountries ?? collect())->count()) }}</div>
+                        <div class="stat-label">Countries</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-3 col-md-6">
+        <div class="glass-card h-100">
+            <div class="card-body">
+                <div class="stat-card">
+                    <div class="stat-icon" style="background:rgba(236,72,153,0.12);color:#ec4899;">
+                        <i class="bi bi-laptop"></i>
+                    </div>
+                    <div>
+                        <div class="stat-value">{{ number_format(($browsers ?? collect())->count()) }}</div>
+                        <div class="stat-label">Browsers</div>
                     </div>
                 </div>
             </div>
@@ -86,7 +94,7 @@
     <div class="col-lg-8">
         <div class="glass-card h-100">
             <div class="card-body">
-                <h6 class="fw-bold mb-3">Visitors Over Last 30 Days</h6>
+                <h6 class="fw-bold mb-3">Views Over Last {{ $days ?? 30 }} Days</h6>
                 <div style="position:relative;height:300px;">
                     <canvas id="visitorsLineChart"></canvas>
                 </div>
@@ -106,7 +114,7 @@
 </div>
 
 <div class="row g-4 mb-4">
-    <div class="col-lg-12">
+    <div class="col-lg-6">
         <div class="glass-card h-100">
             <div class="card-body">
                 <h6 class="fw-bold mb-3">Top Countries</h6>
@@ -116,40 +124,46 @@
             </div>
         </div>
     </div>
+    <div class="col-lg-6">
+        <div class="glass-card h-100">
+            <div class="card-body">
+                <h6 class="fw-bold mb-3">Devices</h6>
+                <div style="position:relative;height:280px;">
+                    <canvas id="devicesDoughnutChart"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 
-<div class="glass-card">
-    <div class="card-body">
-        <h6 class="fw-bold mb-3">Recent Visitors</h6>
-        <div class="table-responsive">
-            <table class="table table-hover mb-0">
-                <thead>
-                    <tr>
-                        <th>IP Address</th>
-                        <th>Country</th>
-                        <th>Device</th>
-                        <th>Browser</th>
-                        <th>Page</th>
-                        <th>Date</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @forelse($recentVisitors ?? [] as $visitor)
-                        <tr>
-                            <td><code class="small">{{ $visitor->ip_address ?? '—' }}</code></td>
-                            <td>{{ $visitor->country ?? '—' }}</td>
-                            <td>{{ $visitor->device ?? '—' }}</td>
-                            <td>{{ $visitor->browser ?? '—' }}</td>
-                            <td class="text-truncate" style="max-width:200px;">{{ $visitor->page ?? '—' }}</td>
-                            <td>{{ $visitor->created_at->diffForHumans() }}</td>
-                        </tr>
-                    @empty
-                        <tr>
-                            <td colspan="6" class="text-center py-4 text-muted">No visitor data available yet.</td>
-                        </tr>
-                    @endforelse
-                </tbody>
-            </table>
+<div class="row g-4 mb-4">
+    <div class="col-lg-12">
+        <div class="glass-card h-100">
+            <div class="card-body">
+                <h6 class="fw-bold mb-3">Top Pages</h6>
+                <div class="table-responsive">
+                    <table class="table table-hover mb-0">
+                        <thead>
+                            <tr>
+                                <th>Page</th>
+                                <th class="text-end">Views</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @forelse($topPages ?? [] as $page)
+                                <tr>
+                                    <td><code class="small">{{ $page->url ?? '—' }}</code></td>
+                                    <td class="text-end"><span class="badge bg-primary">{{ number_format($page->views ?? 0) }}</span></td>
+                                </tr>
+                            @empty
+                                <tr>
+                                    <td colspan="2" class="text-center py-4 text-muted">No page data available yet.</td>
+                                </tr>
+                            @endforelse
+                        </tbody>
+                    </table>
+                </div>
+            </div>
         </div>
     </div>
 </div>
@@ -158,22 +172,35 @@
 @push('scripts')
 <script>
 document.addEventListener('DOMContentLoaded', function () {
-    const textColor = document.documentElement.classList.contains('dark') ? '#94a3b8' : '#64748b';
-    const gridColor = document.documentElement.classList.contains('dark') ? 'rgba(255,255,255,0.06)' : 'rgba(0,0,0,0.06)';
+    const textColor = '#64748b';
+    const gridColor = 'rgba(0,0,0,0.06)';
 
-    const visitorLabels = @json($visitorLabels ?? []);
-    const visitorData = @json($visitorData ?? []);
-    const browserLabels = @json($browserLabels ?? ['Chrome', 'Firefox', 'Safari', 'Edge', 'Other']);
-    const browserData = @json($browserData ?? []);
-    const countryLabels = @json($countryLabels ?? []);
-    const countryData = @json($countryData ?? []);
+    @php
+        $vLabels = $viewsPerDay->pluck('date')->map(fn($d) => \Carbon\Carbon::parse($d)->format('M d'))->toArray();
+        $vData = $viewsPerDay->pluck('views')->toArray();
+        $bLabels = $browsers->pluck('browser')->toArray();
+        $bData = $browsers->pluck('views')->toArray();
+        $cLabels = $topCountries->pluck('country')->toArray();
+        $cData = $topCountries->pluck('views')->toArray();
+        $dLabels = $devices->pluck('device')->toArray();
+        $dData = $devices->pluck('views')->toArray();
+    @endphp
+
+    const visitorLabels = @json($vLabels);
+    const visitorData = @json($vData);
+    const browserLabels = @json($bLabels);
+    const browserData = @json($bData);
+    const countryLabels = @json($cLabels);
+    const countryData = @json($cData);
+    const deviceLabels = @json($dLabels);
+    const deviceData = @json($dData);
 
     new Chart(document.getElementById('visitorsLineChart'), {
         type: 'line',
         data: {
             labels: visitorLabels,
             datasets: [{
-                label: 'Visitors',
+                label: 'Views',
                 data: visitorData,
                 borderColor: '#6366f1',
                 backgroundColor: 'rgba(99, 102, 241, 0.1)',
@@ -200,10 +227,10 @@ document.addEventListener('DOMContentLoaded', function () {
     new Chart(document.getElementById('browsersDoughnutChart'), {
         type: 'doughnut',
         data: {
-            labels: browserLabels,
+            labels: browserLabels.length ? browserLabels : ['No Data'],
             datasets: [{
-                data: browserData,
-                backgroundColor: ['#6366f1', '#10b981', '#f59e0b', '#ec4899', '#64748b'],
+                data: browserData.length ? browserData : [1],
+                backgroundColor: browserData.length ? ['#6366f1', '#10b981', '#f59e0b', '#ec4899', '#64748b', '#8b5cf6', '#14b8a6'] : ['#e2e8f0'],
                 borderWidth: 0,
                 hoverOffset: 4,
             }]
@@ -221,10 +248,10 @@ document.addEventListener('DOMContentLoaded', function () {
     new Chart(document.getElementById('countriesBarChart'), {
         type: 'bar',
         data: {
-            labels: countryLabels,
+            labels: countryLabels.length ? countryLabels : ['No Data'],
             datasets: [{
                 label: 'Visitors',
-                data: countryData,
+                data: countryData.length ? countryData : [0],
                 backgroundColor: 'rgba(99, 102, 241, 0.7)',
                 borderColor: '#6366f1',
                 borderWidth: 2,
@@ -243,6 +270,27 @@ document.addEventListener('DOMContentLoaded', function () {
             }
         }
     });
+
+    new Chart(document.getElementById('devicesDoughnutChart'), {
+        type: 'doughnut',
+        data: {
+            labels: deviceLabels.length ? deviceLabels : ['No Data'],
+            datasets: [{
+                data: deviceData.length ? deviceData : [1],
+                backgroundColor: deviceData.length ? ['#6366f1', '#10b981', '#f59e0b', '#ec4899', '#64748b'] : ['#e2e8f0'],
+                borderWidth: 0,
+                hoverOffset: 4,
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            cutout: '65%',
+            plugins: {
+                legend: { position: 'bottom', labels: { color: textColor, padding: 16, usePointStyle: true } }
+            }
+        }
+    });
 });
 </script>
-@endpush
+@endsection

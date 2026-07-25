@@ -32,7 +32,7 @@ class BlogPostController extends AdminController
 
         $posts = $query->orderBy('created_at', 'desc')->paginate(15);
 
-        return view('admin.blog-posts.index', compact('posts', 'profile'));
+        return view('admin.blog.index', compact('posts', 'profile'));
     }
 
     public function create()
@@ -41,7 +41,7 @@ class BlogPostController extends AdminController
         $categories = BlogCategory::where('profile_id', $profile->id)->orderBy('name')->get();
         $tags = BlogTag::where('profile_id', $profile->id)->orderBy('name')->get();
 
-        return view('admin.blog-posts.create', compact('profile', 'categories', 'tags'));
+        return view('admin.blog.create', compact('profile', 'categories', 'tags'));
     }
 
     public function store(Request $request)
@@ -101,7 +101,7 @@ class BlogPostController extends AdminController
         $tags = BlogTag::where('profile_id', $profile->id)->orderBy('name')->get();
         $post = $blogPost;
 
-        return view('admin.blog-posts.edit', compact('post', 'profile', 'categories', 'tags'));
+        return view('admin.blog.edit', compact('post', 'profile', 'categories', 'tags'));
     }
 
     public function update(Request $request, BlogPost $blogPost)
