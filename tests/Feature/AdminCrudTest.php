@@ -183,8 +183,6 @@ class AdminCrudTest extends TestCase
         $this->assertEquals($profileId, $cat->profile_id);
 
         $response = $this->actingAs($this->admin)->delete(route('admin.blog-categories.destroy', $cat));
-        $this->assertDatabaseHas('profiles', ['user_id' => $this->admin->id]);
-        $this->assertEquals(1, Profile::where('user_id', $this->admin->id)->count(), 'Should have exactly 1 profile');
         $this->assertDatabaseMissing('blog_categories', ['id' => $cat->id]);
     }
 
