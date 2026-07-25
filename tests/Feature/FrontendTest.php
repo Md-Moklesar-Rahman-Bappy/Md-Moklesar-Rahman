@@ -14,6 +14,8 @@ class FrontendTest extends TestCase
 {
     use RefreshDatabase;
 
+    protected Profile $profile;
+
     protected function setUp(): void
     {
         parent::setUp();
@@ -21,8 +23,7 @@ class FrontendTest extends TestCase
 
         $user = User::factory()->create();
         $user->assignRole('admin');
-        $this->profile = Profile::create([
-            'user_id' => $user->id,
+        $this->profile = $user->profile()->create([
             'full_name' => 'Test User',
             'slug' => 'test-user',
             'tagline' => 'Test Tagline',

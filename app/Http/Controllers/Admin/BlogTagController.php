@@ -50,6 +50,7 @@ class BlogTagController extends AdminController
 
     public function destroy(BlogTag $blogTag, Request $request)
     {
+        $this->authorizeOwnership($blogTag);
         $blogTag->blogPosts()->detach();
         $blogTag->delete();
 

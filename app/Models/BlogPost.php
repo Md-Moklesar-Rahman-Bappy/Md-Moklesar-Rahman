@@ -23,7 +23,6 @@ class BlogPost extends Model
         'status',
         'published_at',
         'is_featured',
-        'views_count',
         'meta_title',
         'meta_description',
         'meta_keywords',
@@ -35,6 +34,7 @@ class BlogPost extends Model
         'published_at' => 'datetime',
         'is_featured' => 'boolean',
         'views_count' => 'integer',
+        'reading_time' => 'integer',
     ];
 
     public function profile(): BelongsTo

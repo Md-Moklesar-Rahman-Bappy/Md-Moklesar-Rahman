@@ -103,16 +103,34 @@ class ThemeManager
 
         return "
         :root {
-            --pb-primary: {$c->primary_color};
-            --pb-secondary: {$c->secondary_color};
-            --pb-accent: {$c->accent_color};
-            --pb-bg: {$c->background_color};
-            --pb-text: {$c->text_color};
-            --pb-font: {$c->font_family};
-            --pb-font-size: {$c->font_size};
-            --pb-radius: {$c->border_radius};
-            --pb-width: {$c->layout_width};
+            --pb-primary: {$this->sanitizeCssValue($c->primary_color)};
+            --pb-secondary: {$this->sanitizeCssValue($c->secondary_color)};
+            --pb-accent: {$this->sanitizeCssValue($c->accent_color)};
+            --pb-bg: {$this->sanitizeCssValue($c->background_color)};
+            --pb-text: {$this->sanitizeCssValue($c->text_color)};
+            --pb-font: {$this->sanitizeCssValue($c->font_family)};
+            --pb-font-size: {$this->sanitizeCssValue($c->font_size)};
+            --pb-radius: {$this->sanitizeCssValue($c->border_radius)};
+            --pb-width: {$this->sanitizeCssValue($c->layout_width)};
         }";
+    }
+
+    protected function sanitizeCssValue(?string $value): string
+    {
+        if (! $value) {
+            return '';
+        }
+
+        $value = trim($value);
+
+        $value = preg_replace('/[;{}<>"\'`]/', '', $value);
+
+        $value = preg_replace('/expression\s*\(/i', '', $value);
+        $value = preg_replace('/url\s*\(/i', '', $value);
+        $value = preg_replace('/@import/i', '', $value);
+        $value = preg_replace('/javascript\s*:/i', '', $value);
+
+        return $value;
     }
 
     public static function getThemeDirectoryPath(string $slug): string

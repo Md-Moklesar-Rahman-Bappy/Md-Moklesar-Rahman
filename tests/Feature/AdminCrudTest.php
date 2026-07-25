@@ -8,7 +8,6 @@ use App\Models\BlogTag;
 use App\Models\Certification;
 use App\Models\Education;
 use App\Models\Experience;
-use App\Models\Profile;
 use App\Models\Project;
 use App\Models\Service;
 use App\Models\Skill;
@@ -32,8 +31,7 @@ class AdminCrudTest extends TestCase
 
         $this->admin = User::factory()->create();
         $this->admin->assignRole('admin');
-        Profile::create([
-            'user_id' => $this->admin->id,
+        $this->admin->profile()->create([
             'full_name' => $this->admin->name,
             'slug' => Str::slug($this->admin->name),
         ]);

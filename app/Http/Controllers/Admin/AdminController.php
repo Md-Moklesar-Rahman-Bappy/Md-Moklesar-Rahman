@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Models\Profile;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
 
@@ -30,8 +29,7 @@ abstract class AdminController extends Controller
 
         $this->profile = $user->profile;
         if (! $this->profile) {
-            $this->profile = Profile::create([
-                'user_id' => $user->id,
+            $this->profile = $user->profile()->create([
                 'full_name' => $user->name,
                 'slug' => Str::slug($user->name),
             ]);

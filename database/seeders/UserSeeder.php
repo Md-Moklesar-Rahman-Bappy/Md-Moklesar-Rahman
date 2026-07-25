@@ -37,8 +37,7 @@ class UserSeeder extends Seeder
         $user->assignRole('admin');
 
         // Create profile
-        $profile = Profile::create([
-            'user_id' => $user->id,
+        $profile = $user->profile()->create([
             'full_name' => 'Admin User',
             'tagline' => 'Your Digital Dreamweaver',
             'designation' => 'Senior WordPress Developer',
@@ -379,8 +378,7 @@ class UserSeeder extends Seeder
             'email_verified_at' => now(),
         ]);
 
-        Profile::create([
-            'user_id' => $normalUser->id,
+        $normalUser->profile()->create([
             'full_name' => 'Demo User',
             'tagline' => 'Demo Portfolio User',
             'designation' => 'Web Developer',

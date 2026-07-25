@@ -29,7 +29,6 @@ class Project extends Model
         'sort_order',
         'meta_title',
         'meta_description',
-        'views_count',
     ];
 
     protected $casts = [

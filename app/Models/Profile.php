@@ -9,7 +9,6 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 class Profile extends Model
 {
     protected $fillable = [
-        'user_id',
         'full_name',
         'tagline',
         'designation',
@@ -137,5 +136,10 @@ class Profile extends Model
     public function visitors(): HasMany
     {
         return $this->hasMany(Visitor::class);
+    }
+
+    public function themeCustomizations(): HasMany
+    {
+        return $this->hasMany(ThemeCustomization::class);
     }
 }

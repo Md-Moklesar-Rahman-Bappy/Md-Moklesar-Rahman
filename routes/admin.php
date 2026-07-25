@@ -1,34 +1,32 @@
 <?php
 
-use App\Http\Controllers\Admin\{
-    DashboardController,
-    ProfileController,
-    AboutController,
-    SkillController,
-    SkillCategoryController,
-    ExperienceController,
-    EducationController,
-    ProjectController,
-    ProjectCategoryController,
-    ProjectImageController,
-    ServiceController,
-    TestimonialController,
-    CertificationController,
-    BlogCategoryController,
-    BlogTagController,
-    BlogPostController,
-    MessageController,
-    NewsletterController,
-    SettingController,
-    SeoController,
-    AnalyticsController,
-    MediaController,
-    ThemeController,
-    PageSectionController
-};
+use App\Http\Controllers\Admin\AboutController;
+use App\Http\Controllers\Admin\AnalyticsController;
+use App\Http\Controllers\Admin\BlogCategoryController;
+use App\Http\Controllers\Admin\BlogPostController;
+use App\Http\Controllers\Admin\BlogTagController;
+use App\Http\Controllers\Admin\CertificationController;
+use App\Http\Controllers\Admin\DashboardController;
+use App\Http\Controllers\Admin\EducationController;
+use App\Http\Controllers\Admin\ExperienceController;
+use App\Http\Controllers\Admin\MediaController;
+use App\Http\Controllers\Admin\MessageController;
+use App\Http\Controllers\Admin\NewsletterController;
+use App\Http\Controllers\Admin\PageSectionController;
+use App\Http\Controllers\Admin\ProfileController;
+use App\Http\Controllers\Admin\ProjectCategoryController;
+use App\Http\Controllers\Admin\ProjectController;
+use App\Http\Controllers\Admin\ProjectImageController;
+use App\Http\Controllers\Admin\SeoController;
+use App\Http\Controllers\Admin\ServiceController;
+use App\Http\Controllers\Admin\SettingController;
+use App\Http\Controllers\Admin\SkillCategoryController;
+use App\Http\Controllers\Admin\SkillController;
+use App\Http\Controllers\Admin\TestimonialController;
+use App\Http\Controllers\Admin\ThemeController;
 use Illuminate\Support\Facades\Route;
 
-Route::prefix('admin')->name('admin.')->middleware(['auth', 'verified'])->group(function () {
+Route::prefix('admin')->name('admin.')->middleware(['auth', 'verified', 'admin'])->group(function () {
     // Dashboard
     Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
 
@@ -69,7 +67,7 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'verified'])->group(
 
     // Blog
     Route::resource('blog-categories', BlogCategoryController::class)->except(['show']);
-    Route::resource('blog-tags', BlogTagController::class)->except(['show', 'edit', 'update']);
+    Route::resource('blog-tags', BlogTagController::class)->except(['show', 'edit', 'update', 'create']);
     Route::resource('blog-posts', BlogPostController::class)->except(['show']);
 
     // Messages
@@ -102,8 +100,8 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'verified'])->group(
     // Themes
     Route::get('/themes', [ThemeController::class, 'index'])->name('themes.index');
     Route::post('/themes/{theme}/activate', [ThemeController::class, 'activate'])->name('themes.activate');
-    Route::get('/themes/customize', [ThemeController::class, 'customize'])->name('themes.customize');
-    Route::put('/themes/customize', [ThemeController::class, 'updateCustomization'])->name('themes.customize.update');
+    Route::get('/themes/{theme}/customize', [ThemeController::class, 'customize'])->name('themes.customize');
+    Route::put('/themes/{theme}/customize', [ThemeController::class, 'updateCustomization'])->name('themes.customize.update');
 
     // Page Builder
     Route::get('/page-builder', [PageSectionController::class, 'index'])->name('page-builder.index');

@@ -49,7 +49,7 @@ class MediaController extends AdminController
         $profile = $this->getProfile();
 
         $validated = $request->validate([
-            'file' => 'required|file|mimes:jpg,jpeg,png,gif,webp,svg,pdf,doc,docx,xls,xlsx,mp4,mp3,zip|max:10240',
+            'file' => 'required|file|mimes:jpg,jpeg,png,gif,webp,pdf,doc,docx,xls,xlsx|max:10240',
             'folder' => 'nullable|string|max:255|in:media,blog,blog/og,profiles,covers,resumes,about,projects/thumbnails,projects/images,certifications,testimonials,seo,settings,themes/logos,themes/favicons',
         ]);
 

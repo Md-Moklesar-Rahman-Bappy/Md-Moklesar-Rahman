@@ -2,7 +2,6 @@
 
 namespace Tests\Feature;
 
-use App\Models\Profile;
 use App\Models\Skill;
 use App\Models\User;
 use Database\Seeders\RolePermissionSeeder;
@@ -24,8 +23,7 @@ class AdminAccessTest extends TestCase
     {
         $user = User::factory()->create();
         $user->assignRole('admin');
-        Profile::create([
-            'user_id' => $user->id,
+        $user->profile()->create([
             'full_name' => $user->name,
             'slug' => Str::slug($user->name),
         ]);
@@ -37,8 +35,7 @@ class AdminAccessTest extends TestCase
     {
         $user = User::factory()->create();
         $user->assignRole('editor');
-        Profile::create([
-            'user_id' => $user->id,
+        $user->profile()->create([
             'full_name' => $user->name,
             'slug' => Str::slug($user->name),
         ]);

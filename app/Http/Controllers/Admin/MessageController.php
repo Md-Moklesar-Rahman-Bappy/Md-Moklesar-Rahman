@@ -31,6 +31,7 @@ class MessageController extends AdminController
     public function show(Message $message)
     {
         $profile = $this->getProfile();
+        $this->authorizeOwnership($message);
 
         if (! $message->is_read) {
             $message->update(['is_read' => true]);
@@ -41,6 +42,7 @@ class MessageController extends AdminController
 
     public function destroy(Message $message)
     {
+        $this->authorizeOwnership($message);
         $message->delete();
 
         return redirect()->route('admin.messages.index')
@@ -49,6 +51,7 @@ class MessageController extends AdminController
 
     public function reply(Request $request, Message $message)
     {
+        $this->authorizeOwnership($message);
         $validated = $request->validate([
             'reply' => 'required|string',
         ]);
@@ -65,6 +68,7 @@ class MessageController extends AdminController
 
     public function markRead(Message $message)
     {
+        $this->authorizeOwnership($message);
         if (! $message->is_read) {
             $message->update(['is_read' => true]);
         }

@@ -10,8 +10,8 @@ Route::get('/blog', [HomeController::class, 'blog'])->name('home.blog');
 Route::get('/blog/{slug}', [HomeController::class, 'showBlogPost'])->name('home.blog.show');
 Route::get('/project/{slug}', [HomeController::class, 'showProject'])->name('home.project');
 Route::get('/contact', [HomeController::class, 'contact'])->name('home.contact');
-Route::post('/contact', [HomeController::class, 'submitContact'])->name('home.contact.submit');
-Route::post('/subscribe', [HomeController::class, 'subscribe'])->name('home.subscribe');
+Route::post('/contact', [HomeController::class, 'submitContact'])->name('home.contact.submit')->middleware('throttle:10,1');
+Route::post('/subscribe', [HomeController::class, 'subscribe'])->name('home.subscribe')->middleware('throttle:5,1');
 
 // Load admin routes
 require __DIR__.'/admin.php';

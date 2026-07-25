@@ -35,7 +35,7 @@ $activeTheme = $activeTheme ?? \App\Models\Theme::where('is_active', true)->firs
                 @endif
 
                 <div class="blog-content fs-5 lh-lg">
-                    {!! $post->content !!}
+                    {!! clean($post->content) !!}
                 </div>
 
                 @if($post->tags && $post->tags->count())

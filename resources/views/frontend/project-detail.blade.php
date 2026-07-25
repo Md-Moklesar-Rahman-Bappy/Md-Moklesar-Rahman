@@ -32,7 +32,7 @@ $activeTheme = $activeTheme ?? \App\Models\Theme::where('is_active', true)->firs
 
                 <div class="mb-4">
                     <h5>Description</h5>
-                    <div class="fs-5 lh-lg">{!! $project->description !!}</div>
+                    <div class="fs-5 lh-lg">{!! clean($project->description) !!}</div>
                 </div>
 
                 @if($project->technologies && count($project->technologies))
