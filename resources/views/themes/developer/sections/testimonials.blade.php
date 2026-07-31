@@ -18,11 +18,11 @@
                                 <i class="bi bi-quote" style="font-size: 2rem; color: var(--dev-primary); opacity: 0.5;"></i>
                             </div>
                             <p style="color: #94a3b8; font-size: 0.9rem; flex-grow: 1; font-style: italic;">
-                                "{{ $testimonial->content ?? $testimonial['content'] ?? '' }}"
+                                "{{ $testimonial->review ?? $testimonial['review'] ?? '' }}"
                             </p>
                             <div class="d-flex align-items-center gap-3 mt-3 pt-3" style="border-top: 1px solid var(--dev-border);">
-                                @if($testimonial->avatar ?? $testimonial['avatar'] ?? null)
-                                    <img src="{{ $testimonial->avatar ?? $testimonial['avatar'] }}" alt=""
+                                @if($testimonial->profile_image ?? $testimonial['profile_image'] ?? null)
+                                    <img src="{{ $testimonial->profile_image ?? $testimonial['profile_image'] }}" alt=""
                                          style="width: 45px; height: 45px; border-radius: 50%; object-fit: cover; border: 2px solid var(--dev-border);">
                                 @else
                                     <div style="width: 45px; height: 45px; border-radius: 50%; background: rgba(16, 185, 129, 0.1); display: flex; align-items: center; justify-content: center;">
@@ -31,7 +31,7 @@
                                 @endif
                                 <div>
                                     <strong style="color: var(--dev-heading); font-size: 0.9rem;">
-                                        {{ $testimonial->name ?? $testimonial['name'] ?? '' }}
+                                        {{ $testimonial->client_name ?? $testimonial['client_name'] ?? '' }}
                                     </strong>
                                     <p style="color: var(--dev-primary); font-size: 0.8rem; margin: 0;">
                                         {{ $testimonial->position ?? $testimonial['position'] ?? '' }}

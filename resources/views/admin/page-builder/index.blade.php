@@ -185,7 +185,7 @@ function pageBuilder() {
                         'Accept': 'application/json'
                     },
                     body: JSON.stringify({
-                        order: this.sections.map((s, i) => ({ id: s.id, sort_order: i, is_active: s.is_active }))
+                        sections: this.sections.map((s, i) => ({ id: s.id, sort_order: i, is_active: s.is_active }))
                     })
                 });
                 if (response.ok) alert('Order saved successfully!');

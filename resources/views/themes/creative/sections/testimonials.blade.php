@@ -19,19 +19,19 @@
                                 <i class="bi bi-quote" style="font-size: 2.5rem; background: var(--cre-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent;"></i>
                             </div>
                             <p style="color: var(--cre-text); font-style: italic; flex-grow: 1; font-size: 0.95rem; line-height: 1.8;">
-                                "{{ $testimonial->content ?? $testimonial['content'] ?? '' }}"
+                                "{{ $testimonial->review ?? $testimonial['review'] ?? '' }}"
                             </p>
                             <div class="d-flex align-items-center gap-3 mt-3 pt-3" style="border-top: 1px solid rgba(0,0,0,0.06);">
-                                @if($testimonial->avatar ?? $testimonial['avatar'] ?? null)
-                                    <img src="{{ $testimonial->avatar ?? $testimonial['avatar'] }}" alt=""
+                                @if($testimonial->profile_image ?? $testimonial['profile_image'] ?? null)
+                                    <img src="{{ $testimonial->profile_image ?? $testimonial['profile_image'] }}" alt=""
                                          style="width: 50px; height: 50px; border-radius: 50%; object-fit: cover; border: 3px solid transparent; background: var(--cre-gradient); background-clip: padding-box;">
                                 @else
                                     <div style="width: 50px; height: 50px; border-radius: 50%; background: var(--cre-gradient); display: flex; align-items: center; justify-content: center; color: #fff; font-weight: 700; font-size: 1.1rem;">
-                                        {{ substr($testimonial->name ?? $testimonial['name'] ?? 'U', 0, 1) }}
+                                        {{ substr($testimonial->client_name ?? $testimonial['client_name'] ?? 'U', 0, 1) }}
                                     </div>
                                 @endif
                                 <div>
-                                    <strong style="font-weight: 700;">{{ $testimonial->name ?? $testimonial['name'] ?? '' }}</strong>
+                                    <strong style="font-weight: 700;">{{ $testimonial->client_name ?? $testimonial['client_name'] ?? '' }}</strong>
                                     <p style="color: var(--cre-primary); font-size: 0.8rem; margin: 0; font-weight: 500;">
                                         {{ $testimonial->position ?? $testimonial['position'] ?? '' }}
                                     </p>

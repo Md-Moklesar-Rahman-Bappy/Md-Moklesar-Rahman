@@ -11,34 +11,34 @@
 
         @if($skills && count($skills))
             @php
-                $grouped = $skills->groupBy('category');
+                $grouped = $skills->groupBy(fn($skill) => $skill->category->name ?? 'General');
             @endphp
             <div class="row">
-                @foreach($grouped as $category => $categorySkills)
+                @foreach($grouped as $categoryName => $categorySkills)
                     <div class="col-lg-4 col-md-6 mb-4" data-aos="fade-up" data-aos-delay="{{ $loop->index * 100 }}">
                         <div class="dev-terminal">
                             <div class="dev-terminal-header">
                                 <div class="dev-terminal-dot"></div>
                                 <div class="dev-terminal-dot"></div>
                                 <div class="dev-terminal-dot"></div>
-                                <span class="ms-2" style="color: #94a3b8; font-size: 0.8rem;">{{ \Illuminate\Support\Str::slug($category ?? 'skills') }}.json</span>
+                                <span class="ms-2" style="color: #94a3b8; font-size: 0.8rem;">{{ \Illuminate\Support\Str::slug($categoryName ?? 'skills') }}.json</span>
                             </div>
                             <div class="dev-terminal-body">
-                                <div class="dev-keyword mb-3">"{{ $category ?? 'General' }}"</div>
+                                <div class="dev-keyword mb-3">"{{ $categoryName ?? 'General' }}"</div>
                                 <div class="d-flex flex-wrap gap-2">
                                     @foreach($categorySkills as $skill)
                                         <span class="dev-tag">
                                             {{ $skill->name ?? $skill['name'] ?? '' }}
-                                            @if($skill->proficiency ?? $skill['proficiency'] ?? null)
-                                                <span class="dev-number" style="font-size: 0.65rem;">{{ $skill->proficiency ?? $skill['proficiency'] }}%</span>
+                                            @if($skill->percentage ?? $skill['percentage'] ?? null)
+                                                <span class="dev-number" style="font-size: 0.65rem;">{{ $skill->percentage ?? $skill['percentage'] }}%</span>
                                             @endif
                                         </span>
                                     @endforeach
                                 </div>
-                                @if($categorySkills->first()->proficiency ?? $categorySkills->first()['proficiency'] ?? null)
+                                @if($categorySkills->first()->percentage ?? $categorySkills->first()['percentage'] ?? null)
                                     <div class="mt-3">
                                         @foreach($categorySkills as $skill)
-                                            @php $prof = $skill->proficiency ?? $skill['proficiency'] ?? 0; @endphp
+                                            @php $prof = $skill->percentage ?? $skill['percentage'] ?? 0; @endphp
                                             <div class="mb-2">
                                                 <div class="d-flex justify-content-between mb-1">
                                                     <span style="font-size: 0.75rem; color: #94a3b8;">{{ $skill->name ?? $skill['name'] ?? '' }}</span>

@@ -137,13 +137,13 @@
                     <h6 class="fw-bold mb-4"><i class="bi bi-twitter-x me-2" style="color:#000;"></i>Twitter Card</h6>
                     <div class="row g-3">
                         <div class="col-md-6">
-                            <label for="twitter_card_type" class="form-label fw-semibold">Card Type</label>
-                            <select class="form-select @error('twitter_card_type') is-invalid @enderror"
-                                    id="twitter_card_type" name="twitter_card_type">
-                                <option value="summary" {{ old('twitter_card_type', $seo['twitter_card_type'] ?? 'summary_large_image') === 'summary' ? 'selected' : '' }}>Summary</option>
-                                <option value="summary_large_image" {{ old('twitter_card_type', $seo['twitter_card_type'] ?? 'summary_large_image') === 'summary_large_image' ? 'selected' : '' }}>Summary Large Image</option>
+                            <label for="twitter_card" class="form-label fw-semibold">Card Type</label>
+                            <select class="form-select @error('twitter_card') is-invalid @enderror"
+                                    id="twitter_card" name="twitter_card">
+                                <option value="summary" {{ old('twitter_card', $seo->twitter_card ?? 'summary_large_image') === 'summary' ? 'selected' : '' }}>Summary</option>
+                                <option value="summary_large_image" {{ old('twitter_card', $seo->twitter_card ?? 'summary_large_image') === 'summary_large_image' ? 'selected' : '' }}>Summary Large Image</option>
                             </select>
-                            @error('twitter_card_type')
+                            @error('twitter_card')
                                 <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
                         </div>
@@ -184,6 +184,45 @@
         </div>
 
         <div class="col-lg-4">
+            <div class="glass-card mb-4">
+                <div class="card-body">
+                    <h6 class="fw-bold mb-4"><i class="bi bi-robot me-2" style="color:#6366f1;"></i>Crawling & Indexing</h6>
+                    <div class="mb-3">
+                        <label for="robots" class="form-label fw-semibold">Robots Meta</label>
+                        <input type="text" class="form-control @error('robots') is-invalid @enderror"
+                               id="robots" name="robots"
+                               value="{{ old('robots', $seo->robots ?? 'index, follow') }}"
+                               placeholder="index, follow">
+                        <div class="form-text">Controls search engine crawling behavior.</div>
+                        @error('robots')
+                            <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
+                    </div>
+                    <div class="mb-3">
+                        <label for="canonical_url" class="form-label fw-semibold">Canonical URL</label>
+                        <input type="url" class="form-control @error('canonical_url') is-invalid @enderror"
+                               id="canonical_url" name="canonical_url"
+                               value="{{ old('canonical_url', $seo->canonical_url ?? '') }}"
+                               placeholder="https://example.com">
+                        <div class="form-text">Preferred URL to avoid duplicate content.</div>
+                        @error('canonical_url')
+                            <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
+                    </div>
+                    <div class="mb-0">
+                        <label for="schema_markup" class="form-label fw-semibold">Schema Markup (JSON-LD)</label>
+                        <textarea class="form-control font-monospace @error('schema_markup') is-invalid @enderror"
+                                  id="schema_markup" name="schema_markup" rows="6"
+                                  style="font-size:0.8rem;"
+                                  placeholder='{ "@context": "https://schema.org", "@type": "Person", "name": "..." }'>{{ old('schema_markup', $seo->schema_markup ?? '') }}</textarea>
+                        <div class="form-text">Optional structured data in JSON-LD format.</div>
+                        @error('schema_markup')
+                            <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
+                    </div>
+                </div>
+            </div>
+
             <div class="glass-card mb-4 sticky-top" style="top:80px;">
                 <div class="card-body">
                     <h6 class="fw-bold mb-4"><i class="bi bi-eye me-2" style="color:#6366f1;"></i>Preview</h6>

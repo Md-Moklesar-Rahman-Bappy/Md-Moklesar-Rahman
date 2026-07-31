@@ -10,7 +10,7 @@
                     <div class="d-flex justify-content-between align-items-start flex-wrap">
                         <div>
                             <h5 class="fw-semibold mb-1">{{ $exp->position ?? '' }}</h5>
-                            <p class="text-muted small mb-0">{{ $exp->company ?? '' }}</p>
+                            <p class="text-muted small mb-0">{{ $exp->company_name ?? '' }}</p>
                         </div>
                         <small class="text-muted">{{ $exp->start_date ?? '' }} — {{ $exp->end_date ?? 'Present' }}</small>
                     </div>

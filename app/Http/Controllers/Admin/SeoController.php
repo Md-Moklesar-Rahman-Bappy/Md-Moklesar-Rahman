@@ -32,7 +32,7 @@ class SeoController extends AdminController
             'twitter_title' => 'nullable|string|max:255',
             'twitter_description' => 'nullable|string|max:500',
             'twitter_image' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:2048',
-            'robots_meta' => 'nullable|string|max:255',
+            'robots' => 'nullable|string|max:255',
             'canonical_url' => 'nullable|url|max:255',
             'schema_markup' => 'nullable|string',
         ]);

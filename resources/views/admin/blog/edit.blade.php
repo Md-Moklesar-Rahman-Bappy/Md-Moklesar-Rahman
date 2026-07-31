@@ -239,7 +239,7 @@
                 <div class="card-body">
                     <h6 class="fw-bold mb-3">Post Info</h6>
                     <div class="small text-muted mb-2">
-                        <i class="bi bi-eye me-2"></i>Views: {{ number_format($post->views ?? 0) }}
+                        <i class="bi bi-eye me-2"></i>Views: {{ number_format($post->views_count ?? 0) }}
                     </div>
                     <div class="small text-muted mb-2">
                         <i class="bi bi-calendar3 me-2"></i>Created: {{ $post->created_at->format('M d, Y') }}

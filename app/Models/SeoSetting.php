@@ -24,6 +24,7 @@ class SeoSetting extends Model
         'twitter_image',
         'canonical_url',
         'robots',
+        'schema_markup',
     ];
 
     public function profile(): BelongsTo

@@ -32,12 +32,14 @@ class ExperienceController extends AdminController
         $validated = $request->validate([
             'company_name' => 'required|string|max:255',
             'position' => 'required|string|max:255',
+            'location' => 'nullable|string|max:255',
             'start_date' => 'required|date',
             'end_date' => 'nullable|date|after_or_equal:start_date',
             'is_current' => 'boolean',
             'description' => 'nullable|string',
             'technologies' => 'nullable|array',
             'technologies.*' => 'string|max:255',
+            'sort_order' => 'nullable|integer|min:0',
         ]);
 
         $validated['profile_id'] = $profile->id;
@@ -63,12 +65,14 @@ class ExperienceController extends AdminController
         $validated = $request->validate([
             'company_name' => 'required|string|max:255',
             'position' => 'required|string|max:255',
+            'location' => 'nullable|string|max:255',
             'start_date' => 'required|date',
             'end_date' => 'nullable|date|after_or_equal:start_date',
             'is_current' => 'boolean',
             'description' => 'nullable|string',
             'technologies' => 'nullable|array',
             'technologies.*' => 'string|max:255',
+            'sort_order' => 'nullable|integer|min:0',
         ]);
 
         $validated['is_current'] = $request->boolean('is_current');

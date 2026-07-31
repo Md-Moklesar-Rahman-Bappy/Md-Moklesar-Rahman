@@ -169,13 +169,37 @@
                         <label class="form-label fw-semibold small">Custom CSS</label>
                         <textarea class="form-control font-monospace" name="custom_css" rows="5"
                                   style="font-size:0.82rem;"
-                                  placeholder="/* Add custom CSS here...">{{ old('custom_css', $settings['custom_css'] ?? '') }}</textarea>
+                                  placeholder="/* Add custom CSS here...">{{ old('custom_css', $customization->custom_css ?? '') }}</textarea>
                     </div>
                     <div class="mb-0">
                         <label class="form-label fw-semibold small">Custom JavaScript</label>
                         <textarea class="form-control font-monospace" name="custom_js" rows="5"
                                   style="font-size:0.82rem;"
-                                  placeholder="// Add custom JavaScript here...">{{ old('custom_js', $settings['custom_js'] ?? '') }}</textarea>
+                                  placeholder="// Add custom JavaScript here...">{{ old('custom_js', $customization->custom_js ?? '') }}</textarea>
+                    </div>
+                </div>
+
+                <div class="mb-4">
+                    <h6 class="fw-bold mb-3"><i class="bi bi-image me-2" style="color:#ec4899;"></i>Branding</h6>
+                    <div class="row g-3">
+                        <div class="col-12">
+                            <label class="form-label fw-semibold small">Logo</label>
+                            @if(!empty($customization->logo))
+                                <div class="mb-2">
+                                    <img src="{{ asset('storage/' . $customization->logo) }}" alt="Logo" class="rounded" height="48">
+                                </div>
+                            @endif
+                            <input type="file" class="form-control" name="logo" accept="image/*">
+                        </div>
+                        <div class="col-12">
+                            <label class="form-label fw-semibold small">Favicon</label>
+                            @if(!empty($customization->favicon))
+                                <div class="mb-2">
+                                    <img src="{{ asset('storage/' . $customization->favicon) }}" alt="Favicon" height="32">
+                                </div>
+                            @endif
+                            <input type="file" class="form-control" name="favicon" accept="image/x-icon,image/png">
+                        </div>
                     </div>
                 </div>
 
@@ -266,17 +290,17 @@ function themeCustomizer() {
     return {
         saving: false,
         settings: {
-            primary_color: '{{ $settings["primary_color"] ?? "#6366f1" }}',
-            secondary_color: '{{ $settings["secondary_color"] ?? "#8b5cf6" }}',
-            accent_color: '{{ $settings["accent_color"] ?? "#f59e0b" }}',
-            background_color: '{{ $settings["background_color"] ?? "#ffffff" }}',
-            text_color: '{{ $settings["text_color"] ?? "#1e293b" }}',
-            font_family: '{{ $settings["font_family"] ?? "Inter" }}',
-            font_size: {{ $settings["font_size"] ?? 16 }},
-            border_radius: {{ $settings["border_radius"] ?? 12 }},
-            layout_width: {{ $settings["layout_width"] ?? 1200 }},
-            header_style: '{{ $settings["header_style"] ?? "standard" }}',
-            footer_style: '{{ $settings["footer_style"] ?? "standard" }}'
+            primary_color: '{{ $customization->primary_color ?? "#6366f1" }}',
+            secondary_color: '{{ $customization->secondary_color ?? "#8b5cf6" }}',
+            accent_color: '{{ $customization->accent_color ?? "#f59e0b" }}',
+            background_color: '{{ $customization->background_color ?? "#ffffff" }}',
+            text_color: '{{ $customization->text_color ?? "#1e293b" }}',
+            font_family: '{{ $customization->font_family ?? "Inter" }}',
+            font_size: {{ $customization->font_size ?? 16 }},
+            border_radius: {{ $customization->border_radius ?? 12 }},
+            layout_width: {{ $customization->layout_width ?? 1200 }},
+            header_style: '{{ $customization->header_style ?? "standard" }}',
+            footer_style: '{{ $customization->footer_style ?? "standard" }}'
         },
         async saveForm(form) {
             this.saving = true;

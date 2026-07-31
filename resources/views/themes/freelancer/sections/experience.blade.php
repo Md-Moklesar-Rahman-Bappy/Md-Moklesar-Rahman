@@ -21,7 +21,7 @@
                                         <div>
                                             <h5 style="font-size: 1.1rem; font-weight: 700;">{{ $exp->position ?? $exp['position'] ?? '' }}</h5>
                                             <span style="color: var(--fre-primary); font-weight: 600;">
-                                                {{ $exp->company ?? $exp['company'] ?? '' }}
+                                                {{ $exp->company_name ?? $exp['company_name'] ?? '' }}
                                             </span>
                                             @if($exp->location ?? $exp['location'] ?? null)
                                                 <span style="color: var(--fre-text); font-size: 0.85rem;">

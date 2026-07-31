@@ -19,7 +19,7 @@
                                 <div>
                                     <h5 style="font-size: 1.1rem; font-weight: 700;">{{ $exp->position ?? $exp['position'] ?? '' }}</h5>
                                     <span style="color: var(--cre-primary); font-weight: 600;">
-                                        <i class="bi bi-building me-1"></i>{{ $exp->company ?? $exp['company'] ?? '' }}
+                                        <i class="bi bi-building me-1"></i>{{ $exp->company_name ?? $exp['company_name'] ?? '' }}
                                     </span>
                                     @if($exp->location ?? $exp['location'] ?? null)
                                         <span style="color: var(--cre-text); font-size: 0.85rem;">

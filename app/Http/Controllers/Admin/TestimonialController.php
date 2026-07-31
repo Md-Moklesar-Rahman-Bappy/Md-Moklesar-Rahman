@@ -37,6 +37,8 @@ class TestimonialController extends AdminController
             'review' => 'required|string',
             'rating' => 'required|integer|min:1|max:5',
             'profile_image' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:2048',
+            'is_active' => 'boolean',
+            'sort_order' => 'nullable|integer|min:0',
         ]);
 
         $validated['profile_id'] = $profile->id;
@@ -70,6 +72,8 @@ class TestimonialController extends AdminController
             'review' => 'required|string',
             'rating' => 'required|integer|min:1|max:5',
             'profile_image' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:2048',
+            'is_active' => 'boolean',
+            'sort_order' => 'nullable|integer|min:0',
         ]);
 
         if ($request->hasFile('profile_image')) {

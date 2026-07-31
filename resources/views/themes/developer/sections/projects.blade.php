@@ -14,9 +14,9 @@
                 @foreach($projects as $project)
                     <div class="col-lg-4 col-md-6 mb-4" data-aos="fade-up" data-aos-delay="{{ $loop->index * 100 }}">
                         <div class="dev-card h-100 d-flex flex-column">
-                            @if($project->image ?? $project['image'] ?? null)
+                            @if($project->thumbnail ?? $project['thumbnail'] ?? null)
                                 <div style="margin: -1.5rem -1.5rem 1rem; overflow: hidden; border-radius: 8px 8px 0 0;">
-                                    <img src="{{ $project->image ?? $project['image'] }}" alt="{{ $project->title ?? $project['title'] ?? '' }}"
+                                    <img src="{{ $project->thumbnail ?? $project['thumbnail'] }}" alt="{{ $project->title ?? $project['title'] ?? '' }}"
                                          style="width: 100%; height: 180px; object-fit: cover; filter: grayscale(40%); transition: filter 0.3s;"
                                          onmouseover="this.style.filter='grayscale(0%)'" onmouseout="this.style.filter='grayscale(40%)'">
                                 </div>
@@ -34,7 +34,7 @@
 
                             @if($project->technologies ?? $project['technologies'] ?? null)
                                 <div class="mb-3">
-                                    @php $techs = is_string($project->technologies ?? $project['technologies']) ? explode(',', $project->technologies ?? $project['technologies']) : ($project->technologies ?? $project['technologies']); @endphp
+                                    @php $techs = $project->technologies ?? $project['technologies'] ?? []; @endphp
                                     @foreach($techs as $tech)
                                         <span class="dev-tag">{{ trim($tech) }}</span>
                                     @endforeach

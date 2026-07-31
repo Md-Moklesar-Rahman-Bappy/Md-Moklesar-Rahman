@@ -11,7 +11,7 @@
         </div>
 
         @if($skills && count($skills))
-            @php $grouped = $skills->groupBy('category'); @endphp
+            @php $grouped = $skills->groupBy(fn($skill) => $skill->category->name ?? $skill['category'] ?? 'Uncategorized'); @endphp
             <div class="row">
                 @foreach($grouped as $category => $categorySkills)
                     <div class="col-lg-4 col-md-6 mb-4" data-aos="fade-up" data-aos-delay="{{ $loop->index * 100 }}">
@@ -25,10 +25,10 @@
                                     <span class="cre-tag">{{ $skill->name ?? $skill['name'] ?? '' }}</span>
                                 @endforeach
                             </div>
-                            @if($categorySkills->first()->proficiency ?? $categorySkills->first()['proficiency'] ?? null)
+                            @if($categorySkills->first()->percentage ?? $categorySkills->first()['percentage'] ?? null)
                                 <div class="mt-3">
                                     @foreach($categorySkills as $skill)
-                                        @php $prof = $skill->proficiency ?? $skill['proficiency'] ?? 0; @endphp
+                                        @php $prof = $skill->percentage ?? $skill['percentage'] ?? 0; @endphp
                                         <div class="mb-2">
                                             <div class="d-flex justify-content-between mb-1">
                                                 <small style="font-weight: 600;">{{ $skill->name ?? $skill['name'] ?? '' }}</small>

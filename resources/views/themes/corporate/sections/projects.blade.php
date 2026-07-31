@@ -9,8 +9,8 @@
             @foreach($profile->projects ?? [] as $project)
             <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="{{ ($loop->index % 3) * 100 }}">
                 <div class="bg-white border h-100 overflow-hidden">
-                    @if($project->image)
-                    <img src="{{ asset('storage/' . $project->image) }}" alt="{{ $project->title ?? '' }}" class="w-100" style="height: 220px; object-fit: cover;">
+                    @if($project->thumbnail)
+                    <img src="{{ asset('storage/' . $project->thumbnail) }}" alt="{{ $project->title ?? '' }}" class="w-100" style="height: 220px; object-fit: cover;">
                     @else
                     <div style="height: 220px; background: var(--bg-dark); display: flex; align-items: center; justify-content: center;">
                         <i class="bi bi-folder2-open text-white" style="font-size: 3rem; opacity: 0.3;"></i>
@@ -20,8 +20,8 @@
                         <h5 class="fw-bold">{{ $project->title ?? '' }}</h5>
                         <p class="text-muted small">{{ $project->description ?? '' }}</p>
                         <div class="d-flex gap-2 mt-3">
-                            @if($project->url)
-                            <a href="{{ $project->url }}" class="btn btn-sm btn-corp" target="_blank">View Project</a>
+                            @if($project->live_url)
+                            <a href="{{ $project->live_url }}" class="btn btn-sm btn-corp" target="_blank">View Project</a>
                             @endif
                             @if($project->github_url)
                             <a href="{{ $project->github_url }}" class="btn btn-sm btn-outline-dark" target="_blank"><i class="bi bi-github"></i></a>

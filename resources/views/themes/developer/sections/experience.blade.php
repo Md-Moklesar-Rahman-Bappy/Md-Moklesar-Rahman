@@ -19,7 +19,7 @@
                                 <div class="dev-terminal-dot"></div>
                                 <div class="dev-terminal-dot"></div>
                                 <span class="ms-2" style="color: #94a3b8; font-size: 0.8rem;">
-                                    {{ \Illuminate\Support\Str::slug($exp->company ?? $exp['company'] ?? 'company') }}.log
+                                    {{ \Illuminate\Support\Str::slug($exp->company_name ?? $exp['company_name'] ?? 'company') }}.log
                                 </span>
                             </div>
                             <div class="dev-terminal-body">
@@ -39,7 +39,7 @@
 
                                 <div class="mb-3">
                                     <i class="bi bi-building me-1" style="color: var(--dev-primary);"></i>
-                                    <span style="color: var(--dev-secondary);">{{ $exp->company ?? $exp['company'] ?? '' }}</span>
+                                    <span style="color: var(--dev-secondary);">{{ $exp->company_name ?? $exp['company_name'] ?? '' }}</span>
                                     @if($exp->location ?? $exp['location'] ?? null)
                                         <span style="color: #64748b;"> | {{ $exp->location ?? $exp['location'] }}</span>
                                     @endif
@@ -55,7 +55,7 @@
                                 @if($exp->technologies ?? $exp['technologies'] ?? null)
                                     <div class="mt-3">
                                         <span class="dev-comment">// tech_used</span><br>
-                                        @php $techs = is_string($exp->technologies ?? $exp['technologies']) ? explode(',', $exp->technologies ?? $exp['technologies']) : ($exp->technologies ?? $exp['technologies']); @endphp
+                                        @php $techs = $exp->technologies ?? $exp['technologies'] ?? []; @endphp
                                         @foreach($techs as $tech)
                                             <span class="dev-tag">{{ trim($tech) }}</span>
                                         @endforeach

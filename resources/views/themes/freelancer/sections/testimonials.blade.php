@@ -24,19 +24,19 @@
                                             @endfor
                                         </div>
                                         <p style="font-size: 1.1rem; font-style: italic; color: var(--fre-text); line-height: 1.9; margin-bottom: 1.5rem;">
-                                            "{{ $testimonial->content ?? $testimonial['content'] ?? '' }}"
+                                            "{{ $testimonial->review ?? $testimonial['review'] ?? '' }}"
                                         </p>
                                         <div class="d-flex align-items-center justify-content-center gap-3">
-                                            @if($testimonial->avatar ?? $testimonial['avatar'] ?? null)
-                                                <img src="{{ $testimonial->avatar ?? $testimonial['avatar'] }}" alt=""
+                                            @if($testimonial->profile_image ?? $testimonial['profile_image'] ?? null)
+                                                <img src="{{ $testimonial->profile_image ?? $testimonial['profile_image'] }}" alt=""
                                                      style="width: 56px; height: 56px; border-radius: 50%; object-fit: cover; border: 3px solid var(--fre-primary);">
                                             @else
                                                 <div style="width: 56px; height: 56px; border-radius: 50%; background: var(--fre-warm); display: flex; align-items: center; justify-content: center; color: #fff; font-weight: 700; font-size: 1.2rem; border: 3px solid var(--fre-primary);">
-                                                    {{ substr($testimonial->name ?? $testimonial['name'] ?? 'U', 0, 1) }}
+                                                    {{ substr($testimonial->client_name ?? $testimonial['client_name'] ?? 'U', 0, 1) }}
                                                 </div>
                                             @endif
                                             <div class="text-start">
-                                                <strong style="font-size: 1rem;">{{ $testimonial->name ?? $testimonial['name'] ?? '' }}</strong>
+                                                <strong style="font-size: 1rem;">{{ $testimonial->client_name ?? $testimonial['client_name'] ?? '' }}</strong>
                                                 <p style="color: var(--fre-primary); font-size: 0.85rem; margin: 0; font-weight: 500;">
                                                     {{ $testimonial->position ?? $testimonial['position'] ?? '' }}
                                                 </p>

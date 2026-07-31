@@ -70,6 +70,9 @@ class ProjectController extends AdminController
             'is_featured' => 'boolean',
             'is_active' => 'boolean',
             'thumbnail' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:2048',
+            'sort_order' => 'nullable|integer|min:0',
+            'meta_title' => 'nullable|string|max:255',
+            'meta_description' => 'nullable|string|max:500',
         ]);
 
         $validated['slug'] = Str::slug($validated['title']);
@@ -115,6 +118,9 @@ class ProjectController extends AdminController
             'is_featured' => 'boolean',
             'is_active' => 'boolean',
             'thumbnail' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:2048',
+            'sort_order' => 'nullable|integer|min:0',
+            'meta_title' => 'nullable|string|max:255',
+            'meta_description' => 'nullable|string|max:500',
         ]);
 
         $validated['slug'] = Str::slug($validated['title']);

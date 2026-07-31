@@ -16,7 +16,7 @@ if (method_exists($blogPosts, 'where')) {
                 <div class="min-card" data-aos="fade-up" data-aos-delay="{{ $loop->index * 50 }}">
                     <div class="d-flex justify-content-between align-items-start">
                         <div>
-                            <p class="text-muted small mb-1">{{ $post->created_at?->format('M d, Y') ?? '' }}@if($post->category) &middot; {{ $post->category }}@endif</p>
+                            <p class="text-muted small mb-1">{{ $post->created_at?->format('M d, Y') ?? '' }}@if($post->category) &middot; {{ $post->category->name ?? '' }}@endif</p>
                             <h5 class="fw-semibold mb-1">{{ $post->title ?? '' }}</h5>
                             <p class="text-muted small mb-0" style="font-size: 0.9rem;">{{ Str::limit($post->excerpt ?? $post->description ?? '', 150) }}</p>
                         </div>

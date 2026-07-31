@@ -14,9 +14,9 @@
                 @foreach($blogPosts->take(3) as $post)
                     <div class="col-lg-4 mb-4" data-aos="fade-up" data-aos-delay="{{ $loop->index * 100 }}">
                         <div class="dev-card h-100 d-flex flex-column">
-                            @if($post->image ?? $post['image'] ?? null)
+                            @if($post->featured_image ?? $post['featured_image'] ?? null)
                                 <div style="margin: -1.5rem -1.5rem 1rem; overflow: hidden; border-radius: 8px 8px 0 0;">
-                                    <img src="{{ $post->image ?? $post['image'] }}" alt="{{ $post->title ?? $post['title'] ?? '' }}"
+                                    <img src="{{ $post->featured_image ?? $post['featured_image'] }}" alt="{{ $post->title ?? $post['title'] ?? '' }}"
                                          style="width: 100%; height: 180px; object-fit: cover;">
                                 </div>
                             @endif
@@ -24,11 +24,11 @@
                             <div class="mb-2">
                                 <span class="dev-tag">
                                     <i class="bi bi-calendar3 me-1"></i>
-                                    {{ $post->published_date ?? $post['published_date'] ?? $post->created_at ?? '' }}
+                                    {{ $post->published_at ?? $post['published_at'] ?? $post->created_at ?? '' }}
                                 </span>
-                                @if($post->category ?? $post['category'] ?? null)
+                                @if($post->category)
                                     <span class="dev-tag">
-                                        {{ $post->category ?? $post['category'] }}
+                                        {{ $post->category->name ?? '' }}
                                     </span>
                                 @endif
                             </div>

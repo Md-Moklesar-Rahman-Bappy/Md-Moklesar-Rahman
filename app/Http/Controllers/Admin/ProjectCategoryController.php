@@ -34,6 +34,7 @@ class ProjectCategoryController extends AdminController
         $validated = $request->validate([
             'name' => 'required|string|max:255',
             'description' => 'nullable|string|max:500',
+            'sort_order' => 'nullable|integer|min:0',
         ]);
 
         $validated['slug'] = Str::slug($validated['name']);
@@ -59,6 +60,7 @@ class ProjectCategoryController extends AdminController
         $validated = $request->validate([
             'name' => 'required|string|max:255',
             'description' => 'nullable|string|max:500',
+            'sort_order' => 'nullable|integer|min:0',
         ]);
 
         $validated['slug'] = Str::slug($validated['name']);

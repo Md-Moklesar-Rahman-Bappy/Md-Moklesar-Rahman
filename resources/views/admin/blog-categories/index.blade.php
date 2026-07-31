@@ -51,7 +51,7 @@
                                         </form>
                                     </td>
                                     <td><code class="small">{{ $category->slug }}</code></td>
-                                    <td>{{ $category->parent->name ?? '—' }}</td>
+                                    <td>{{ $category->parent?->name ?? '—' }}</td>
                                     <td>
                                         <span class="badge rounded-pill" style="background:rgba(99,102,241,0.12);color:#6366f1;">
                                             {{ $category->posts_count ?? $category->posts()->count() ?? 0 }}

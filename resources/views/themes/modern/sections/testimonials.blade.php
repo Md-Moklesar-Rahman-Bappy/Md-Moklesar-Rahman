@@ -21,19 +21,19 @@
                                 @endfor
                             </div>
                             <p style="color: var(--mod-text); font-style: italic; flex-grow: 1; font-size: 0.95rem;">
-                                "{{ $testimonial->content ?? $testimonial['content'] ?? '' }}"
+                                "{{ $testimonial->review ?? $testimonial['review'] ?? '' }}"
                             </p>
                             <div class="d-flex align-items-center gap-3 mt-3 pt-3" style="border-top: 1px solid rgba(0,0,0,0.06);">
-                                @if($testimonial->avatar ?? $testimonial['avatar'] ?? null)
-                                    <img src="{{ $testimonial->avatar ?? $testimonial['avatar'] }}" alt=""
+                                @if($testimonial->profile_image ?? $testimonial['profile_image'] ?? null)
+                                    <img src="{{ $testimonial->profile_image ?? $testimonial['profile_image'] }}" alt=""
                                          style="width: 48px; height: 48px; border-radius: 50%; object-fit: cover;">
                                 @else
                                     <div style="width: 48px; height: 48px; border-radius: 50%; background: var(--mod-gradient); display: flex; align-items: center; justify-content: center; color: #fff; font-weight: 700; font-size: 1rem;">
-                                        {{ substr($testimonial->name ?? $testimonial['name'] ?? 'U', 0, 1) }}
+                                        {{ substr($testimonial->client_name ?? $testimonial['client_name'] ?? 'U', 0, 1) }}
                                     </div>
                                 @endif
                                 <div>
-                                    <strong style="font-size: 0.95rem;">{{ $testimonial->name ?? $testimonial['name'] ?? '' }}</strong>
+                                    <strong style="font-size: 0.95rem;">{{ $testimonial->client_name ?? $testimonial['client_name'] ?? '' }}</strong>
                                     <p style="color: var(--mod-primary); font-size: 0.8rem; margin: 0;">{{ $testimonial->position ?? $testimonial['position'] ?? '' }}</p>
                                 </div>
                             </div>

@@ -47,6 +47,7 @@ class BlogCategoryController extends AdminController
             'parent_id' => 'nullable|exists:blog_categories,id',
             'meta_title' => 'nullable|string|max:255',
             'meta_description' => 'nullable|string|max:500',
+            'sort_order' => 'nullable|integer|min:0',
         ]);
 
         $validated['slug'] = Str::slug($validated['name']);
@@ -80,6 +81,7 @@ class BlogCategoryController extends AdminController
             'parent_id' => 'nullable|exists:blog_categories,id',
             'meta_title' => 'nullable|string|max:255',
             'meta_description' => 'nullable|string|max:500',
+            'sort_order' => 'nullable|integer|min:0',
         ]);
 
         $validated['slug'] = Str::slug($validated['name']);

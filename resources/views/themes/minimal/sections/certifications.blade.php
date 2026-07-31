@@ -10,13 +10,13 @@
                     <div class="d-flex justify-content-between align-items-start">
                         <div>
                             <h5 class="fw-semibold mb-1">{{ $cert->name ?? '' }}</h5>
-                            <p class="text-muted small mb-0">{{ $cert->issuer ?? '' }}</p>
+                            <p class="text-muted small mb-0">{{ $cert->organization ?? '' }}</p>
                         </div>
-                        <small class="text-muted">{{ $cert->date ?? '' }}</small>
+                        <small class="text-muted">{{ $cert->issue_date ?? '' }}</small>
                     </div>
-                    @if($cert->url)
+                    @if($cert->verification_url)
                     <div class="mt-2">
-                        <a href="{{ $cert->url }}" class="min-link small" target="_blank">View credential <i class="bi bi-arrow-up-right" style="font-size: 0.7rem;"></i></a>
+                        <a href="{{ $cert->verification_url }}" class="min-link small" target="_blank">View credential <i class="bi bi-arrow-up-right" style="font-size: 0.7rem;"></i></a>
                     </div>
                     @endif
                 </div>

@@ -37,6 +37,7 @@ class EducationController extends AdminController
             'start_date' => 'required|date',
             'end_date' => 'nullable|date|after_or_equal:start_date',
             'description' => 'nullable|string',
+            'sort_order' => 'nullable|integer|min:0',
         ]);
 
         $validated['profile_id'] = $profile->id;
@@ -66,6 +67,7 @@ class EducationController extends AdminController
             'start_date' => 'required|date',
             'end_date' => 'nullable|date|after_or_equal:start_date',
             'description' => 'nullable|string',
+            'sort_order' => 'nullable|integer|min:0',
         ]);
 
         $education->update($validated);

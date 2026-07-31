@@ -49,14 +49,16 @@ class ThemeController extends AdminController
             'accent_color' => 'nullable|string|max:7',
             'text_color' => 'nullable|string|max:7',
             'background_color' => 'nullable|string|max:7',
-            'heading_font' => 'nullable|string|max:255',
-            'body_font' => 'nullable|string|max:255',
+            'font_family' => 'nullable|string|max:255',
+            'font_size' => 'nullable|integer|min:12|max:24',
+            'border_radius' => 'nullable|integer|min:0|max:24',
+            'layout_width' => 'nullable|integer|min:960|max:1400',
             'logo' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:2048',
             'favicon' => 'nullable|image|mimes:ico,png|max:512',
             'custom_css' => 'nullable|string',
             'custom_js' => 'nullable|string',
-            'header_layout' => 'nullable|string|max:255',
-            'footer_layout' => 'nullable|string|max:255',
+            'header_style' => 'nullable|string|max:255',
+            'footer_style' => 'nullable|string|max:255',
         ]);
 
         $existing = ThemeCustomization::where('theme_id', $theme->id)

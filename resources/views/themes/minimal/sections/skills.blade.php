@@ -7,7 +7,7 @@
                 <p class="section-subtitle">Technologies and tools I use</p>
                 <div class="d-flex flex-wrap" data-aos="fade-up" data-aos-delay="100">
                     @foreach($profile->skills ?? [] as $skill)
-                    <span class="skill-tag">{{ $skill->name ?? '' }}@if($skill->level) — {{ $skill->level }}%@endif</span>
+                    <span class="skill-tag">{{ $skill->name ?? '' }}@if($skill->percentage) — {{ $skill->percentage }}%@endif</span>
                     @endforeach
                 </div>
                 @if(empty($profile->skills))

@@ -19,6 +19,9 @@ class SkillCategoryController extends AdminController
 
         $validated = $request->validate([
             'name' => 'required|string|max:255',
+            'icon' => 'nullable|string|max:255',
+            'color' => 'nullable|string|max:7',
+            'sort_order' => 'nullable|integer|min:0',
         ]);
 
         $validated['slug'] = Str::slug($validated['name']);
@@ -26,7 +29,7 @@ class SkillCategoryController extends AdminController
 
         SkillCategory::create($validated);
 
-        return redirect()->route('admin.skill-categories.index')
+        return redirect()->route('admin.skills.index')
             ->with('success', 'Skill category created successfully.');
     }
 
@@ -35,13 +38,16 @@ class SkillCategoryController extends AdminController
         $this->authorizeOwnership($skillCategory);
         $validated = $request->validate([
             'name' => 'required|string|max:255',
+            'icon' => 'nullable|string|max:255',
+            'color' => 'nullable|string|max:7',
+            'sort_order' => 'nullable|integer|min:0',
         ]);
 
         $validated['slug'] = Str::slug($validated['name']);
 
         $skillCategory->update($validated);
 
-        return redirect()->route('admin.skill-categories.index')
+        return redirect()->route('admin.skills.index')
             ->with('success', 'Skill category updated successfully.');
     }
 
@@ -50,7 +56,7 @@ class SkillCategoryController extends AdminController
         $this->authorizeOwnership($skillCategory);
         $skillCategory->delete();
 
-        return redirect()->route('admin.skill-categories.index')
+        return redirect()->route('admin.skills.index')
             ->with('success', 'Skill category deleted successfully.');
     }
 }

@@ -25,7 +25,7 @@ class PageSectionController extends AdminController
 
         $validated = $request->validate([
             'name' => 'required|string|max:255',
-            'type' => 'required|string|max:255',
+            'section_type' => 'required|string|max:255',
             'content' => 'nullable|string',
             'sort_order' => 'nullable|integer|min:0',
             'is_active' => 'boolean',
@@ -52,7 +52,7 @@ class PageSectionController extends AdminController
         $this->authorizeOwnership($pageSection);
         $validated = $request->validate([
             'name' => 'required|string|max:255',
-            'type' => 'required|string|max:255',
+            'section_type' => 'required|string|max:255',
             'content' => 'nullable|string',
             'sort_order' => 'nullable|integer|min:0',
             'is_active' => 'boolean',

@@ -14,7 +14,7 @@
                         <div class="d-flex justify-content-between align-items-start flex-wrap mb-2">
                             <div>
                                 <h5 class="fw-bold mb-1">{{ $exp->position ?? '' }}</h5>
-                                <p class="mb-0 fw-medium" style="color: var(--primary);">{{ $exp->company ?? '' }}</p>
+                                <p class="mb-0 fw-medium" style="color: var(--primary);">{{ $exp->company_name ?? '' }}</p>
                             </div>
                             <span class="badge bg-dark text-white rounded-pill px-3 py-2">{{ $exp->start_date ?? '' }} - {{ $exp->end_date ?? 'Present' }}</span>
                         </div>

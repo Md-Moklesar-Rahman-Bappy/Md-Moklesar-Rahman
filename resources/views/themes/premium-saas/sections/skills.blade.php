@@ -17,11 +17,11 @@
                         @endif
                     </div>
                     <h5 class="fw-bold">{{ $skill->name ?? '' }}</h5>
-                    @if($skill->level)
+                    @if($skill->percentage)
                     <div class="progress mt-3" style="height: 6px; border-radius: 3px; background: #f1f5f9;">
-                        <div class="progress-bar" role="progressbar" style="width: {{ $skill->level }}%; background: linear-gradient(90deg, var(--primary), var(--secondary)); border-radius: 3px;"></div>
+                        <div class="progress-bar" role="progressbar" style="width: {{ $skill->percentage }}%; background: linear-gradient(90deg, var(--primary), var(--secondary)); border-radius: 3px;"></div>
                     </div>
-                    <small class="text-muted mt-2 d-block">{{ $skill->level }}% proficiency</small>
+                    <small class="text-muted mt-2 d-block">{{ $skill->percentage }}% proficiency</small>
                     @endif
                 </div>
             </div>

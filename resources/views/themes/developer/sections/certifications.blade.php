@@ -23,15 +23,15 @@
                                         {{ $cert->name ?? $cert['name'] ?? '' }}
                                     </h5>
                                     <p style="color: var(--dev-secondary); font-size: 0.85rem; margin-bottom: 0.25rem;">
-                                        {{ $cert->issuer ?? $cert['issuer'] ?? '' }}
+                                        {{ $cert->organization ?? $cert['organization'] ?? '' }}
                                     </p>
                                     <div class="d-flex justify-content-between align-items-center">
                                         <span class="dev-tag">
                                             <i class="bi bi-calendar3 me-1"></i>
-                                            {{ $cert->date ?? $cert['date'] ?? '' }}
+                                            {{ $cert->issue_date ?? $cert['issue_date'] ?? '' }}
                                         </span>
-                                        @if($cert->credential_url ?? $cert['credential_url'] ?? null)
-                                            <a href="{{ $cert->credential_url ?? $cert['credential_url'] }}" target="_blank"
+                                        @if($cert->verification_url ?? $cert['verification_url'] ?? null)
+                                            <a href="{{ $cert->verification_url ?? $cert['verification_url'] }}" target="_blank"
                                                style="color: var(--dev-primary); font-size: 0.8rem;">
                                                 <i class="bi bi-box-arrow-up-right me-1"></i>Verify
                                             </a>

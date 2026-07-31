@@ -15,9 +15,9 @@
                 @foreach($projects as $project)
                     <div class="col-lg-4 col-md-6 mb-4" data-aos="fade-up" data-aos-delay="{{ $loop->index * 100 }}">
                         <div class="cre-card h-100 d-flex flex-column" style="padding: 0; overflow: hidden;">
-                            @if($project->image ?? $project['image'] ?? null)
+                            @if($project->thumbnail ?? $project['thumbnail'] ?? null)
                                 <div style="overflow: hidden;">
-                                    <img src="{{ $project->image ?? $project['image'] }}" alt="{{ $project->title ?? $project['title'] ?? '' }}"
+                                    <img src="{{ $project->thumbnail ?? $project['thumbnail'] }}" alt="{{ $project->title ?? $project['title'] ?? '' }}"
                                          style="width: 100%; height: 220px; object-fit: cover; transition: transform 0.4s;"
                                          onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'">
                                 </div>

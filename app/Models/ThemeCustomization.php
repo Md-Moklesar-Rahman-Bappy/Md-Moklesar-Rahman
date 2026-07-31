@@ -23,6 +23,8 @@ class ThemeCustomization extends Model
         'footer_style',
         'custom_css',
         'custom_js',
+        'logo',
+        'favicon',
     ];
 
     public function profile(): BelongsTo

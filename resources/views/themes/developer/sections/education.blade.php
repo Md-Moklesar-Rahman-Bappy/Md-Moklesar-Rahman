@@ -25,9 +25,9 @@
                                     <p style="color: var(--dev-secondary); font-size: 0.9rem; margin-bottom: 0.25rem;">
                                         {{ $edu->institution ?? $edu['institution'] ?? '' }}
                                     </p>
-                                    @if($edu->field_of_study ?? $edu['field_of_study'] ?? null)
+                                    @if($edu->group_or_field ?? $edu['group_or_field'] ?? null)
                                         <p style="color: #94a3b8; font-size: 0.8rem; margin-bottom: 0.25rem;">
-                                            <i class="bi bi-book me-1"></i>{{ $edu->field_of_study ?? $edu['field_of_study'] }}
+                                            <i class="bi bi-book me-1"></i>{{ $edu->group_or_field ?? $edu['group_or_field'] }}
                                         </p>
                                     @endif
                                     <span class="dev-tag">
@@ -35,9 +35,9 @@
                                         {{ $edu->start_date ?? $edu['start_date'] ?? '' }}
                                         — {{ $edu->end_date ?? $edu['end_date'] ?? 'Present' }}
                                     </span>
-                                    @if($edu->grade ?? $edu['grade'] ?? null)
+                                    @if($edu->result ?? $edu['result'] ?? null)
                                         <div class="mt-2">
-                                            <span class="dev-number">{{ $edu->grade ?? $edu['grade'] }}</span>
+                                            <span class="dev-number">{{ $edu->result ?? $edu['result'] }}</span>
                                         </div>
                                     @endif
                                 </div>

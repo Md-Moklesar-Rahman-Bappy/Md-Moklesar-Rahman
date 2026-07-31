@@ -22,14 +22,14 @@
                                 <div>
                                     <h5 style="font-size: 0.95rem; margin-bottom: 0.25rem;">{{ $cert->name ?? $cert['name'] ?? '' }}</h5>
                                     <p style="color: var(--mod-primary); font-size: 0.85rem; margin-bottom: 0.25rem;">
-                                        {{ $cert->issuer ?? $cert['issuer'] ?? '' }}
+                                        {{ $cert->organization ?? $cert['organization'] ?? '' }}
                                     </p>
                                     <span style="font-size: 0.8rem; color: var(--mod-text);">
-                                        <i class="bi bi-calendar3 me-1"></i>{{ $cert->date ?? $cert['date'] ?? '' }}
+                                        <i class="bi bi-calendar3 me-1"></i>{{ $cert->issue_date ?? $cert['issue_date'] ?? '' }}
                                     </span>
-                                    @if($cert->credential_url ?? $cert['credential_url'] ?? null)
+                                    @if($cert->verification_url ?? $cert['verification_url'] ?? null)
                                         <div class="mt-2">
-                                            <a href="{{ $cert->credential_url ?? $cert['credential_url'] }}" target="_blank"
+                                            <a href="{{ $cert->verification_url ?? $cert['verification_url'] }}" target="_blank"
                                                style="font-size: 0.8rem; font-weight: 600;">
                                                 Verify <i class="bi bi-box-arrow-up-right ms-1"></i>
                                             </a>

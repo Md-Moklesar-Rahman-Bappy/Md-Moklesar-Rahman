@@ -39,6 +39,8 @@ class SkillController extends AdminController
             'category_id' => 'nullable|exists:skill_categories,id',
             'icon' => 'nullable|string|max:255',
             'color' => 'nullable|string|max:7',
+            'sort_order' => 'nullable|integer|min:0',
+            'is_active' => 'boolean',
         ]);
 
         $validated['profile_id'] = $profile->id;
@@ -67,6 +69,8 @@ class SkillController extends AdminController
             'category_id' => 'nullable|exists:skill_categories,id',
             'icon' => 'nullable|string|max:255',
             'color' => 'nullable|string|max:7',
+            'sort_order' => 'nullable|integer|min:0',
+            'is_active' => 'boolean',
         ]);
 
         $skill->update($validated);

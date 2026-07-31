@@ -15,9 +15,9 @@
                 @foreach($blogPosts->take(3) as $post)
                     <div class="col-lg-4 mb-4" data-aos="fade-up" data-aos-delay="{{ $loop->index * 100 }}">
                         <div class="cre-card h-100 d-flex flex-column" style="padding: 0; overflow: hidden;">
-                            @if($post->image ?? $post['image'] ?? null)
+                            @if($post->featured_image ?? $post['featured_image'] ?? null)
                                 <div style="overflow: hidden;">
-                                    <img src="{{ $post->image ?? $post['image'] }}" alt="{{ $post->title ?? $post['title'] ?? '' }}"
+                                    <img src="{{ $post->featured_image ?? $post['featured_image'] }}" alt="{{ $post->title ?? $post['title'] ?? '' }}"
                                          style="width: 100%; height: 200px; object-fit: cover; transition: transform 0.4s;"
                                          onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'">
                                 </div>
@@ -26,11 +26,11 @@
                             <div style="padding: 1.5rem;" class="flex-grow-1 d-flex flex-column">
                                 <div class="mb-2">
                                     <span class="cre-tag" style="font-size: 0.7rem;">
-                                        {{ $post->published_date ?? $post['published_date'] ?? $post->created_at ?? '' }}
+                                        {{ $post->published_at ?? $post['published_at'] ?? $post->created_at ?? '' }}
                                     </span>
                                     @if($post->category ?? $post['category'] ?? null)
                                         <span class="cre-tag" style="font-size: 0.7rem; background: rgba(124,58,237,0.08); color: var(--cre-secondary);">
-                                            {{ $post->category ?? $post['category'] }}
+                                            {{ $post->category->name ?? $post['category'] ?? '' }}
                                         </span>
                                     @endif
                                 </div>

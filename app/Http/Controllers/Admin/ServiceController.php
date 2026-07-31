@@ -37,6 +37,8 @@ class ServiceController extends AdminController
             'features' => 'nullable|array',
             'features.*' => 'string|max:255',
             'price' => 'nullable|numeric|min:0',
+            'sort_order' => 'nullable|integer|min:0',
+            'is_active' => 'boolean',
         ]);
 
         $validated['slug'] = Str::slug($validated['title']);
@@ -66,6 +68,8 @@ class ServiceController extends AdminController
             'features' => 'nullable|array',
             'features.*' => 'string|max:255',
             'price' => 'nullable|numeric|min:0',
+            'sort_order' => 'nullable|integer|min:0',
+            'is_active' => 'boolean',
         ]);
 
         $validated['slug'] = Str::slug($validated['title']);

@@ -115,9 +115,9 @@
                                     <span class="text-muted">—</span>
                                 @endif
                             </td>
-                            <td>{{ $post->author->name ?? 'Admin' }}</td>
+                            <td>{{ $post->profile->full_name ?? 'Admin' }}</td>
                             <td>{{ $post->created_at->format('M d, Y') }}</td>
-                            <td>{{ number_format($post->views ?? 0) }}</td>
+                            <td>{{ number_format($post->views_count ?? 0) }}</td>
                             <td class="text-end">
                                 <div class="d-flex gap-1 justify-content-end">
                                     @if($post->status === 'published')

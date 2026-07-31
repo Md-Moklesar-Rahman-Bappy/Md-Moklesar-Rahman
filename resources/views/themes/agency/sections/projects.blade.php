@@ -9,8 +9,8 @@
             @foreach($profile->projects ?? [] as $project)
             <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="{{ ($loop->index % 3) * 100 }}">
                 <div class="project-card">
-                    @if($project->image)
-                    <img src="{{ asset('storage/' . $project->image) }}" alt="{{ $project->title ?? '' }}">
+                    @if($project->thumbnail)
+                    <img src="{{ asset('storage/' . $project->thumbnail) }}" alt="{{ $project->title ?? '' }}">
                     @else
                     <div style="height: 300px; background: linear-gradient(135deg, var(--primary), var(--secondary)); display: flex; align-items: center; justify-content: center;">
                         <i class="bi bi-folder2-open text-white" style="font-size: 4rem; opacity: 0.5;"></i>
@@ -20,8 +20,8 @@
                         <h5 class="fw-bold">{{ $project->title ?? '' }}</h5>
                         <p class="small mb-3">{{ $project->description ?? '' }}</p>
                         <div class="d-flex gap-2">
-                            @if($project->url)
-                            <a href="{{ $project->url }}" class="btn btn-sm btn-light rounded-pill" target="_blank"><i class="bi bi-link-45deg"></i> View</a>
+                            @if($project->live_url)
+                            <a href="{{ $project->live_url }}" class="btn btn-sm btn-light rounded-pill" target="_blank"><i class="bi bi-link-45deg"></i> View</a>
                             @endif
                             @if($project->github_url)
                             <a href="{{ $project->github_url }}" class="btn btn-sm btn-outline-light rounded-pill" target="_blank"><i class="bi bi-github"></i></a>

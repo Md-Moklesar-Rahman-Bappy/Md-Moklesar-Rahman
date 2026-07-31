@@ -38,6 +38,8 @@ class CertificationController extends AdminController
             'certificate_file' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:5120',
             'verification_url' => 'nullable|url|max:255',
             'credential_id' => 'nullable|string|max:255',
+            'is_active' => 'boolean',
+            'sort_order' => 'nullable|integer|min:0',
         ]);
 
         $validated['profile_id'] = $profile->id;
@@ -72,6 +74,8 @@ class CertificationController extends AdminController
             'certificate_file' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:5120',
             'verification_url' => 'nullable|url|max:255',
             'credential_id' => 'nullable|string|max:255',
+            'is_active' => 'boolean',
+            'sort_order' => 'nullable|integer|min:0',
         ]);
 
         if ($request->hasFile('certificate_file')) {

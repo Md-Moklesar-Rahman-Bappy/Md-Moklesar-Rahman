@@ -12,6 +12,8 @@ class SkillCategory extends Model
         'profile_id',
         'name',
         'slug',
+        'icon',
+        'color',
         'sort_order',
     ];
 

@@ -16,8 +16,8 @@ if (method_exists($blogPosts, 'where')) {
             @foreach($blogPosts as $post)
             <div class="col-lg-4" data-aos="fade-up" data-aos-delay="{{ ($loop->index % 3) * 100 }}">
                 <div class="bg-white border h-100 overflow-hidden">
-                    @if($post->image)
-                    <img src="{{ asset('storage/' . $post->image) }}" alt="{{ $post->title ?? '' }}" class="w-100" style="height: 200px; object-fit: cover;">
+                    @if($post->featured_image)
+                    <img src="{{ asset('storage/' . $post->featured_image) }}" alt="{{ $post->title ?? '' }}" class="w-100" style="height: 200px; object-fit: cover;">
                     @else
                     <div style="height: 200px; background: var(--bg-dark); display: flex; align-items: center; justify-content: center;">
                         <i class="bi bi-journal-text text-white" style="font-size: 2.5rem; opacity: 0.3;"></i>
@@ -28,7 +28,7 @@ if (method_exists($blogPosts, 'where')) {
                             <i class="bi bi-calendar3 me-1"></i> {{ $post->created_at?->format('M d, Y') ?? '' }}
                             @if($post->category)
                             <span class="mx-2">|</span>
-                            <span style="color: var(--primary);">{{ $post->category }}</span>
+                            <span style="color: var(--primary);">{{ $post->category->name ?? '' }}</span>
                             @endif
                         </div>
                         <h5 class="fw-bold">{{ $post->title ?? '' }}</h5>

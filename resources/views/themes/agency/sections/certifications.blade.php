@@ -14,11 +14,11 @@
                     </div>
                     <div>
                         <h6 class="fw-bold mb-1">{{ $cert->name ?? '' }}</h6>
-                        <p class="text-muted small mb-1">{{ $cert->issuer ?? '' }}</p>
-                        <small class="text-muted">{{ $cert->date ?? '' }}</small>
-                        @if($cert->url)
+                        <p class="text-muted small mb-1">{{ $cert->organization ?? '' }}</p>
+                        <small class="text-muted">{{ $cert->issue_date ?? '' }}</small>
+                        @if($cert->verification_url)
                         <div class="mt-2">
-                            <a href="{{ $cert->url }}" class="small" style="color: var(--primary);" target="_blank">View Certificate <i class="bi bi-arrow-right"></i></a>
+                            <a href="{{ $cert->verification_url }}" class="small" style="color: var(--primary);" target="_blank">View Certificate <i class="bi bi-arrow-right"></i></a>
                         </div>
                         @endif
                     </div>

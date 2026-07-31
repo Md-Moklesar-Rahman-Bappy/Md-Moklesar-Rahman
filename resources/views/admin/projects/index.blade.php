@@ -87,7 +87,7 @@
                                 {{ $project->category->name }}
                             </span>
                         @endif
-                        @if($project->is_published)
+                        @if($project->is_active)
                             <span class="badge bg-success rounded-pill" style="font-size:0.7rem;">Published</span>
                         @else
                             <span class="badge bg-secondary rounded-pill" style="font-size:0.7rem;">Draft</span>

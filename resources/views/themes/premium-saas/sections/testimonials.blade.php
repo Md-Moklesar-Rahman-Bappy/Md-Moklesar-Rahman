@@ -14,17 +14,17 @@
                         <i class="bi bi-star-fill me-1" style="color: #fbbf24; font-size: 0.85rem;"></i>
                         @endfor
                     </div>
-                    <p class="text-muted mb-4" style="font-size: 0.95rem; line-height: 1.7;">"{{ $testimonial->content ?? '' }}"</p>
+                    <p class="text-muted mb-4" style="font-size: 0.95rem; line-height: 1.7;">"{{ $testimonial->review ?? '' }}"</p>
                     <div class="d-flex align-items-center">
-                        @if($testimonial->avatar)
-                        <img src="{{ asset('storage/' . $testimonial->avatar) }}" alt="" class="rounded-circle me-3" style="width: 48px; height: 48px; object-fit: cover;">
+                        @if($testimonial->profile_image)
+                        <img src="{{ asset('storage/' . $testimonial->profile_image) }}" alt="" class="rounded-circle me-3" style="width: 48px; height: 48px; object-fit: cover;">
                         @else
                         <div class="rounded-circle me-3 d-flex align-items-center justify-content-center" style="width: 48px; height: 48px; background: linear-gradient(135deg, var(--primary), var(--secondary)); color: #fff; font-weight: 700; font-size: 0.9rem;">
-                            {{ strtoupper(substr($testimonial->name ?? 'U', 0, 1)) }}
+                            {{ strtoupper(substr($testimonial->client_name ?? 'U', 0, 1)) }}
                         </div>
                         @endif
                         <div>
-                            <h6 class="fw-bold mb-0">{{ $testimonial->name ?? '' }}</h6>
+                            <h6 class="fw-bold mb-0">{{ $testimonial->client_name ?? '' }}</h6>
                             <small class="text-muted">{{ $testimonial->position ?? '' }}{{ $testimonial->company ? ' at ' . $testimonial->company : '' }}</small>
                         </div>
                     </div>

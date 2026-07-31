@@ -3,24 +3,38 @@
 namespace App\Http\Controllers\Frontend;
 
 use App\Http\Controllers\Controller;
-use App\Models\{Profile, Project, BlogPost, Skill, Experience, Education, Service, Testimonial, Certification, Setting, Theme, ThemeCustomization, PageSection, Message, Newsletter};
+use App\Models\BlogPost;
+use App\Models\Message;
+use App\Models\Newsletter;
+use App\Models\Profile;
+use App\Models\Project;
 use App\Services\ThemeManager;
 use Illuminate\Http\Request;
 
 class HomeController extends Controller
 {
-    public function __construct(protected ThemeManager $theme)
-    {
-    }
+    public function __construct(protected ThemeManager $theme) {}
 
     public function index()
     {
         $profile = Profile::with([
-            'socialLinks', 'skills.category', 'experiences', 'educations',
-            'projects.category', 'services', 'testimonials', 'certifications'
+            'socialLinks' => function ($q) {
+                $q->where('is_active', true)->orderBy('sort_order');
+            },
+            'skills.category', 'experiences', 'educations',
+            'projects.category', 'services', 'testimonials' => function ($q) {
+                $q->where('is_active', true);
+            },
+            'certifications' => function ($q) {
+                $q->where('is_active', true);
+            },
+            'blogPosts' => function ($q) {
+                $q->where('status', 'published')->latest('published_at')->take(6);
+            },
+            'blogPosts.category', 'blogPosts.tags',
         ])->first();
 
-        if (!$profile) {
+        if (! $profile) {
             return view('themes.empty');
         }
 
@@ -89,6 +103,7 @@ class HomeController extends Controller
     public function contact()
     {
         $profile = Profile::with('socialLinks')->first();
+
         return view('frontend.contact', compact('profile'));
     }
 

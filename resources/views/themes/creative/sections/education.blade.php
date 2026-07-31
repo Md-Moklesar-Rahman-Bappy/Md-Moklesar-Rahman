@@ -31,14 +31,14 @@
                                             {{ $edu->start_date ?? $edu['start_date'] ?? '' }} — {{ $edu->end_date ?? $edu['end_date'] ?? 'Present' }}
                                         </span>
                                     </div>
-                                    @if($edu->field_of_study ?? $edu['field_of_study'] ?? null)
+                                    @if($edu->group_or_field ?? $edu['group_or_field'] ?? null)
                                         <p style="color: var(--cre-text); margin: 0.5rem 0 0; font-size: 0.9rem;">
-                                            <i class="bi bi-book me-1"></i>{{ $edu->field_of_study ?? $edu['field_of_study'] }}
+                                            <i class="bi bi-book me-1"></i>{{ $edu->group_or_field ?? $edu['group_or_field'] }}
                                         </p>
                                     @endif
-                                    @if($edu->grade ?? $edu['grade'] ?? null)
+                                    @if($edu->result ?? $edu['result'] ?? null)
                                         <span style="color: var(--cre-secondary); font-weight: 700; font-size: 0.9rem;">
-                                            Grade: {{ $edu->grade ?? $edu['grade'] }}
+                                            Grade: {{ $edu->result ?? $edu['result'] }}
                                         </span>
                                     @endif
                                 </div>

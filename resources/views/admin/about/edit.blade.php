@@ -168,9 +168,13 @@ function achievementsManager() {
 
 function countersManager() {
     return {
-        counters: @json(collect(old('counter_labels'))->map(function($label, $i) {
-            return ['label' => $label, 'value' => old('counter_values')[$i] ?? ''];
-        })->values() ?? ($about->counters ?? [])),
+        counters: @json(
+            old('counter_labels')
+                ? collect(old('counter_labels'))->map(function($label, $i) {
+                    return ['label' => $label, 'value' => old('counter_values')[$i] ?? ''];
+                })->values()
+                : ($about->counters ?? [])
+        ),
         add() {
             this.counters.push({ label: '', value: '' });
         },

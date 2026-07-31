@@ -9,8 +9,8 @@
             @foreach($profile->projects ?? [] as $project)
             <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="{{ ($loop->index % 3) * 100 }}">
                 <div class="feature-card h-100 p-0 overflow-hidden">
-                    @if($project->image)
-                    <img src="{{ asset('storage/' . $project->image) }}" alt="{{ $project->title ?? '' }}" class="w-100" style="height: 220px; object-fit: cover;">
+                    @if($project->thumbnail)
+                    <img src="{{ asset('storage/' . $project->thumbnail) }}" alt="{{ $project->title ?? '' }}" class="w-100" style="height: 220px; object-fit: cover;">
                     @else
                     <div style="height: 220px; background: linear-gradient(135deg, var(--primary), var(--secondary)); display: flex; align-items: center; justify-content: center;">
                         <i class="bi bi-rocket-takeoff-fill text-white" style="font-size: 3rem; opacity: 0.3;"></i>
@@ -20,8 +20,8 @@
                         <h5 class="fw-bold">{{ $project->title ?? '' }}</h5>
                         <p class="text-muted small mb-3">{{ $project->description ?? '' }}</p>
                         <div class="d-flex gap-2">
-                            @if($project->url)
-                            <a href="{{ $project->url }}" class="btn btn-sm btn-saas-dark rounded-pill" style="font-size: 0.8rem; padding: 0.4rem 1rem;" target="_blank">View Live <i class="bi bi-arrow-right ms-1"></i></a>
+                            @if($project->live_url)
+                            <a href="{{ $project->live_url }}" class="btn btn-sm btn-saas-dark rounded-pill" style="font-size: 0.8rem; padding: 0.4rem 1rem;" target="_blank">View Live <i class="bi bi-arrow-right ms-1"></i></a>
                             @endif
                             @if($project->github_url)
                             <a href="{{ $project->github_url }}" class="btn btn-sm btn-outline-secondary rounded-pill" style="font-size: 0.8rem; padding: 0.4rem 1rem;" target="_blank"><i class="bi bi-github"></i></a>
