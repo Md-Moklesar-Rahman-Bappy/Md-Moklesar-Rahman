@@ -12,6 +12,8 @@ The Portfolio Builder application has undergone a comprehensive 12-phase product
 
 **Result:** 56/56 tests passing, 20+ critical/high-severity bugs fixed, 8 theme layouts secured, comprehensive documentation generated.
 
+> **Note (July 31, 2026):** Following this audit, the **Theme System** and **Page Builder** were fully removed from the application per product decision. All theme models/migrations/seeders/views, the `ThemeManager` service, `ThemeServiceProvider`, theme + page-builder admin routes/controllers, and the admin Themes/Appearance/Page Builder UI were deleted. The frontend now uses a single fixed dark "developer terminal" layout (`layouts/frontend.blade.php`) that renders profile content directly. Bug fixes described below for those components are superseded by their removal.
+
 ---
 
 ## Test Results

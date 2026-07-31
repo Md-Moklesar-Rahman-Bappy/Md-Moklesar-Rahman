@@ -54,27 +54,18 @@ A complete platform that allows admins to create, manage, customize and control 
 - Analytics dashboard with visitor tracking
 - Browser and country breakdowns
 
-### Theme System
-- 8 switchable themes with live preview
-- Theme Customizer (colors, fonts, layout settings)
-- Page Builder for section ordering and visibility
+### Frontend
+- Fixed single-page portfolio layout (dark developer terminal style)
+- Hero, About, Skills, Experience, Education, Projects, Services, Testimonials, Certifications, Blog, Contact sections
+- Renders directly from profile content — no theme switching or page builder
 
 ### Media & Settings
 - Media Library with upload, preview, delete
 - Settings Manager (site info, social links, contact details)
 
-## 8 Themes
+## Frontend Theme
 
-| Theme | Style |
-|-------|-------|
-| Developer | Dark terminal-style, monospace, green accents |
-| Modern | Clean white, gradient hero, smooth animations |
-| Creative | Bold colorful, split-screen, vibrant gradients |
-| Freelancer | Warm friendly, timeline, pricing cards, carousel |
-| Agency | Professional blue/white, service cards, stat counters |
-| Corporate | Conservative navy, structured, formal |
-| Minimal | Ultra-clean B&W, whitespace-heavy, typography |
-| Premium SaaS | Tech startup, gradients, glassmorphism |
+The frontend uses a single fixed dark "developer terminal" layout with Bootstrap 5 + Bootstrap Icons, driven directly by the profile content. All sections render with empty-state fallbacks when no content exists.
 
 ## Installation
 
@@ -130,38 +121,27 @@ portfolio-builder/
 │   │   │   └── Frontend/        # Public-facing controllers
 │   │   └── Middleware/
 │   │       └── AdminMiddleware.php
-│   ├── Models/                  # 26 Eloquent models
+│   ├── Models/                  # 23 Eloquent models
 │   ├── Providers/
-│   │   └── ThemeServiceProvider.php
+│   │   └── AppServiceProvider.php
 │   └── Services/
-│       └── ThemeManager.php
 ├── database/
-│   ├── migrations/              # 31 migration files
+│   ├── migrations/              # 30 migration files
 │   └── seeders/
 │       ├── UserSeeder.php       # Creates demo admin + normal user
-│       ├── RolePermissionSeeder.php
-│       ├── ThemeSeeder.php
-│       └── ProfileSeeder.php
+│       └── RolePermissionSeeder.php
 ├── resources/
 │   └── views/
 │       ├── admin/               # 40+ admin Blade views
 │       ├── auth/                # Breeze auth views (Tailwind)
-│       ├── frontend/            # Public page views
+│       ├── frontend/            # Public page views + section partials
 │       ├── layouts/
-│       │   ├── app.blade.php    # Frontend layout
-│       │   └── admin.blade.php  # Admin layout (Bootstrap 5)
-│       └── themes/              # 8 themes x 12+ files each
-│           ├── developer/
-│           ├── modern/
-│           ├── creative/
-│           ├── freelancer/
-│           ├── agency/
-│           ├── corporate/
-│           ├── minimal/
-│           └── premium-saas/
+│       │   ├── app.blade.php    # Auth layout
+│       │   ├── admin.blade.php  # Admin layout (Bootstrap 5)
+│       │   └── frontend.blade.php  # Frontend layout (dark terminal)
 ├── routes/
 │   ├── web.php                  # Frontend + auth routes
-│   ├── admin.php                # All admin routes (120+)
+│   ├── admin.php                # All admin routes
 │   └── auth.php                 # Breeze auth routes
 ├── tests/                       # 56 tests (PHPUnit 11)
 │   ├── Feature/
@@ -177,12 +157,12 @@ portfolio-builder/
 
 ## Database Schema
 
-31 tables covering: users, profiles, social_links, about_sections, skill_categories, skills, experiences, educations, project_categories, projects, project_images, services, testimonials, certifications, blog_categories, blog_tags, blog_posts, blog_post_tag, messages, newsletters, seo_settings, analytics, settings, themes, theme_customizations, page_sections, visitors, plus Spatie permission/media/cache/job tables.
+24 tables covering: users, profiles, social_links, about_sections, skill_categories, skills, experiences, educations, project_categories, projects, project_images, services, testimonials, certifications, blog_categories, blog_tags, blog_posts, blog_post_tag, messages, newsletters, seo_settings, analytics, settings, visitors, plus Spatie permission/media/cache/job tables.
 
 ## Routes
 
-- **Frontend (6):** Home, Blog Index, Blog Post, Project Detail, Contact Submit, Newsletter Subscribe
-- **Admin (120+):** Full CRUD for all content modules, dashboard, analytics, settings, themes, page builder, media
+- **Frontend (7):** Home, Blog Index, Blog Post, Project Detail, Contact Submit, Newsletter Subscribe
+- **Admin:** Full CRUD for all content modules, dashboard, analytics, settings, media
 - **Auth (8):** Login, Register, Password Reset/Confirm, Email Verification, Profile Edit/Update
 
 ## Testing

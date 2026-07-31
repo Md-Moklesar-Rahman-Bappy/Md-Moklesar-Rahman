@@ -18,9 +18,8 @@ Welcome to the Portfolio Builder CMS! This guide will help you get started with 
 
 1. **Update your profile** - Go to Profile to set your name, bio, photo, and resume
 2. **Add social links** - Connect your GitHub, LinkedIn, Twitter, etc.
-3. **Choose a theme** - Go to Themes to select from 8 available themes
-4. **Customize your theme** - Use Theme Customizer to adjust colors and fonts
-5. **Add content** - Start adding skills, experience, projects, and blog posts
+3. **Add content** - Start adding skills, experience, projects, and blog posts
+4. The frontend renders all sections automatically in a fixed dark terminal-style layout
 
 ---
 
@@ -236,40 +235,6 @@ Open a message and use the reply form to respond directly.
 
 ---
 
-## Theme System
-
-### Switching Themes
-1. Go to **Themes** in the sidebar
-2. Browse the 8 available themes
-3. Click **Activate** on your preferred theme
-4. Your portfolio frontend instantly updates
-
-### Customizing Your Theme
-1. Go to **Themes** > **Customize**
-2. Adjust:
-   - **Primary Color** - Main brand color
-   - **Secondary Color** - Accent color
-   - **Background Color** - Page background
-   - **Text Color** - Body text color
-   - **Border Radius** - Corner roundness (0-20px)
-   - **Header Style** - Centered, minimal, or default
-   - **Font Family** - Choose from Google Fonts
-3. See a live preview on the right side
-4. Click **Save Settings** when satisfied
-
----
-
-## Page Builder
-
-1. Go to **Page Builder** in the sidebar
-2. View all sections on your homepage
-3. **Toggle visibility** - Show/hide sections with the switch
-4. **Reorder sections** - Use up/down arrows to change order
-5. **Edit sections** - Click the edit icon to customize content
-6. **Delete sections** - Remove sections you don't need
-
----
-
 ## Site Settings
 
 1. Go to **Settings** in the sidebar
@@ -313,8 +278,10 @@ Your portfolio website includes these public pages:
 | Home | `/` | Main landing page with all sections |
 | Blog | `/blog` | Blog post listing |
 | Blog Post | `/blog/{slug}` | Individual blog post |
-| Projects | `/` (section) | Project portfolio grid |
-| Contact | `/` (section) | Contact form |
+| Project | `/project/{slug}` | Individual project detail |
+| Contact | `/contact` | Contact form |
+
+The homepage uses a single fixed dark terminal-style layout. Sections (Hero, About, Skills, Experience, Education, Projects, Services, Testimonials, Certifications, Blog, Contact) render directly from your content. Any section without content is hidden automatically.
 
 ---
 
@@ -326,8 +293,7 @@ Your portfolio website includes these public pages:
 4. **Projects** - Add high-quality screenshots and detailed descriptions
 5. **Blog** - Write regularly to improve SEO and showcase expertise
 6. **SEO** - Fill in all meta fields for better search engine visibility
-7. **Themes** - Test multiple themes to find the best fit for your brand
-8. **Mobile** - All themes are fully responsive and mobile-friendly
+7. **Mobile** - The frontend layout is fully responsive and mobile-friendly
 
 ---
 
@@ -336,7 +302,7 @@ Your portfolio website includes these public pages:
 | Issue | Solution |
 |-------|----------|
 | Images not uploading | Check `storage/` directory permissions. Run `php artisan storage:link` |
-| Theme not applying | Ensure a theme is activated in the Themes page |
+| Section not showing on homepage | Add the corresponding content (e.g., skills, projects) in the admin panel |
 | Contact form not working | Check that the profile has an email address set |
 | Blog post not showing | Ensure status is set to "Published" and published date is today or past |
 | 403 Error on admin | Ensure you are logged in with the admin role |
