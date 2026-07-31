@@ -1,8 +1,6 @@
 @php
-$blogPosts = $profile->blogPosts ?? collect();
-if (method_exists($blogPosts, 'where')) {
-    $blogPosts = $blogPosts->where('status', 'published')->latest()->take(3);
-}
+$blogPosts = collect($profile->blogPosts ?? []);
+$blogPosts = $blogPosts->where('status', 'published')->sortByDesc('published_at')->take(3);
 @endphp
 
 <section id="blog" class="section-padding" style="background: #fff;">

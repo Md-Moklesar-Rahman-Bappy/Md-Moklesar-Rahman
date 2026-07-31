@@ -28,7 +28,7 @@
                                             </span>
                                         </div>
                                         <span style="padding: 0.3rem 1rem; background: var(--cre-gradient-alt); color: #fff; border-radius: 20px; font-size: 0.8rem; font-weight: 500;">
-                                            {{ $edu->start_date ?? $edu['start_date'] ?? '' }} — {{ $edu->end_date ?? $edu['end_date'] ?? 'Present' }}
+                                            {{ format_date($edu->start_date ?? $edu['start_date'] ?? null) }} — {{ format_date($edu->end_date ?? $edu['end_date'] ?? null) ?: 'Present' }}
                                         </span>
                                     </div>
                                     @if($edu->group_or_field ?? $edu['group_or_field'] ?? null)

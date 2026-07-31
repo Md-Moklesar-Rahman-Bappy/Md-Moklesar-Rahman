@@ -28,7 +28,7 @@
                                     <div class="d-flex justify-content-between align-items-center">
                                         <span class="dev-tag">
                                             <i class="bi bi-calendar3 me-1"></i>
-                                            {{ $cert->issue_date ?? $cert['issue_date'] ?? '' }}
+                                            {{ format_date($cert->issue_date ?? $cert['issue_date'] ?? null) }}
                                         </span>
                                         @if($cert->verification_url ?? $cert['verification_url'] ?? null)
                                             <a href="{{ $cert->verification_url ?? $cert['verification_url'] }}" target="_blank"

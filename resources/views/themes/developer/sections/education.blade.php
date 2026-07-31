@@ -32,8 +32,8 @@
                                     @endif
                                     <span class="dev-tag">
                                         <i class="bi bi-calendar3 me-1"></i>
-                                        {{ $edu->start_date ?? $edu['start_date'] ?? '' }}
-                                        — {{ $edu->end_date ?? $edu['end_date'] ?? 'Present' }}
+                                        {{ format_date($edu->start_date ?? $edu['start_date'] ?? null) }}
+                                        — {{ format_date($edu->end_date ?? $edu['end_date'] ?? null) ?: 'Present' }}
                                     </span>
                                     @if($edu->result ?? $edu['result'] ?? null)
                                         <div class="mt-2">

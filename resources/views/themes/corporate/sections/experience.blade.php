@@ -16,7 +16,7 @@
                                 <h5 class="fw-bold mb-1">{{ $exp->position ?? '' }}</h5>
                                 <p class="mb-0 fw-medium" style="color: var(--primary);">{{ $exp->company_name ?? '' }}</p>
                             </div>
-                            <span class="badge bg-dark text-white rounded-pill px-3 py-2">{{ $exp->start_date ?? '' }} - {{ $exp->end_date ?? 'Present' }}</span>
+                            <span class="badge bg-dark text-white rounded-pill px-3 py-2">{{ format_date($exp->start_date) }} - {{ format_date($exp->end_date) ?: 'Present' }}</span>
                         </div>
                         <p class="text-muted mt-3 mb-0">{{ $exp->description ?? '' }}</p>
                     </div>

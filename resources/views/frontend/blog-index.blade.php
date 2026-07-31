@@ -1,6 +1,6 @@
 @php
-$themeSlug = $activeTheme?->slug ?? 'developer' ?? 'developer';
 $activeTheme = $activeTheme ?? \App\Models\Theme::where('is_active', true)->first();
+$themeSlug = $activeTheme?->slug ?? 'developer';
 @endphp
 
 @extends("themes.{$themeSlug}.layout")

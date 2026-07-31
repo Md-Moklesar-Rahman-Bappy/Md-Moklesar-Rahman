@@ -1,5 +1,5 @@
 @php
-    $blogPosts = $data['blog_posts'] ?? ($profile->blogPosts ?? collect());
+    $blogPosts = collect($data['blog_posts'] ?? $profile->blogPosts ?? []);
 @endphp
 
 <section id="blog" class="fre-section fre-section-alt">
@@ -23,7 +23,7 @@
                             <div style="padding: 1.5rem;" class="flex-grow-1 d-flex flex-column">
                                 <div class="d-flex align-items-center gap-2 mb-2">
                                     <span style="padding: 0.2rem 0.6rem; background: rgba(37,99,235,0.08); color: var(--fre-primary); border-radius: 6px; font-size: 0.75rem; font-weight: 600;">
-                                        {{ $post->published_at ?? $post['published_at'] ?? $post->created_at ?? '' }}
+                                        {{ ($d = $post->published_at ?? $post['published_at'] ?? $post->created_at ?? null) ? \Carbon\Carbon::parse($d)->format('M j, Y') : '' }}
                                     </span>
                                     @if($post->category ?? $post['category'] ?? null)
                                         <span style="padding: 0.2rem 0.6rem; background: rgba(249,115,22,0.08); color: var(--fre-secondary); border-radius: 6px; font-size: 0.75rem; font-weight: 600;">

@@ -65,7 +65,9 @@ class HomeController extends Controller
             ->take(3)
             ->get();
 
-        return view('frontend.project-detail', compact('project', 'profile', 'relatedProjects'));
+        $activeTheme = $this->theme->getActiveTheme();
+
+        return view('frontend.project-detail', compact('project', 'profile', 'relatedProjects', 'activeTheme'));
     }
 
     public function blog()
@@ -77,7 +79,9 @@ class HomeController extends Controller
             ->latest('published_at')
             ->paginate(9);
 
-        return view('frontend.blog-index', compact('posts', 'profile'));
+        $activeTheme = $this->theme->getActiveTheme();
+
+        return view('frontend.blog-index', compact('posts', 'profile', 'activeTheme'));
     }
 
     public function showBlogPost($slug)
@@ -97,14 +101,18 @@ class HomeController extends Controller
             ->take(3)
             ->get();
 
-        return view('frontend.blog-detail', compact('post', 'profile', 'relatedPosts'));
+        $activeTheme = $this->theme->getActiveTheme();
+
+        return view('frontend.blog-detail', compact('post', 'profile', 'relatedPosts', 'activeTheme'));
     }
 
     public function contact()
     {
         $profile = Profile::with('socialLinks')->first();
 
-        return view('frontend.contact', compact('profile'));
+        $activeTheme = $this->theme->getActiveTheme();
+
+        return view('frontend.contact', compact('profile', 'activeTheme'));
     }
 
     public function submitContact(Request $request)

@@ -214,7 +214,7 @@
                         <textarea class="form-control font-monospace @error('schema_markup') is-invalid @enderror"
                                   id="schema_markup" name="schema_markup" rows="6"
                                   style="font-size:0.8rem;"
-                                  placeholder='{ "@context": "https://schema.org", "@type": "Person", "name": "..." }'>{{ old('schema_markup', $seo->schema_markup ?? '') }}</textarea>
+                                  placeholder='{ "@@context": "https://schema.org", "@@type": "Person", "name": "..." }'>{{ old('schema_markup', $seo->schema_markup ?? '') }}</textarea>
                         <div class="form-text">Optional structured data in JSON-LD format.</div>
                         @error('schema_markup')
                             <div class="invalid-feedback">{{ $message }}</div>

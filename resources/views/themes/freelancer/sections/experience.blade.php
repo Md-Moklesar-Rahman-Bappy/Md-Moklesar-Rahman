@@ -31,7 +31,7 @@
                                         </div>
                                         <span style="padding: 0.3rem 0.85rem; background: rgba(37,99,235,0.08); color: var(--fre-primary); border-radius: 8px; font-size: 0.8rem; font-weight: 600;">
                                             <i class="bi bi-calendar3 me-1"></i>
-                                            {{ $exp->start_date ?? $exp['start_date'] ?? '' }} — {{ $exp->end_date ?? $exp['end_date'] ?? 'Present' }}
+                                            {{ format_date($exp->start_date ?? $exp['start_date'] ?? null) }} — {{ format_date($exp->end_date ?? $exp['end_date'] ?? null) ?: 'Present' }}
                                         </span>
                                     </div>
 

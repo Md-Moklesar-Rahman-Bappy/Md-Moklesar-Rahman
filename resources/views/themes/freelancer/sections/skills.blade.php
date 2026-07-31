@@ -1,5 +1,5 @@
 @php
-    $skills = $data['skills'] ?? ($profile->skills ?? collect());
+    $skills = collect($data['skills'] ?? $profile->skills ?? []);
 @endphp
 
 <section id="skills" class="fre-section">

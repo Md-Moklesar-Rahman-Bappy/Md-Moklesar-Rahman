@@ -32,8 +32,8 @@
                                     </div>
                                     <span class="dev-tag">
                                         <i class="bi bi-calendar3 me-1"></i>
-                                        {{ $exp->start_date ?? $exp['start_date'] ?? '' }}
-                                        — {{ $exp->end_date ?? $exp['end_date'] ?? 'Present' }}
+                                        {{ format_date($exp->start_date ?? $exp['start_date'] ?? null) }}
+                                        — {{ format_date($exp->end_date ?? $exp['end_date'] ?? null) ?: 'Present' }}
                                     </span>
                                 </div>
 

@@ -9,8 +9,8 @@ class ThemeServiceProvider extends ServiceProvider
 {
     public function register(): void
     {
-        $this->app->singleton(ThemeManager::class, function ($app) {
-            return new ThemeManager();
+        $this->app->bind(ThemeManager::class, function ($app) {
+            return new ThemeManager;
         });
     }
 

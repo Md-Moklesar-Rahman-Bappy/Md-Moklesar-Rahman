@@ -12,7 +12,7 @@
                             <h5 class="fw-semibold mb-1">{{ $cert->name ?? '' }}</h5>
                             <p class="text-muted small mb-0">{{ $cert->organization ?? '' }}</p>
                         </div>
-                        <small class="text-muted">{{ $cert->issue_date ?? '' }}</small>
+                        <small class="text-muted">{{ format_date($cert->issue_date) }}</small>
                     </div>
                     @if($cert->verification_url)
                     <div class="mt-2">

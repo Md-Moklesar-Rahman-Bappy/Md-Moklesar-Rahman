@@ -25,7 +25,7 @@
                                         {{ $cert->organization ?? $cert['organization'] ?? '' }}
                                     </p>
                                     <span style="font-size: 0.8rem; color: var(--mod-text);">
-                                        <i class="bi bi-calendar3 me-1"></i>{{ $cert->issue_date ?? $cert['issue_date'] ?? '' }}
+                                        <i class="bi bi-calendar3 me-1"></i>{{ format_date($cert->issue_date ?? $cert['issue_date'] ?? null) }}
                                     </span>
                                     @if($cert->verification_url ?? $cert['verification_url'] ?? null)
                                         <div class="mt-2">

@@ -28,7 +28,7 @@
                                     @endif
                                 </div>
                                 <span style="padding: 0.3rem 1rem; background: var(--cre-gradient); color: #fff; border-radius: 20px; font-size: 0.8rem; font-weight: 500;">
-                                    {{ $exp->start_date ?? $exp['start_date'] ?? '' }} — {{ $exp->end_date ?? $exp['end_date'] ?? 'Present' }}
+                                    {{ format_date($exp->start_date ?? $exp['start_date'] ?? null) }} — {{ format_date($exp->end_date ?? $exp['end_date'] ?? null) ?: 'Present' }}
                                 </span>
                             </div>
 

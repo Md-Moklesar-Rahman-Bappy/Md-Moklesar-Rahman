@@ -26,7 +26,7 @@
                                         </div>
                                         <span style="padding: 0.3rem 0.85rem; background: rgba(16,185,129,0.08); color: var(--fre-accent); border-radius: 8px; font-size: 0.8rem; font-weight: 600;">
                                             <i class="bi bi-calendar3 me-1"></i>
-                                            {{ $edu->start_date ?? $edu['start_date'] ?? '' }} — {{ $edu->end_date ?? $edu['end_date'] ?? 'Present' }}
+                                            {{ format_date($edu->start_date ?? $edu['start_date'] ?? null) }} — {{ format_date($edu->end_date ?? $edu['end_date'] ?? null) ?: 'Present' }}
                                         </span>
                                     </div>
 

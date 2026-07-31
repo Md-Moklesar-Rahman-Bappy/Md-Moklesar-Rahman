@@ -27,7 +27,7 @@
                 <h4 class="fw-bold mb-3">Professional Summary</h4>
                 @foreach($profile->aboutSections ?? [] as $section)
                 <div class="mb-4">
-                    <h6 class="fw-bold text-uppercase" style="letter-spacing: 1px; color: var(--primary);">{{ $section->title ?? '' }}</h6>
+                    <h6 class="fw-bold text-uppercase" style="letter-spacing: 1px; color: var(--primary);">{{ $section->heading ?? $section->title ?? '' }}</h6>
                     <p class="text-muted">{{ $section->content ?? '' }}</p>
                 </div>
                 @endforeach

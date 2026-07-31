@@ -14,7 +14,7 @@
                     </div>
                     <h6 class="fw-bold">{{ $cert->name ?? '' }}</h6>
                     <p class="text-muted small mb-1">{{ $cert->organization ?? '' }}</p>
-                    <small class="text-muted">{{ $cert->issue_date ?? '' }}</small>
+                    <small class="text-muted">{{ format_date($cert->issue_date) }}</small>
                     @if($cert->verification_url)
                     <div class="mt-3">
                         <a href="{{ $cert->verification_url }}" class="btn btn-sm btn-saas-dark rounded-pill" style="font-size: 0.8rem;" target="_blank">View Credential</a>

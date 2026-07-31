@@ -27,7 +27,7 @@
                     <div class="col-lg-8">
                         @foreach($profile->aboutSections ?? [] as $section)
                         <div class="mb-4">
-                            <h6 class="fw-semibold mb-2" style="text-transform: uppercase; letter-spacing: 1px; font-size: 0.75rem; color: var(--text-light);">{{ $section->title ?? '' }}</h6>
+                            <h6 class="fw-semibold mb-2" style="text-transform: uppercase; letter-spacing: 1px; font-size: 0.75rem; color: var(--text-light);">{{ $section->heading ?? $section->title ?? '' }}</h6>
                             <p class="text-muted">{{ $section->content ?? '' }}</p>
                         </div>
                         @endforeach

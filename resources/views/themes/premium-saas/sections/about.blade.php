@@ -7,7 +7,7 @@
                 <p class="section-subtitle">Innovative solutions for modern challenges</p>
                 @foreach($profile->aboutSections ?? [] as $section)
                 <div class="mb-4">
-                    <h5 class="fw-bold">{{ $section->title ?? '' }}</h5>
+                    <h5 class="fw-bold">{{ $section->heading ?? $section->title ?? '' }}</h5>
                     <p class="text-muted">{{ $section->content ?? '' }}</p>
                 </div>
                 @endforeach

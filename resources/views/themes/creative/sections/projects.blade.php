@@ -36,7 +36,7 @@
                                 @if($project->technologies ?? $project['technologies'] ?? null)
                                     <div class="mb-3">
                                         @php $techs = is_string($project->technologies ?? $project['technologies']) ? explode(',', $project->technologies ?? $project['technologies']) : ($project->technologies ?? $project['technologies']); @endphp
-                                        @foreach($techs->take(4) as $tech)
+                                        @foreach(collect($techs)->take(4) as $tech)
                                             <span class="cre-tag" style="font-size: 0.7rem;">{{ trim($tech) }}</span>
                                         @endforeach
                                     </div>

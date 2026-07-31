@@ -16,7 +16,7 @@
                         <div>
                             <h5 class="fw-bold mb-1">{{ $edu->degree ?? '' }}</h5>
                             <p class="mb-1" style="color: var(--primary); font-weight: 600;">{{ $edu->institution ?? '' }}</p>
-                            <p class="text-muted mb-2"><small>{{ $edu->start_date ?? '' }} - {{ $edu->end_date ?? 'Present' }}</small></p>
+                            <p class="text-muted mb-2"><small>{{ format_date($edu->start_date) }} - {{ format_date($edu->end_date) ?: 'Present' }}</small></p>
                             @if($edu->description)
                             <p class="text-muted mb-0">{{ $edu->description }}</p>
                             @endif
