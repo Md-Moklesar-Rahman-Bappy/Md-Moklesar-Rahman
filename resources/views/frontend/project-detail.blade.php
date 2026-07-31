@@ -1,29 +1,24 @@
-@php
-$activeTheme = $activeTheme ?? \App\Models\Theme::where('is_active', true)->first();
-$themeSlug = $activeTheme?->slug ?? 'developer';
-@endphp
-
-@extends("themes.{$themeSlug}.layout")
+@extends('layouts.frontend')
 
 @section('page_title', $project->title)
 
 @section('content')
-<section class="py-5">
+<article class="py-5">
     <div class="container">
         <div class="row">
             <div class="col-lg-8 mx-auto">
-                <a href="{{ route('home') }}" class="text-decoration-none mb-4 d-inline-block">
+                <a href="{{ route('home') }}" style="color: var(--dev-primary);" class="mb-4 d-inline-block">
                     <i class="bi bi-arrow-left me-1"></i>Back to Portfolio
                 </a>
 
                 @if($project->category)
-                    <span class="badge bg-primary mb-3">{{ $project->category->name }}</span>
+                    <span class="dev-tag mb-3">{{ $project->category->name }}</span>
                 @endif
 
                 <h1 class="display-6 fw-bold mb-3">{{ $project->title }}</h1>
 
                 @if($project->client_name)
-                    <p class="text-muted mb-4"><strong>Client:</strong> {{ $project->client_name }}</p>
+                    <p class="mb-4" style="color: #94a3b8;"><strong>Client:</strong> {{ $project->client_name }}</p>
                 @endif
 
                 @if($project->thumbnail)
@@ -32,7 +27,7 @@ $themeSlug = $activeTheme?->slug ?? 'developer';
 
                 <div class="mb-4">
                     <h5>Description</h5>
-                    <div class="fs-5 lh-lg">{!! clean($project->description) !!}</div>
+                    <div class="fs-5 lh-lg" style="color: var(--dev-text); line-height: 1.9;">{!! clean($project->description) !!}</div>
                 </div>
 
                 @if($project->technologies && count($project->technologies))
@@ -40,7 +35,7 @@ $themeSlug = $activeTheme?->slug ?? 'developer';
                         <h5>Technologies Used</h5>
                         <div class="d-flex flex-wrap gap-2">
                             @foreach($project->technologies as $tech)
-                                <span class="badge bg-primary bg-opacity-10 text-primary fs-6">{{ $tech }}</span>
+                                <span class="dev-tag">{{ $tech }}</span>
                             @endforeach
                         </div>
                     </div>
@@ -49,10 +44,10 @@ $themeSlug = $activeTheme?->slug ?? 'developer';
                 @if($project->features && count($project->features))
                     <div class="mb-4">
                         <h5>Key Features</h5>
-                        <ul class="list-group list-group-flush">
+                        <ul class="list-unstyled">
                             @foreach($project->features as $feature)
-                                <li class="list-group-item ps-0">
-                                    <i class="bi bi-check-circle-fill text-success me-2"></i>{{ $feature }}
+                                <li class="mb-2">
+                                    <i class="bi bi-check-circle-fill me-2" style="color: var(--dev-primary);"></i>{{ $feature }}
                                 </li>
                             @endforeach
                         </ul>
@@ -61,12 +56,12 @@ $themeSlug = $activeTheme?->slug ?? 'developer';
 
                 <div class="d-flex gap-3 mt-4">
                     @if($project->live_url)
-                        <a href="{{ $project->live_url }}" target="_blank" class="btn btn-primary">
+                        <a href="{{ $project->live_url }}" target="_blank" class="dev-btn">
                             <i class="bi bi-box-arrow-up-right me-1"></i>Live Demo
                         </a>
                     @endif
                     @if($project->github_url)
-                        <a href="{{ $project->github_url }}" target="_blank" class="btn btn-outline-dark">
+                        <a href="{{ $project->github_url }}" target="_blank" class="dev-btn dev-btn-outline">
                             <i class="bi bi-github me-1"></i>Source Code
                         </a>
                     @endif
@@ -81,7 +76,7 @@ $themeSlug = $activeTheme?->slug ?? 'developer';
                     <div class="row g-3">
                         @foreach($project->projectImages as $image)
                             <div class="col-md-6">
-                                <img src="{{ asset('storage/' . $image->image_path) }}" class="img-fluid rounded shadow-sm" alt="{{ $image->alt_text ?? $project->title }}">
+                                <img src="{{ asset('storage/' . $image->image_path) }}" class="img-fluid rounded" alt="{{ $image->alt_text ?? $project->title }}">
                             </div>
                         @endforeach
                     </div>
@@ -89,28 +84,30 @@ $themeSlug = $activeTheme?->slug ?? 'developer';
             </div>
         @endif
     </div>
-</section>
+</article>
 
 @if($relatedProjects && $relatedProjects->count())
-<section class="py-5 bg-light">
+<section class="dev-section dev-section-alt" style="padding: 4rem 0;">
     <div class="container">
         <h3 class="mb-4">Related Projects</h3>
         <div class="row g-4">
             @foreach($relatedProjects as $related)
                 <div class="col-md-4">
-                    <div class="card h-100 border-0 shadow-sm">
+                    <div class="dev-card h-100 d-flex flex-column">
                         @if($related->thumbnail)
-                            <img src="{{ asset('storage/' . $related->thumbnail) }}" class="card-img-top" alt="{{ $related->title }}" style="height: 180px; object-fit: cover;">
+                            <div style="margin: -1.5rem -1.5rem 1rem; overflow: hidden; border-radius: 8px 8px 0 0;">
+                                <img src="{{ asset('storage/' . $related->thumbnail) }}" class="w-100" alt="{{ $related->title }}" style="height: 140px; object-fit: cover;">
+                            </div>
                         @else
-                            <div class="card-img-top bg-dark d-flex align-items-center justify-content-center" style="height: 180px;">
-                                <i class="bi bi-folder text-white" style="font-size: 2.5rem;"></i>
+                            <div class="d-flex align-items-center justify-content-center" style="margin: -1.5rem -1.5rem 1rem; height: 140px; background: var(--dev-bg); border-radius: 8px 8px 0 0;">
+                                <i class="bi bi-folder" style="font-size: 2.5rem; color: var(--dev-primary);"></i>
                             </div>
                         @endif
-                        <div class="card-body">
-                            <h6 class="card-title">
-                                <a href="{{ route('home.project', $related->slug) }}" class="text-decoration-none text-dark">{{ $related->title }}</a>
+                        <div class="card-body d-flex flex-column p-0">
+                            <h6>
+                                <a href="{{ route('home.project', $related->slug) }}" style="color: var(--dev-heading);">{{ $related->title }}</a>
                             </h6>
-                            <p class="card-text small text-muted">{{ Str::limit($related->short_description, 80) }}</p>
+                            <p class="small mt-auto" style="color: #64748b;">{{ Str::limit($related->short_description, 80) }}</p>
                         </div>
                     </div>
                 </div>

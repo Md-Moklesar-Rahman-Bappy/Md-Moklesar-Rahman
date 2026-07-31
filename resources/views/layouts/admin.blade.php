@@ -266,12 +266,6 @@
             <a href="{{ route('admin.analytics.index') }}" class="nav-link {{ request()->routeIs('admin.analytics.*') ? 'active' : '' }}">
                 <i class="bi bi-bar-chart"></i><span class="nav-text">Analytics</span>
             </a>
-            <a href="{{ route('admin.page-builder.index') }}" class="nav-link {{ request()->routeIs('admin.page-builder.*') ? 'active' : '' }}">
-                <i class="bi bi-layout-wtf"></i><span class="nav-text">Page Builder</span>
-            </a>
-            <a href="{{ route('admin.themes.index') }}" class="nav-link {{ request()->routeIs('admin.themes.*') ? 'active' : '' }}">
-                <i class="bi bi-palette"></i><span class="nav-text">Appearance</span>
-            </a>
             <a href="{{ route('admin.settings.index') }}" class="nav-link {{ request()->routeIs('admin.settings.*') ? 'active' : '' }}">
                 <i class="bi bi-sliders"></i><span class="nav-text">Settings</span>
             </a>

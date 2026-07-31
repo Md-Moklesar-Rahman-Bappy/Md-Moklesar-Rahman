@@ -12,7 +12,6 @@ use App\Http\Controllers\Admin\ExperienceController;
 use App\Http\Controllers\Admin\MediaController;
 use App\Http\Controllers\Admin\MessageController;
 use App\Http\Controllers\Admin\NewsletterController;
-use App\Http\Controllers\Admin\PageSectionController;
 use App\Http\Controllers\Admin\ProfileController;
 use App\Http\Controllers\Admin\ProjectCategoryController;
 use App\Http\Controllers\Admin\ProjectController;
@@ -23,7 +22,6 @@ use App\Http\Controllers\Admin\SettingController;
 use App\Http\Controllers\Admin\SkillCategoryController;
 use App\Http\Controllers\Admin\SkillController;
 use App\Http\Controllers\Admin\TestimonialController;
-use App\Http\Controllers\Admin\ThemeController;
 use Illuminate\Support\Facades\Route;
 
 Route::prefix('admin')->name('admin.')->middleware(['auth', 'verified', 'admin'])->group(function () {
@@ -96,17 +94,4 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'verified', 'admin']
     Route::get('/media', [MediaController::class, 'index'])->name('media.index');
     Route::post('/media/upload', [MediaController::class, 'upload'])->name('media.upload');
     Route::delete('/media/{filename}', [MediaController::class, 'destroy'])->name('media.destroy');
-
-    // Themes
-    Route::get('/themes', [ThemeController::class, 'index'])->name('themes.index');
-    Route::post('/themes/{theme}/activate', [ThemeController::class, 'activate'])->name('themes.activate');
-    Route::get('/themes/{theme}/customize', [ThemeController::class, 'customize'])->name('themes.customize');
-    Route::put('/themes/{theme}/customize', [ThemeController::class, 'updateCustomization'])->name('themes.customize.update');
-
-    // Page Builder
-    Route::get('/page-builder', [PageSectionController::class, 'index'])->name('page-builder.index');
-    Route::post('/page-builder', [PageSectionController::class, 'store'])->name('page-builder.store');
-    Route::put('/page-builder/{pageSection}', [PageSectionController::class, 'update'])->name('page-builder.update');
-    Route::delete('/page-builder/{pageSection}', [PageSectionController::class, 'destroy'])->name('page-builder.destroy');
-    Route::post('/page-builder/reorder', [PageSectionController::class, 'reorder'])->name('page-builder.reorder');
 });

@@ -8,13 +8,10 @@ use App\Models\Message;
 use App\Models\Newsletter;
 use App\Models\Profile;
 use App\Models\Project;
-use App\Services\ThemeManager;
 use Illuminate\Http\Request;
 
 class HomeController extends Controller
 {
-    public function __construct(protected ThemeManager $theme) {}
-
     public function index()
     {
         $profile = Profile::with([
@@ -35,19 +32,10 @@ class HomeController extends Controller
         ])->first();
 
         if (! $profile) {
-            return view('themes.empty');
+            return view('frontend.empty');
         }
 
-        $this->theme->setProfile($profile);
-
-        $sections = $this->theme->getSections();
-        $customization = $this->theme->getCustomization();
-        $activeTheme = $this->theme->getActiveTheme();
-
-        $data = compact('profile', 'sections', 'customization', 'activeTheme');
-        $data['cssVariables'] = $this->theme->getCssVariables();
-
-        return view('frontend.home', $data);
+        return view('frontend.home', compact('profile'));
     }
 
     public function showProject($slug)
@@ -65,9 +53,7 @@ class HomeController extends Controller
             ->take(3)
             ->get();
 
-        $activeTheme = $this->theme->getActiveTheme();
-
-        return view('frontend.project-detail', compact('project', 'profile', 'relatedProjects', 'activeTheme'));
+        return view('frontend.project-detail', compact('project', 'profile', 'relatedProjects'));
     }
 
     public function blog()
@@ -79,9 +65,7 @@ class HomeController extends Controller
             ->latest('published_at')
             ->paginate(9);
 
-        $activeTheme = $this->theme->getActiveTheme();
-
-        return view('frontend.blog-index', compact('posts', 'profile', 'activeTheme'));
+        return view('frontend.blog-index', compact('posts', 'profile'));
     }
 
     public function showBlogPost($slug)
@@ -101,18 +85,14 @@ class HomeController extends Controller
             ->take(3)
             ->get();
 
-        $activeTheme = $this->theme->getActiveTheme();
-
-        return view('frontend.blog-detail', compact('post', 'profile', 'relatedPosts', 'activeTheme'));
+        return view('frontend.blog-detail', compact('post', 'profile', 'relatedPosts'));
     }
 
     public function contact()
     {
         $profile = Profile::with('socialLinks')->first();
 
-        $activeTheme = $this->theme->getActiveTheme();
-
-        return view('frontend.contact', compact('profile', 'activeTheme'));
+        return view('frontend.contact', compact('profile'));
     }
 
     public function submitContact(Request $request)

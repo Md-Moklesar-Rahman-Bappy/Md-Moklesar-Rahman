@@ -4,7 +4,6 @@ namespace Tests\Feature;
 
 use App\Models\User;
 use Database\Seeders\RolePermissionSeeder;
-use Database\Seeders\ThemeSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Str;
 use Tests\TestCase;
@@ -17,7 +16,6 @@ class AdminSmokeTest extends TestCase
     {
         parent::setUp();
         $this->seed(RolePermissionSeeder::class);
-        $this->seed(ThemeSeeder::class);
     }
 
     protected function createAdmin(): User
@@ -54,8 +52,6 @@ class AdminSmokeTest extends TestCase
             'admin.media.index' => [],
             'admin.seo.index' => [],
             'admin.analytics.index' => [],
-            'admin.page-builder.index' => [],
-            'admin.themes.index' => [],
             'admin.settings.index' => [],
         ];
 

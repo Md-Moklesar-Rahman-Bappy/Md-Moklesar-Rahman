@@ -128,18 +128,8 @@ class Profile extends Model
         return $this->hasMany(Setting::class);
     }
 
-    public function pageSections(): HasMany
-    {
-        return $this->hasMany(PageSection::class);
-    }
-
     public function visitors(): HasMany
     {
         return $this->hasMany(Visitor::class);
-    }
-
-    public function themeCustomizations(): HasMany
-    {
-        return $this->hasMany(ThemeCustomization::class);
     }
 }

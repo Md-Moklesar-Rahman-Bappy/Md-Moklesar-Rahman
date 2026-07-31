@@ -1,13 +1,17 @@
-@php
-$themeSlug = $activeTheme?->slug ?? 'developer';
-@endphp
-
-@extends("themes.{$themeSlug}.layout")
+@extends('layouts.frontend')
 
 @section('page_title', $profile->full_name . ' - ' . ($profile->tagline ?? 'Portfolio'))
 
 @section('content')
-@foreach($sections as $section)
-    @includeIf("themes.{$themeSlug}.sections.{$section->section_type}", ['data' => $section->content, 'section' => $section, 'profile' => $profile])
-@endforeach
+    @include('frontend.partials.hero', ['profile' => $profile])
+    @include('frontend.partials.about', ['profile' => $profile])
+    @include('frontend.partials.skills', ['profile' => $profile])
+    @include('frontend.partials.experience', ['profile' => $profile])
+    @include('frontend.partials.education', ['profile' => $profile])
+    @include('frontend.partials.projects', ['profile' => $profile])
+    @include('frontend.partials.services', ['profile' => $profile])
+    @include('frontend.partials.testimonials', ['profile' => $profile])
+    @include('frontend.partials.certifications', ['profile' => $profile])
+    @include('frontend.partials.blog', ['profile' => $profile])
+    @include('frontend.partials.contact', ['profile' => $profile])
 @endsection
