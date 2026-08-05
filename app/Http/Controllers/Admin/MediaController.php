@@ -50,7 +50,7 @@ class MediaController extends AdminController
 
         $validated = $request->validate([
             'file' => 'required|file|mimes:jpg,jpeg,png,gif,webp,pdf,doc,docx,xls,xlsx|max:10240',
-            'folder' => 'nullable|string|max:255|in:media,blog,blog/og,profiles,covers,resumes,about,projects/thumbnails,projects/images,certifications,testimonials,seo,settings,themes/logos,themes/favicons',
+            'folder' => 'nullable|string|max:255|in:media,blog,blog/og,profiles,covers,resumes,about,projects/thumbnails,projects/images,certifications,testimonials,seo,settings',
         ]);
 
         $folder = $validated['folder'] ?? 'media';
@@ -103,7 +103,7 @@ class MediaController extends AdminController
 
         $allowedFolders = ['media', 'blog', 'blog/og', 'profiles', 'covers', 'resumes',
             'about', 'projects/thumbnails', 'projects/images', 'certifications',
-            'testimonials', 'seo', 'settings', 'themes/logos', 'themes/favicons'];
+            'testimonials', 'seo', 'settings'];
 
         if (! in_array($directory, $allowedFolders, true)) {
             $directory = 'media';

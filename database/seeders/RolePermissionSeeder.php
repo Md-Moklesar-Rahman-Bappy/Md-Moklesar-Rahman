@@ -3,14 +3,15 @@
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
-use Spatie\Permission\Models\Role;
 use Spatie\Permission\Models\Permission;
+use Spatie\Permission\Models\Role;
+use Spatie\Permission\PermissionRegistrar;
 
 class RolePermissionSeeder extends Seeder
 {
     public function run(): void
     {
-        app()[\Spatie\Permission\PermissionRegistrar::class]->forgetCachedPermissions();
+        app()[PermissionRegistrar::class]->forgetCachedPermissions();
 
         // Create permissions
         Permission::create(['name' => 'manage dashboard']);
@@ -29,8 +30,6 @@ class RolePermissionSeeder extends Seeder
         Permission::create(['name' => 'manage seo']);
         Permission::create(['name' => 'manage analytics']);
         Permission::create(['name' => 'manage media']);
-        Permission::create(['name' => 'manage themes']);
-        Permission::create(['name' => 'manage page builder']);
 
         // Create roles
         $admin = Role::create(['name' => 'admin']);
