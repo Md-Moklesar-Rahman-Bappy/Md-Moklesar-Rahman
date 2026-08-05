@@ -279,7 +279,7 @@ Your portfolio website includes these public pages:
 | Blog | `/blog` | Blog post listing |
 | Blog Post | `/blog/{slug}` | Individual blog post |
 | Project | `/project/{slug}` | Individual project detail |
-| Contact | `/contact` | Contact form |
+| Contact | `/` (section) | Contact form section on the homepage |
 
 The homepage uses a single fixed dark terminal-style layout. Sections (Hero, About, Skills, Experience, Education, Projects, Services, Testimonials, Certifications, Blog, Contact) render directly from your content. Any section without content is hidden automatically.
 

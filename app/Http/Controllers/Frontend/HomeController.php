@@ -88,13 +88,6 @@ class HomeController extends Controller
         return view('frontend.blog-detail', compact('post', 'profile', 'relatedPosts'));
     }
 
-    public function contact()
-    {
-        $profile = Profile::with('socialLinks')->first();
-
-        return view('frontend.contact', compact('profile'));
-    }
-
     public function submitContact(Request $request)
     {
         $validated = $request->validate([
@@ -113,7 +106,8 @@ class HomeController extends Controller
             ]);
         }
 
-        return redirect()->route('home.contact')->with('success', 'Message sent successfully!');
+        return redirect()->to(route('home').'#contact')
+            ->with('success', 'Message sent successfully!');
     }
 
     public function subscribe(Request $request)

@@ -121,6 +121,7 @@
         .dev-section {
             padding: 6rem 0;
             position: relative;
+            scroll-margin-top: 5rem;
         }
 
         .dev-section-alt {
@@ -372,7 +373,7 @@
                     <a href="{{ route('home') }}#experience" class="nav-link">Experience</a>
                     <a href="{{ route('home') }}#projects" class="nav-link">Projects</a>
                     <a href="{{ route('home.blog') }}" class="nav-link">Blog</a>
-                    <a href="{{ route('home.contact') }}" class="nav-link">Contact</a>
+                    <a href="{{ route('home') }}#contact" class="nav-link">Contact</a>
                 </div>
                 <button class="btn btn-sm d-lg-none" style="color: var(--dev-primary); border: 1px solid var(--dev-border);" onclick="document.querySelector('.dev-nav-links').classList.toggle('d-none')">
                     <i class="bi bi-list"></i>
@@ -384,7 +385,7 @@
                 <a href="{{ route('home') }}#experience" class="nav-link d-block py-2">Experience</a>
                 <a href="{{ route('home') }}#projects" class="nav-link d-block py-2">Projects</a>
                 <a href="{{ route('home.blog') }}" class="nav-link d-block py-2">Blog</a>
-                <a href="{{ route('home.contact') }}" class="nav-link d-block py-2">Contact</a>
+                <a href="{{ route('home') }}#contact" class="nav-link d-block py-2">Contact</a>
             </div>
         </div>
     </nav>

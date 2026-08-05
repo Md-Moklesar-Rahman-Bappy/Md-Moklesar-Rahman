@@ -80,33 +80,65 @@
             <div class="col-lg-7" data-aos="fade-left" data-aos-delay="200">
                 <div class="dev-card">
                     <div class="dev-keyword mb-4">// send_message</div>
-                    <form action="{{ route('home.contact.submit') }}" method="POST" id="contactForm">
+
+                    @if(session('success'))
+                        <div class="alert alert-success alert-dismissible fade show d-flex align-items-center" role="alert" style="border: 1px solid rgba(16, 185, 129, 0.4);">
+                            <i class="bi bi-check-circle-fill me-2"></i>
+                            {{ session('success') }}
+                            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                        </div>
+                    @endif
+
+                    @if($errors->any())
+                        <div class="alert alert-danger alert-dismissible fade show" role="alert" style="border: 1px solid rgba(239, 68, 68, 0.4);">
+                            <i class="bi bi-exclamation-triangle-fill me-2"></i>
+                            Please fix the errors below and try again.
+                            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                        </div>
+                    @endif
+
+                    <form action="{{ route('home.contact.submit') }}" method="POST" id="contactForm" novalidate>
                         @csrf
                         <div class="row">
                             <div class="col-md-6 mb-3">
-                                <label style="color: #94a3b8; font-size: 0.8rem; margin-bottom: 0.5rem; display: block;">name:</label>
-                                <input type="text" name="name" class="form-control" required
+                                <label for="contact_name" style="color: #94a3b8; font-size: 0.8rem; margin-bottom: 0.5rem; display: block;">name: <span style="color: var(--dev-primary);">*</span></label>
+                                <input type="text" id="contact_name" name="name" class="form-control @error('name') is-invalid @enderror" required
                                        style="background: var(--dev-bg); border: 1px solid var(--dev-border); color: var(--dev-text); font-family: var(--dev-font); font-size: 0.9rem;"
-                                       placeholder="John Doe">
+                                       value="{{ old('name') }}"
+                                       placeholder="John Doe" autocomplete="name">
+                                @error('name')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
                             </div>
                             <div class="col-md-6 mb-3">
-                                <label style="color: #94a3b8; font-size: 0.8rem; margin-bottom: 0.5rem; display: block;">email:</label>
-                                <input type="email" name="email" class="form-control" required
+                                <label for="contact_email" style="color: #94a3b8; font-size: 0.8rem; margin-bottom: 0.5rem; display: block;">email: <span style="color: var(--dev-primary);">*</span></label>
+                                <input type="email" id="contact_email" name="email" class="form-control @error('email') is-invalid @enderror" required
                                        style="background: var(--dev-bg); border: 1px solid var(--dev-border); color: var(--dev-text); font-family: var(--dev-font); font-size: 0.9rem;"
-                                       placeholder="john@example.com">
+                                       value="{{ old('email') }}"
+                                       placeholder="john@example.com" autocomplete="email">
+                                @error('email')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
                             </div>
                         </div>
                         <div class="mb-3">
-                            <label style="color: #94a3b8; font-size: 0.8rem; margin-bottom: 0.5rem; display: block;">subject:</label>
-                            <input type="text" name="subject" class="form-control"
+                            <label for="contact_subject" style="color: #94a3b8; font-size: 0.8rem; margin-bottom: 0.5rem; display: block;">subject: <span style="color: var(--dev-primary);">*</span></label>
+                            <input type="text" id="contact_subject" name="subject" class="form-control @error('subject') is-invalid @enderror" required
                                    style="background: var(--dev-bg); border: 1px solid var(--dev-border); color: var(--dev-text); font-family: var(--dev-font); font-size: 0.9rem;"
+                                   value="{{ old('subject') }}"
                                    placeholder="Project Inquiry">
+                            @error('subject')
+                                <div class="invalid-feedback">{{ $message }}</div>
+                            @enderror
                         </div>
                         <div class="mb-4">
-                            <label style="color: #94a3b8; font-size: 0.8rem; margin-bottom: 0.5rem; display: block;">message:</label>
-                            <textarea name="message" rows="5" class="form-control" required
+                            <label for="contact_message" style="color: #94a3b8; font-size: 0.8rem; margin-bottom: 0.5rem; display: block;">message: <span style="color: var(--dev-primary);">*</span></label>
+                            <textarea id="contact_message" name="message" rows="5" class="form-control @error('message') is-invalid @enderror" required
                                       style="background: var(--dev-bg); border: 1px solid var(--dev-border); color: var(--dev-text); font-family: var(--dev-font); font-size: 0.9rem; resize: vertical;"
-                                      placeholder="Your message here..."></textarea>
+                                      placeholder="Your message here...">{{ old('message') }}</textarea>
+                            @error('message')
+                                <div class="invalid-feedback">{{ $message }}</div>
+                            @enderror
                         </div>
                         <button type="submit" class="dev-btn dev-btn-filled">
                             <i class="bi bi-send"></i> Send Message

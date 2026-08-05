@@ -44,10 +44,19 @@ class FrontendTest extends TestCase
         $response->assertStatus(200);
     }
 
-    public function test_contact_page_loads(): void
+    public function test_contact_form_submission(): void
     {
-        $response = $this->get('/contact');
-        $response->assertStatus(200);
+        $response = $this->post('/contact', [
+            'name' => 'Test Contact',
+            'email' => 'test@example.com',
+            'subject' => 'Test Subject',
+            'message' => 'Hello, this is a test message.',
+        ]);
+        $response->assertRedirect(route('home').'#contact');
+        $this->assertDatabaseHas('messages', [
+            'name' => 'Test Contact',
+            'email' => 'test@example.com',
+        ]);
     }
 
     public function test_blog_post_page_loads(): void
@@ -77,21 +86,6 @@ class FrontendTest extends TestCase
 
         $response = $this->get('/project/test-project');
         $response->assertStatus(200);
-    }
-
-    public function test_contact_form_submission(): void
-    {
-        $response = $this->post('/contact', [
-            'name' => 'Test Contact',
-            'email' => 'test@example.com',
-            'subject' => 'Test Subject',
-            'message' => 'Hello, this is a test message.',
-        ]);
-        $response->assertRedirect();
-        $this->assertDatabaseHas('messages', [
-            'name' => 'Test Contact',
-            'email' => 'test@example.com',
-        ]);
     }
 
     public function test_newsletter_subscription(): void

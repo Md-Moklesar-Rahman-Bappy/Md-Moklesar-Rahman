@@ -12,13 +12,33 @@ class SkillController extends AdminController
     {
         $profile = $this->getProfile();
 
-        $skills = Skill::where('profile_id', $profile->id)
+        $skills = Skill::query()
+            ->where('profile_id', $profile->id)
             ->with('category')
+            ->when($request->filled('search'), function ($q) use ($request) {
+                $q->where('name', 'like', '%'.$request->search.'%');
+            })
             ->orderBy('category_id')
+            ->orderBy('sort_order')
             ->orderBy('name')
-            ->paginate(15);
+            ->paginate(15)
+            ->withQueryString();
 
-        return view('admin.skills.index', compact('skills', 'profile'));
+        $categories = SkillCategory::where('profile_id', $profile->id)
+            ->withCount('skills')
+            ->withAvg('skills', 'percentage')
+            ->orderBy('sort_order')
+            ->orderBy('name')
+            ->get();
+
+        $stats = [
+            'total' => Skill::where('profile_id', $profile->id)->count(),
+            'active' => Skill::where('profile_id', $profile->id)->where('is_active', true)->count(),
+            'categories' => $categories->count(),
+            'avg' => round(Skill::where('profile_id', $profile->id)->avg('percentage') ?? 0),
+        ];
+
+        return view('admin.skills.index', compact('skills', 'profile', 'categories', 'stats'));
     }
 
     public function create()

@@ -161,7 +161,7 @@ portfolio-builder/
 
 ## Routes
 
-- **Frontend (7):** Home, Blog Index, Blog Post, Project Detail, Contact Submit, Newsletter Subscribe
+- **Frontend (6):** Home, Blog Index, Blog Post, Project Detail, Contact Submit, Newsletter Subscribe
 - **Admin:** Full CRUD for all content modules, dashboard, analytics, settings, media
 - **Auth (8):** Login, Register, Password Reset/Confirm, Email Verification, Profile Edit/Update
 
